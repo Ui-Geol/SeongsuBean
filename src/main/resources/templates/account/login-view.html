@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Seongsu Bean - 로그인</title>
-  <link rel="stylesheet" href="/css/account/login-view.css">
+  <link rel="stylesheet" th:href="@{/css/account/login-view.css}">
 </head>
 <body>
-<div class="login-wrapper" style="background-image: url('/static/images/account/background.png');">
+<div class="login-wrapper" th:style="'background-image: url(' + @{/images/account/background.png} + ');'">
   <div class="outer-box">
     <div class="login-box">
       <img th:src="@{/images/common/logo.png}" alt="Seongsu Bean Logo" class="logo">
