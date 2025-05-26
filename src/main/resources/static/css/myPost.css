@@ -1,0 +1,231 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+/* 헤더 스타일 */
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 0.8rem;
+}
+
+.logo-text {
+  color: #8B4513;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-item {
+  color: #4A4A4A;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-item:hover {
+  color: #8B4513;
+}
+
+.login-btn {
+  background-color: #8B4513;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #A0522D;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(139, 69, 19, 0.3);
+}
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+  padding: 3rem 0;
+  min-height: calc(100vh - 100px);
+}
+
+.page-title {
+  color: #4A4A4A;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #8B4513;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.posts-table {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background-color: #8B4513;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 1rem;
+  text-align: center;
+}
+
+.table tbody td {
+  padding: 1rem;
+  text-align: center;
+  border-color: #e0e0e0;
+  color: #4A4A4A;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.post-type {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.type-cafe {
+  background-color: #e8f5e8;
+  color: #2d5a2d;
+}
+
+.type-free {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.type-report {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.post-title {
+  color: #4A4A4A;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.post-title:hover {
+  color: #8B4513;
+  text-decoration: underline;
+}
+
+.post-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.pagination-container {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.page-link {
+  color: #8B4513;
+  border-color: #8B4513;
+}
+
+.page-link:hover {
+  background-color: #8B4513;
+  border-color: #8B4513;
+  color: white;
+}
+
+.page-item.active .page-link {
+  background-color: #8B4513;
+  border-color: #8B4513;
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    gap: 1rem;
+  }
+
+  .nav-item {
+    font-size: 1rem;
+  }
+
+  .login-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .table thead th,
+  .table tbody td {
+    padding: 0.8rem 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  .nav-menu {
+    gap: 0.8rem;
+  }
+
+  .nav-item {
+    font-size: 0.9rem;
+  }
+
+  .table-responsive {
+    font-size: 0.85rem;
+  }
+}

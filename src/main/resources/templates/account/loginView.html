@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Seongsu Bean - 로그인</title>
+  <link rel="stylesheet" href="/static/css/loginView.css">
+</head>
+<body>
+<div class="login-wrapper" style="background-image: url('/static/images/account/background.png');">
+  <div class="outer-box">
+    <div class="login-box">
+      <img th:src="@{/images/common/logo.png}" alt="Seongsu Bean Logo" class="logo">
+      <h2>LOGIN</h2>
+      <form class="login-form">
+        <input type="email" placeholder="이메일">
+        <input type="password" placeholder="비밀번호">
+        <button type="submit" class="btn btn-login">로그인</button>
+        <div class="divider"></div> <!-- 선 추가 -->
+        <button type="button" class="btn btn-signup">회원가입</button>
+      </form>
+      <div class="sns-section">
+        <div class="sns-divider">
+          <div class="line"></div>
+          <span>SNS LOGIN</span>
+          <div class="line"></div>
+        </div>
+        <div class="sns-icons">
+          <img th:src="@{/images/account/googlelogo.png}" alt="Google Login">
+          <img th:src="@{/images/account/kakaologo.png}" alt="Kakao Login">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">©Designed by SeongsuBean</div>
+</div>
+</body>
+</html>

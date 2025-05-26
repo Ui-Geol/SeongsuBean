@@ -1,0 +1,154 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Pretendard', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fff;
+}
+
+.login-wrapper {
+  width: 500px;
+  height: 650px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+}
+
+.outer-box {
+  width: 400px;
+  height: 540px;
+  border: 2px solid rgba(255, 255, 255, 0.5); /* 연한 흰색 테두리 */
+  padding: 10px;
+  backdrop-filter: blur(2px); /* 배경 흐리게 (선택 사항) */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.login-box {
+  width: 400px;
+  height: 520px;
+  background-color: rgba(242, 234, 229, 0.9); /* F2EAE5 with 90% opacity */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 30px;
+}
+
+
+.logo {
+  width: 100px;
+  margin-bottom: 10px;
+  margin-top: -35px
+}
+
+h2 {
+  margin: 5px 0 25px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-form input {
+  padding: 12px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  border: none;
+  border-bottom: 1px solid #000;
+  background: transparent;
+  outline: none;
+  width: 100%;
+}
+
+.btn {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.sns-divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0 10px;
+}
+
+.sns-divider .line {
+  flex: 1;
+  height: 1px;
+  background-color: #aea5a5;
+  width: 120px;
+}
+
+.sns-divider span {
+  padding: 0 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  color: #333;
+}
+
+.btn-login {
+  background-color: #a06a3c;
+  color: white;
+}
+
+.btn-signup {
+  background-color: #222;
+  color: white;
+}
+
+.sns-section {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sns-icons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.sns-icons img {
+  width: 38px;
+  margin: 0 10px;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #aea5a5; /* 회색 선 */
+  margin: 10px 0;
+}
+
+.footer {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.51);
+}

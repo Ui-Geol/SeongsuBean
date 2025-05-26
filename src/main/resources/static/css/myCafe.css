@@ -1,0 +1,311 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+/* 헤더 스타일 */
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 0.8rem;
+}
+
+.logo-text {
+  color: #8B4513;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-item {
+  color: #4A4A4A;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-item:hover {
+  color: #8B4513;
+}
+
+.login-btn {
+  background-color: #8B4513;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #A0522D;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(139, 69, 19, 0.3);
+}
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+  padding: 3rem 0;
+  min-height: calc(100vh - 100px);
+}
+
+.page-title {
+  color: #4A4A4A;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #8B4513;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.cafe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.cafe-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cafe-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.cafe-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cafe-info {
+  padding: 1.5rem;
+}
+
+.cafe-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #4A4A4A;
+  margin-bottom: 0.8rem;
+}
+
+.cafe-address {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.cafe-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rating-score {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #8B4513;
+}
+
+.stars {
+  color: #ffc107;
+  font-size: 1rem;
+}
+
+.review-count {
+  color: #666;
+  font-size: 0.9rem;
+  margin-left: 0.3rem;
+}
+
+.cafe-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.edit-btn:hover {
+  background-color: #1565c0;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.delete-btn:hover {
+  background-color: #c62828;
+  color: white;
+}
+
+.view-btn {
+  background-color: #e8f5e8;
+  color: #2d5a2d;
+}
+
+.view-btn:hover {
+  background-color: #2d5a2d;
+  color: white;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.empty-state i {
+  font-size: 4rem;
+  color: #ccc;
+  margin-bottom: 1.5rem;
+}
+
+.empty-state h4 {
+  margin-bottom: 1rem;
+  color: #4A4A4A;
+}
+
+.add-cafe-btn {
+  background-color: #8B4513;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.add-cafe-btn:hover {
+  background-color: #A0522D;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+}
+
+.pagination-container {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.page-link {
+  color: #8B4513;
+  border-color: #8B4513;
+}
+
+.page-link:hover {
+  background-color: #8B4513;
+  border-color: #8B4513;
+  color: white;
+}
+
+.page-item.active .page-link {
+  background-color: #8B4513;
+  border-color: #8B4513;
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    gap: 1rem;
+  }
+
+  .nav-item {
+    font-size: 1rem;
+  }
+
+  .login-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .cafe-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .cafe-actions {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
+  .nav-menu {
+    gap: 0.8rem;
+  }
+
+  .nav-item {
+    font-size: 0.9rem;
+  }
+
+  .main-content {
+    padding: 2rem 0;
+  }
+
+  .cafe-info {
+    padding: 1rem;
+  }
+}
