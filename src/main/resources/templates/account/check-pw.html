@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>마이페이지 - Seongsu Bean</title>
+  <title>개인정보 수정 - Seongsu Bean</title>
   <!-- Bootstrap 5.3.2 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/myPage.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/account/check-pw.css/">
 </head>
 <body>
 <div class="container-fluid py-5">
@@ -14,7 +16,7 @@
     <div class="col-12 col-md-8 col-lg-6">
       <!-- 로고 섹션 -->
       <div class="logo-section">
-        <img class="logo-image" src="/static/images/common/logo.png" style="cursor: pointer;">
+        <img class="logo-image" rel="#" src="/static/images/common/logo.png" style="cursor: pointer;">
       </div>
 
       <!-- 메인 카드 -->
@@ -25,45 +27,40 @@
           <label for="profile-upload">
             <img id="profile-img"
                  src="/static/images/common/default.png"
-                 alt="프로필 이미지"
                  class="rounded-circle profile-img"
                  style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
           </label>
           <div class="username">honghong님</div>
         </div>
 
-        <!-- 메뉴 섹션 -->
-        <div class="menu-section">
-          <button type="button" class="btn menu-item">
-            내가 쓴 리뷰 보기
-          </button>
+        <!-- 페이지 제목 -->
+        <h2 class="page-title">개인 정보 수정</h2>
 
-          <button type="button" class="btn menu-item">
-            내 카페 보기
-          </button>
-
-          <button type="button" class="btn menu-item">
-            내가 쓴 글 보기
-          </button>
-        </div>
-
-        <!-- 개인정보 수정 버튼 -->
-        <div class="text-center">
-          <button type="button" class="btn edit-profile-btn">
-            개인정보 수정
-          </button>
-        </div>
+        <!-- 비밀번호 확인 폼 -->
+        <form id="passwordVerificationForm">
+          <div class="form-section">
+            <label for="currentPassword" class="form-label">비밀 번호 확인</label>
+            <div class="input-group">
+              <input type="password"
+                     class="form-control"
+                     id="currentPassword"
+                     name="currentPassword"
+                     placeholder="현재 비밀번호를 입력하세요"
+                     required
+                     autocomplete="current-password">
+            </div>
+          </div>
+          <!-- 버튼 섹션 -->
+          <div class="text-center">
+            <button type="submit" class="btn confirm-btn" id="confirmBtn">
+              확인
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
-
-<!-- Bootstrap 5.3.2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // 메뉴 아이템 클릭 효과
-  // 개인정보 수정 버튼 클릭 효과
-  //사진 미리보기
-</script>
 </body>
 </html>

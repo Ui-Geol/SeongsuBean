@@ -1,0 +1,44 @@
+.footer {
+  background-color: #fefefe;
+  padding: 40px 20px;
+  box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.footer-container {
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-logo-img {
+  height: 60px;
+}
+
+.footer-brand {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #8a6534;
+}
+
+.footer-section-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.detail-row {
+  margin-bottom: 4px;
+}
+
+.contact-info {
+  margin-top: 10px;
+}
+
+.copyright {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 20px;
+}
