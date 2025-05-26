@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개인정보 수정 - Seongsu Bean</title>
+  <!-- Bootstrap 5.3.2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/account/check-pw.css/">
+</head>
+<body>
+<div class="container-fluid py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <!-- 로고 섹션 -->
+      <div class="logo-section">
+        <img class="logo-image" rel="#" src="/static/images/common/logo.png" style="cursor: pointer;">
+      </div>
+
+      <!-- 메인 카드 -->
+      <div class="main-card position-relative">
+        <!-- 프로필 섹션 -->
+        <div class="profile-section text-center">
+          <input type="file" id="profile-upload" accept="image/*" style="display: none;">
+          <label for="profile-upload">
+            <img id="profile-img"
+                 src="/static/images/common/default.png"
+                 class="rounded-circle profile-img"
+                 style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
+          </label>
+          <div class="username">honghong님</div>
+        </div>
+
+        <!-- 페이지 제목 -->
+        <h2 class="page-title">개인 정보 수정</h2>
+
+        <!-- 비밀번호 확인 폼 -->
+        <form id="passwordVerificationForm">
+          <div class="form-section">
+            <label for="currentPassword" class="form-label">비밀 번호 확인</label>
+            <div class="input-group">
+              <input type="password"
+                     class="form-control"
+                     id="currentPassword"
+                     name="currentPassword"
+                     placeholder="현재 비밀번호를 입력하세요"
+                     required
+                     autocomplete="current-password">
+            </div>
+          </div>
+          <!-- 버튼 섹션 -->
+          <div class="text-center">
+            <button type="submit" class="btn confirm-btn" id="confirmBtn">
+              확인
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

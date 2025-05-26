@@ -1,0 +1,56 @@
+.navbar-custom {
+  background-color: #f5f0e6;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.container {
+  max-width: 90%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.navbar-custom .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #6b4f1d;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-custom .navbar-brand img {
+  height: 40px;
+  margin-right: 0.5rem;
+}
+
+.navbar-custom .nav-link {
+  color: #6b4f1d;
+  font-size: 1.1rem;
+  margin: 0 1rem;
+}
+
+.navbar-custom .nav-link:hover {
+  color: #8a6534;
+}
+
+.btn-login {
+  background-color: #6b4f1d;
+  color: #fff;
+  border-radius: 0.25rem;
+  padding: 0.35rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.btn-login:hover {
+  background-color: #8a6534;
+  color: #fff;
+}
+
+/* 중앙 정렬을 위해 flex-grow 활용 */
+.navbar-nav {
+  flex-grow: 1;
+  justify-content: center;
+}
+

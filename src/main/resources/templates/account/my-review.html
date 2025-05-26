@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="<http://www.thymeleaf.org>"
+      xmlns:layout="<http://www.ultraq.net.nz/thymeleaf/layout>"
+      layout:decorate="~{common/common}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title layout:fragment="title">Seongsu Bean - 내가 쓴 리뷰</title>
+  <link layout:fragment="styles" rel="stylesheet" th:href="@{/account/my-review.css}" />
+</head>
+<body>
+<!-- 메인 콘텐츠 -->
+<div layout:fragment="content">
+  <main class="main-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="page-title">내가 쓴 리뷰 총 2개</h1>
+          <div class="reviews-table">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th style="width: 20%;">카페 이름</th>
+                  <th style="width: 50%;">내용</th>
+                  <th style="width: 15%;">날짜</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="cafe-name">
+                      성수동 카페
+                    </a>
+                  </td>
+                  <td>
+                    <div class="review-content">
+                        <span>
+                          정말 맛있는 커피와 분위기 좋은 카페입니다. 재방문 의사 있어요!
+                        </span>
+                    </div>
+                  </td>
+                  <td>
+                      <span class="review-date">
+                        2024-01-15
+                      </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <a href="#" class="cafe-name">성수동 브루잉</a>
+                  </td>
+                  <td>
+                    <div class="review-content">
+                      정말 맛있는 커피와 분위기 좋은 카페입니다. 재방문 의사 있어요!
+                    </div>
+                  </td>
+                  <td>
+                    <span class="review-date">2024-01-15</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <a href="#" class="cafe-name">카페 온더코너</a>
+                  </td>
+                  <td>
+                    <div class="review-content">
+                      조용하고 작업하기 좋은 환경이에요. 디저트도 맛있습니다.
+                    </div>
+                  </td>
+                  <td>
+                    <span class="review-date">2024-01-14</span>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- 페이지네이션 -->
+          <div class="pagination-container">
+            <nav aria-label="Page navigation">
+              <ul class="pagination">
+                <li class="page-item">
+                  <a class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link">1</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<th:block layout:fragment="scripts">
+  <script th:src="@{/account/my-review.js}"></script>
+</th:block>
+</body>
+</html>

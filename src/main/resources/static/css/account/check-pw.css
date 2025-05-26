@@ -1,0 +1,123 @@
+body {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+.logo-section {
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.logo-container {
+  position: relative;
+  display: inline-block;
+}
+
+.logo-image {
+  max-width: 200px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.main-card {
+  background: linear-gradient(145deg, #E6D3C7 0%, #D4B896 100%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 3px solid #F5E6D3;
+  max-width: 450px;
+  margin: 0 auto;
+  min-height: 400px;
+}
+.profile-img {
+  border: 2px solid #ccc;
+  transition: transform 0.2s ease;
+}
+
+.profile-img:hover {
+  transform: scale(1.05);
+}
+.profile-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.username {
+  color: #4A4A4A;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+.page-title {
+  color: #4A4A4A;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-label {
+  color: #4A4A4A;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
+.form-control {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #D2691E;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  background: white;
+  border-color: #8B4513;
+  box-shadow: 0 0 0 0.2rem rgba(139, 69, 19, 0.25);
+}
+
+.form-control::placeholder {
+  color: #999;
+}
+
+.confirm-btn {
+  background: #4A4A4A;
+  color: white;
+  border: none;
+  padding: 0.8rem 2.5rem;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.confirm-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.confirm-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 576px) {
+  .main-card {
+    margin: 1rem;
+    padding: 2rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+}

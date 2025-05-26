@@ -1,0 +1,50 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #fff;
+}
+
+.signup-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.logo {
+  width: 120px;
+}
+
+.signup-form {
+  background-color: #f2e8e0;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: -10px;
+}
+
+.form-check-input:checked {
+  background-color: #a06a3c;
+  border-color: #a06a3c;
+}
+
+.email-group {
+  display: flex;
+  align-items: center;
+}
+
+.date-group {
+  position: relative;
+}
+
+.date-group .calendar-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
