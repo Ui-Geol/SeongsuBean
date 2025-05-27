@@ -2,4 +2,9 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oopsw.seongsubean.cafe.repository.CafeRepository">
+  <select id="getCafeName" parameterType="int" resultType="String">
+    SELECT CAFE_NAME
+    FROM CAFE_INFO
+    WHERE CAFE_ID = #{cafeId}
+  </select>
 </mapper>
