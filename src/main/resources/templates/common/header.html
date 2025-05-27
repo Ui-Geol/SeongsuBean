@@ -1,44 +1,47 @@
 <header th:fragment="headerFragment">
   <div class="container mb-4">
-  <nav class="navbar navbar-expand-lg navbar-custom">
-    <div class="container-fluid">
-      <!-- 로고 & 브랜드 -->
-      <a class="navbar-brand"
-         th:href="@{/}">                        <!-- ③ th:href -->
-        <img th:src="@{/images/common/logo.png}" alt="Seongsu Bean Logo"/>          <!-- ③ th:src -->
-      </a>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <div class="container-fluid justify-content-between align-items-center">
 
-      <!-- 토글 버튼 (반응형) -->
-      <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#mainNavbar"
-          aria-controls="mainNavbar"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <!-- 왼쪽: 로고 + 메뉴 -->
+        <div class="d-flex align-items-center gap-4">
+          <a class="navbar-brand" href="/map">
+            <img th:src="@{/images/common/logo.png}" alt="Seongsu Bean Logo" class="logo-icon" />
+            <img th:src="@{/images/common/typoLogo.png}" alt="Seongsu Bean Typo Logo" class="logo-text" />
+          </a>
 
-      <!-- 네비게이션 메뉴 -->
-      <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">자유</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">제보</a>
-          </li>
-        </ul>
-        <!-- 로그인 버튼 -->
-        <div class="d-flex">
-          <a class="btn btn-login"
-             th:href="@{/login}">로그인</a>
+          <!-- 메뉴: 로고 옆으로 이동 -->
+          <ul class="navbar-nav flex-row">
+            <li class="nav-item me-1">
+              <a class="nav-link" href="/free-list">자유</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/report-list">제보</a>
+            </li>
+          </ul>
         </div>
+
+        <!-- 토글 버튼 (반응형) -->
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- 오른쪽: 로그인 버튼만 collapse에 포함 -->
+        <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
+          <a class="btn btn-login" href="/loginView">로그인</a>
+        </div>
+
       </div>
-    </div>
-  </nav>
+    </nav>
+
   </div>
 </header>
 
