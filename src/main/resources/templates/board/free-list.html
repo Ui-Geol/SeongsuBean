@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/common}">
+<head>
+  <title layout:fragment="title">자유 게시판</title>
+  <link layout:fragment="styles" rel="stylesheet" th:href="@{/css/board/free.css}" />
+</head>
+<body>
+
+<div layout:fragment="content">
+  <!-- 자유게시판 검색 영역 -->
+  <div class="container mb-4">
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div class="input-group">
+          <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            카페
+          </button>
+          <input type="text" class="form-control" placeholder="분위기있는">
+          <button class="btn search-btn" type="button">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-3 text-end">
+        <button class="btn search-btn" onclick="location.href='/free-post'">새 글쓰기</button>
+      </div>
+    </div>
+  </div>
+
+    <div class="container">
+      <div class="row">
+        <!-- Row 1 -->
+        <div class="col-md-4"> <div class="card" style="cursor: pointer;" onclick="location.href='/free-detail'"><img src="/images/dessert1.png" class="card-img-top" alt="크로플 아이스크림">
+          <div class="card-body px-0"><h5 class="card-title">성수 크로플 맛집 추천...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+        <div class="col-md-4"><div class="card"><img src="/images/dessert2.png" class="card-img-top" alt="수플레 브런치">
+          <div class="card-body px-0"><h5 class="card-title">수플레 브런치 카페 전문점은...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+        <div class="col-md-4"><div class="card"><img src="/images/dessert3.png" class="card-img-top" alt="루프탑 카페">
+          <div class="card-body px-0"><h5 class="card-title">루프탑 카페는 사진찍기가...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+
+        <!-- Row 2 -->
+        <div class="col-md-4"><div class="card"><img src="/images/dessert4.png" class="card-img-top" alt="혼카페">
+          <div class="card-body px-0"><h5 class="card-title">혼카페는 여기가 최고인 눈치는...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+        <div class="col-md-4"><div class="card"><img src="/images/dessert5.png" class="card-img-top" alt="미국식 파이">
+          <div class="card-body px-0"><h5 class="card-title">여긴 한적 미국식 파이가...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+        <div class="col-md-4"><div class="card"><img src="/images/dessert6.png" class="card-img-top" alt="망고빙수">
+          <div class="card-body px-0"><h5 class="card-title">확실히 여름에는 망고빙수...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+
+        <!-- Row 3 -->
+        <div class="col-md-4"><div class="card"><img src="/images/dessert7.png" class="card-img-top" alt="밝은 카페">
+          <div class="card-body px-0"><h5 class="card-title">엄마랑 새로 생긴 카페...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+        <div class="col-md-4"><div class="card"><img src="/images/dessert8.png" class="card-img-top" alt="카페 외관">
+          <div class="card-body px-0"><h5 class="card-title">성수동 20년 토박이 추천...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+        <div class="col-md-4"><div class="card"><img src="/images/dessert9.png" class="card-img-top" alt="크레이프 케이크">
+          <div class="card-body px-0"><h5 class="card-title">크레이프 케이크 맛집 추유...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+
+        <!-- Row 4 -->
+        <div class="col-md-4"><div class="card"><img src="/images/dessert10.png" class="card-img-top" alt="팬 애플파이">
+          <div class="card-body px-0"><h5 class="card-title">팬 애플파이 맛집 서귀포...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+        <div class="col-md-4"><div class="card"><img src="/images/dessert11.png" class="card-img-top" alt="연예인 카페">
+          <div class="card-body px-0"><h5 class="card-title">큐브오더 근처에서 연예인 실물...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+        <div class="col-md-4"><div class="card"><img src="/images/dessert12.png" class="card-img-top" alt="진통 브런치">
+          <div class="card-body px-0"><h5 class="card-title">성수동 진통 브런치는 여기가...</h5><div class="d-flex justify-content-between"><span class="card-text">성수카페리</span><span class="card-text">2025-05-18</span></div></div></div></div>
+      </div>
+
+    <!-- 페이지네이션 -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

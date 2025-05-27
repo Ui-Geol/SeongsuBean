@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/common}">
+<head>
+  <title layout:fragment="title">카페 상세</title>
+  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/cafe-detail.css" />
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="cafe-container">
+    <div class="cafe-header">
+      <h1 class="cafe-name" >아쿠아 아티산
+        <span class="icon-button" id="editCafe" title="수정">✏️</span>
+        <span class="icon-button" id="deleteCafe" title="삭제">🗑️</span>
+      </h1>
+
+
+      <div class="rating-container">
+        <span class="rating-score" >4.1</span>
+        <!-- 테스트용 그냥 4개 채워진 별, 1개 빈 별을 직접 씀 구현때 다시 원상복구 해야 함 -->
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star empty">★</span>
+
+        <span class="review-count" >（41）</span>
+      </div>
+
+      <img class="cafe-image"
+           src="/images/Cafe1.png"
+           alt="카페 이미지">
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('overview')">개요</button>
+      <button class="nav-tab" onclick="showTab('menu')">메뉴</button>
+      <button class="nav-tab" onclick="showTab('reviews')">리뷰</button>
+    </nav>
+
+    <div class="cafe-content">
+      <div id="overview" class="tab-content active">
+        <div class="info-section">
+          <div class="info-item">
+            <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                    clip-rule="evenodd"></path>
+            </svg>
+            <span class="info-text" >서울 성동구 성수로이 97 5층</span>
+          </div>
+
+          <div class="info-item">
+            <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"></path>
+            </svg>
+            <div class="info-text">
+              <div class="hours-container">
+                <button class="status-badge status" id="statusBadge" onclick="toggleStatus()">영업중</button>
+                <button class="hours-dropdown" onclick="toggleHours()">
+                  <span>08:30에 영업 시작</span>
+                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path
+                        d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
+                  </svg>
+                </button>
+                <button class="status-badge status today-closed" id="todayClosedBtn" onclick="toggleTodayClosed()">오늘 휴무</button>
+
+
+                <div class="hours-detail" id="hoursDetail">
+                  <div class="hours-day"><span>월요일</span><span>08:30 - 22:00</span></div>
+                  <div class="hours-day"><span>화요일</span><span>08:30 - 22:00</span></div>
+                  <div class="hours-day"><span>수요일</span><span>08:30 - 22:00</span></div>
+                  <div class="hours-day"><span>목요일</span><span>08:30 - 22:00</span></div>
+                  <div class="hours-day"><span>금요일</span><span>08:30 - 22:00</span></div>
+                  <div class="hours-day"><span>토요일</span><span>09:00 - 23:00</span></div>
+                  <div class="hours-day"><span>일요일</span><span>09:00 - 23:00</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <svg class="info-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                  d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+            </svg>
+            <span class="info-text" >0542-1234-1652</span>
+          </div>
+        </div>
+
+        <div class="description-section">
+          <h2 class="section-title">소개</h2>
+          <div class="description-box">
+            <p class="description-text" >
+              저희 카페는 직접 로스팅한 신선한 원두위 매일 구워내는 디저트가 자랑입니다.
+              아늑한 분위기에서 향긋한 커피 한 잔과 함께 여유로운 시간을 보내세요
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="menu" class="tab-content">
+        <div class="menu-item">
+          <div class="menu-info">
+            <div class="menu-header">
+              <div class="menu-name">Single Origin Tea</div>
+              <div class="menu-actions">
+                <a class="edit-btn" href="/add-menu" th:alt="메뉴수정">
+                  <button class="edit-btn">✏️</button>
+                </a>
+                <a class="delete-btn" href="/cafe-detail" th:alt="메뉴삭제">
+                  <button class="delete-btn">🗑️</button>
+                </a>
+              </div>
+            </div>
+            <div class="menu-price">8,000원</div>
+          </div>
+          <img class="menu-image" src="/images/dessert1.png" alt="Single Origin Tea">
+        </div>
+
+        <div class="menu-item">
+          <div class="menu-info">
+            <div class="menu-header">
+              <div class="menu-name">바스크 치즈 케이크</div>
+              <div class="menu-actions">
+                <a class="edit-btn" href="/add-menu" th:alt="메뉴수정">
+                  <button class="edit-btn">✏️</button>
+                </a>
+                <a class="delete-btn" href="/cafe-detail" th:alt="메뉴삭제">
+                  <button class="delete-btn">🗑️</button>
+                </a>
+              </div>
+            </div>
+            <div class="menu-description">고소한 치즈의 향미가 가득한 바스크 케이크</div>
+            <div class="menu-price">5,300 원</div>
+          </div>
+          <img class="menu-image" src="/images/dessert2.png" alt="바스크 치즈 케이크">
+        </div>
+
+        <div class="menu-item">
+          <div class="menu-info">
+            <div class="menu-header">
+              <div class="menu-name">단호박 파운드 케이크</div>
+              <div class="menu-actions">
+                <a class="edit-btn" href="/add-menu" th:alt="메뉴수정">
+                  <button class="edit-btn">✏️</button>
+                </a>
+                <a class="delete-btn" href="/cafe-detail" th:alt="메뉴삭제">
+                  <button class="delete-btn">🗑️</button>
+                </a>
+              </div>
+            </div>
+            <div class="menu-description">부드럽게 씹히는 단호박이 일품인 케이크</div>
+            <div class="menu-price">7,000 원</div>
+          </div>
+          <img class="menu-image" src="/images/dessert3.png" alt="단호박 파운드 케이크">
+        </div>
+      </div>
+
+      <div id="reviews" class="tab-content">
+        <div class="review-write-wrapper">
+          <a href="/review-form" class="review-write-btn">리뷰 작성하기</a>
+        </div>
+        <div class="review-item">
+          <a class="review-delete-btn" href="/cafe-detail" th:alt="리뷰삭제">🗑️</a>
+          <div class="review-header">
+            <img class="reviewer-avatar" src="/images/common/SampleProfile.png" alt="독산동남자">
+            <div class="reviewer-info">
+              <div class="reviewer-name">독산동남자</div>
+              <div class="review-rating">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star empty">★</span>
+              </div>
+            </div>
+            <div class="review-date">2025-05-18</div>
+          </div>
+          <div class="review-text">파운드 케이크 맛있어요!</div>
+          <div class="review-images">
+            <img class="review-image" src="/images/dessert5.png" alt="리뷰 이미지">
+            <img class="review-image" src="/images/dessert6.png" alt="리뷰 이미지">
+          </div>
+        </div>
+
+        <div class="review-item">
+          <a class="review-delete-btn" href="/cafe-detail" th:alt="리뷰삭제">🗑️</a>
+          <div class="review-header">
+            <img class="reviewer-avatar" src="/images/common/SampleProfile.png" alt="독산동남자">
+            <div class="reviewer-info">
+              <div class="reviewer-name">독산동남자</div>
+              <div class="review-rating">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star empty">★</span>
+              </div>
+            </div>
+            <div class="review-date">2025-05-18</div>
+          </div>
+          <div class="review-text">여기 빵이 맛있네요</div>
+        </div>
+
+        <button class="more-button">더보기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<th:block layout:fragment="scripts">
+  <script th:src="@{/js/cafe/cafe-detail.js}"></script>
+</th:block>
+</body>
+</html>

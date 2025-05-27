@@ -35,9 +35,10 @@ html, body {
 }
 
 #map {
-  position: static;
-  width: 1248px;
-  height: 753px;
+  position: relative;
+  width: 100%;
+  max-width: 1248px;
+  height: 500px;
   margin: 10px auto 0;
 }
 
@@ -53,32 +54,58 @@ html, body {
 }
 
 /* 카테고리 아이콘 목록 (우측) 스타일 */
-
 #filterIcons {
   position: absolute;
   top: 60px;
   right: 10px;
   z-index: 1000;
 }
+.filter-icon-img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+}
+#filterIcons button {
+  padding: 6px;
+  background-color: #ffffff;
+  border: none;
+  box-shadow: none;
+}
 
 /* 왕관 아이콘 (좌상단) 스타일 */
 
 #crownBtn {
+  background-color: #ffffff !important;
+  border: none;
   position: absolute;
   top: 10px;
   left: 10px;
   z-index: 1000;
+  border-radius: 8px;
 }
 
+#crownBtn img {
+  width: 60px;
+  height: 60px;
+}
+
+.section-title {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4b2e1f;  /* 진한 브라운 색 */
+  text-align: left;
+  margin: 10px 0 10px 0;
+}
 /* 2) 카드 뷰 컨테이너 */
 
 #cards-wrapper {
   width: 100%;
-  max-width: 1248px;
+  max-width: 1200px;
   overflow-y: auto;
   background: #fff;
   max-height: 40vh;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
   padding: 16px;
 }
 
@@ -94,14 +121,15 @@ html, body {
   background: #fafafa;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card img {
   width: 100%;
-  height: 100px;
+  height: 140px;
   object-fit: cover;
 }
 
@@ -129,16 +157,33 @@ html, body {
 
 #load-more {
   position: absolute;
-  display: block;
-  bottom: 16px;
-  right: 16px;
-  padding: 8px 16px;
-  background: purple;
-  color: #fff;
-  border: none;
+  bottom: -18px;
+  right: 0;
+  padding: 3px 10px;
+  background: #ffffff;
+  border: 2px solid #A55C19;
+  color: #A55C19;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
   z-index: 10;
+  margin: 0;
+}
+#cafe-registration {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  padding: 3px 10px;
+  background: #ffffff;
+  border: 2px solid #A55C19;
+  color: #A55C19;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  z-index: 10;
+  margin: 0;
 }
 
 /* 카드 뷰 컨테이너: 남은 40vh 높이 내에서 스크롤 */
@@ -146,5 +191,7 @@ html, body {
   max-height: 40vh;
   overflow-y: auto;
 }
-
-
+.card:hover {
+  transform: translateY(-2px); /* 호버 시 살짝 뜨는 효과 */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); /* 더 깊은 그림자 */
+}

@@ -1,0 +1,49 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.nav-link {
+    color: #333;
+    font-weight: 500;
+}
+
+.search-btn {
+    background-color: #b78456;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+.card {
+    border: none;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.card-title {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.card-text {
+    font-size: 0.8rem;
+    color: #888;
+    text-align: right;
+}
+.pagination .page-link {
+    color: #333;
+}
+.pagination .active .page-link {
+    background-color: #b78456;
+    border-color: #b78456;
+}
+.dropdown-toggle {
+    background-color: white;
+    border: 1px solid #ddd;
+    color: #333;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/common}">
+<head>
+    <title layout:fragment="title">자유게시글 작성</title>
+    <link layout:fragment="styles" rel="stylesheet" th:href="@{/css/board/post.css}" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+</head>
+<body>
+
+<!-- Main Content -->
+<div layout:fragment="content">
+    <div class="main-container">
+        <h1 class="page-title">게시글 쓰기</h1>
+        <form>
+            <!-- Category Selection -->
+            <div class="mb-4">
+                <select class="form-select" style="width: 150px;">
+                    <option selected>머릿말 선택</option>
+                    <option>자유::잡담</option>
+                    <option>자유::리뷰</option>
+                </select>
+            </div>
+
+            <!-- Title Input -->
+            <div class="mb-4">
+                <input type="text" class="form-control" placeholder="제목을 입력하세요">
+            </div>
+
+            <!-- ✅ Toast UI Editor 삽입 -->
+            <div class="mb-4">
+                <div id="editor" style="height: 500px;"></div>
+                <input type="hidden" name="contents" id="editor-contents">
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-cancel">취소</button>
+                <button type="submit" class="btn btn-submit">게시하기</button>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/board/post.js}"></script>
+</th:block>
+</body>
+</html>

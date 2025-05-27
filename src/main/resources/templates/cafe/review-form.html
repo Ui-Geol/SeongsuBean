@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/common}">
+<head>
+  <title layout:fragment="title">리뷰 작성</title>
+  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/review-form.css" />
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="review-container">
+    <div class="review-form">
+      <!-- Header -->
+      <div class="review-header">
+        <h1>리뷰작성</h1>
+      </div>
+
+      <!-- Product Title -->
+      <div class="product-title">
+        <h2>아쿠아 아티산</h2>
+      </div>
+
+      <!-- User Profile and Rating -->
+      <div class="user-section">
+        <div class="profile-info">
+          <div class="avatar">
+            <img alt="프로필 이미지"
+                 src="/images/common/SampleProfile.png">>
+          </div>
+          <div class="user-details">
+            <div class="username" >독산동남집사</div>
+            <!-- Interactive Star Rating Input -->
+            <div class="rating-input">
+              <input type="radio" name="rating" value="1" id="star1" class="star-input">
+              <label for="star1" class="star-label">★</label>
+
+              <input type="radio" name="rating" value="2" id="star2" class="star-input">
+              <label for="star2" class="star-label">★</label>
+
+              <input type="radio" name="rating" value="3" id="star3" class="star-input">
+              <label for="star3" class="star-label">★</label>
+
+              <input type="radio" name="rating" value="4" id="star4" class="star-input" checked>
+              <label for="star4" class="star-label">★</label>
+
+              <input type="radio" name="rating" value="5" id="star5" class="star-input">
+              <label for="star5" class="star-label">★</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Form -->
+      <form method="post" enctype="multipart/form-data" id="reviewForm">
+        <input type="hidden" name="_csrf" value="test-csrf-token" />
+        <input type="hidden" name="productId" value="123" />
+
+
+        <!-- Review Text Area -->
+        <div class="review-input">
+                      <textarea
+                          name="content"
+                          id="reviewContent"
+                          placeholder="리뷰를 작성해주세요. (최대 500자)"
+                          maxlength="500"
+                          required></textarea>
+          <div class="char-count">
+            <span id="charCount">0</span>/500
+          </div>
+        </div>
+
+        <!-- Image Upload Section -->
+        <div class="image-upload" id="imageUpload">
+          <input type="file" name="images" id="imageInput" multiple accept="image/*"
+                 style="display: none;">
+          <div class="upload-area" onclick="document.getElementById('imageInput').click();">
+            <div class="upload-icon">📷</div>
+            <span>사진 추가</span>
+          </div>
+          <div class="image-preview" id="imagePreview"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="button-group">
+          <button type="button" class="btn btn-cancel" onclick="cancelReview()">취소</button>
+          <button type="submit" class="btn btn-submit">등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<th:block layout:fragment="scripts">
+  <script th:src="@{/js/cafe/review-form.js}"></script>
+</th:block>
+</body>
+</html>
