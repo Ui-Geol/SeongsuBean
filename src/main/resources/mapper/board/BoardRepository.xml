@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oopsw.seongsubean.board.repository.BoardRepository">
+  <insert id="addFreeBoard" >
+    select name from customers
+  </insert>
+  <insert id="insertFreeBoard" useGeneratedKeys="true" keyProperty="freeBoardId">
+    INSERT INTO FREE_BOARD (
+      FREE_BOARD_ID, TITLE, HEAD_WQRD, CONTENT, CREATED_DATE, EMAIL
+    ) VALUES (
+               #{freeBoardId}, #{title}, #{headWqrd}, #{content}, NOW(), #{email}
+             )
+  </insert>
+  <insert id="insertFreeBoardImage">
+    INSERT INTO FREE_BOARD_IMAGE (IMAGE, FREE_BOARD_ID)
+    VALUES (#{img}, #{freeBoardId})
+  </insert>
+
+</mapper>

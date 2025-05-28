@@ -1,69 +1,66 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/common}">
 <head>
-  <meta charset="UTF-8">
-  <title>지도 페이지</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
-  <!-- Font Awesome (아이콘용 CDN) -->
+  <title layout:fragment="title">SeongsuBean</title>
+  <link layout:fragment="styles" rel="stylesheet" href="/css/home/map.css" />
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
-  <!-- Pretendard CSS: jsDelivr 최신 버전 -->
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css"/>
-  <link th:href="@{/css/map.css}" rel="stylesheet">
 </head>
 <body>
-<div class="page-wrapper">
-  <!-- 1) 헤더 불러오기 -->
+<div layout:fragment="content">
+  <div class="page-wrapper">
+    <div class="content-wrapper">
+      <!-- 1) 맵 전체를 감싸는 컨테이너 -->
+      <div id="map">
+        <!-- 검색 입력창 (지도 우상단) -->
+        <div id="searchBox">
+          <div class="input-group">
+            <input type="text" id="searchInput" class="form-control" placeholder="검색어 입력"/>
+            <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
 
-  <main class="content-wrapper">
-    <!-- 1) 맵 전체를 감싸는 컨테이너 -->
-    <div id="map">
-      <!-- 검색 입력창 (지도 우상단) -->
-      <div id="searchBox">
-        <div class="input-group">
-          <input type="text" id="searchInput" class="form-control" placeholder="검색어 입력"/>
-          <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i></button>
+        <!-- 특별 필터 버튼 (왕관 아이콘, 좌상단) -->
+        <button id="crownBtn"><img src="/images/common/crown.png" alt="crown" class="filter-icon-img"></button>
+
+        <!-- 카테고리 필터 아이콘들 (지도 우측) -->
+        <div id="filterIcons" class="d-flex flex-column">
+          <button class="btn btn-light mb-2" data-category="coffee"><img src="/images/common/coffee.png" alt="Bread" class="filter-icon-img">
+          </button>
+          <button class="btn btn-light mb-2" data-category="bean"><img src="/images/common/bean.png" alt="Bread" class="filter-icon-img">
+          </button>
+          <button class="btn btn-light mb-2" data-category="cake"><img src="/images/common/bread.png" alt="Bread" class="filter-icon-img">
+          </button>
+          <button class="btn btn-light mb-2" data-category="cake"><img src="/images/common/cake.png" alt="Bread" class="filter-icon-img">
+          </button>
+          <button class="btn btn-light mb-2" data-category="pie"><img src="/images/common/pie.png" alt="Bread" class="filter-icon-img">
+          </button>
+          <button class="btn btn-light mb-2" data-category="etc"><img src="/images/common/etc.png" alt="Bread" class="filter-icon-img">
+          </button>
         </div>
       </div>
-
-      <!-- 특별 필터 버튼 (왕관 아이콘, 좌상단) -->
-      <button id="crownBtn" class="btn btn-warning"><i class="fas fa-crown"></i></button>
-
-      <!-- 카테고리 필터 아이콘들 (지도 우측) -->
-      <div id="filterIcons" class="d-flex flex-column">
-        <button class="btn btn-light mb-2" data-category="bread"><i class="fas fa-bread-slice"></i>
-        </button>
-        <button class="btn btn-light mb-2" data-category="coffee"><i class="fas fa-coffee"></i>
-        </button>
-        <button class="btn btn-light mb-2" data-category="cake"><i class="fas fa-birthday-cake"></i>
-        </button>
-        <button class="btn btn-light mb-2" data-category="icecream"><i class="fas fa-ice-cream"></i>
-        </button>
-        <button class="btn btn-light mb-2" data-category="photo"><i class="fas fa-camera"></i>
-        </button>
-        <button class="btn btn-light mb-2" data-category="light"><i class="fas fa-lightbulb"></i>
-        </button>
+      <div class="section-title">
+        성수 카페 전체
+      </div>
+      <!-- 2) 카드 뷰 -->
+      <div id="card-section">
+        <button id="cafe-registration">카페 만들기</button>
+        <div id="cards-wrapper">
+          <div class="card"></div>
+        </div>
+        <button id="load-more" >더보기</button>
       </div>
     </div>
-    <!-- 2) 카드 뷰 -->
-    <div id="card-section">
-      <div id="cards-wrapper"></div>
-      <button id="load-more">더보기</button>
-    </div>
-  </main>
-  <!-- 3) Footer 영역 -->
-
-
-</div>  <!-- /.page-wrapper -->
-<!-- Kakao 지도 API 스크립트 (YOUR_APP_KEY 부분에 실제 앱 키 적용) -->
-<script
-    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bffaea04caf0041c1e1d5d41f3c815dc&libraries=services"></script>
-<!-- static/js 폴더에 넣은 map.js 로드 -->
-<script th:src="@{/js/map.js}"></script>
-<script>
-  src = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-</script>
+  </div>
+</div>
+<th:block layout:fragment="scripts">
+  <!-- API 키 값 없음 -->
+  <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=&libraries=services"></script>
+  <script th:src="@{/js/home/map.js}"></script>
+</th:block>
 </body>
 </html>
