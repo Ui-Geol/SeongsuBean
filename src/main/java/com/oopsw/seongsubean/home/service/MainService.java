@@ -1,8 +1,6 @@
 package com.oopsw.seongsubean.home.service;
 
 import com.oopsw.seongsubean.home.repository.MainRepository;
-import com.oopsw.seongsubean.home.dto.CafeInfo;
-import com.oopsw.seongsubean.home.dto.RankingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +14,16 @@ public class MainService {
   /**
    * 메인 페이지 카드 뷰에 필요한 카페 리스트 조회
    */
-  public List<CafeInfo> getMainCardView() {
-    return mainRepository.getMainCardView();
-  }
-
-  /**
-   * 카페 별점 랭킹 리스트 조회
-   */
-  public List<RankingDto> getRanking() {
-    return mainRepository.getRanking();
-  }
+//  public List<CafeInfo> getMainCardView() {
+//    return mainRepository.getMainCardView();
+//  }
+//
+//  /**
+//   * 카페 별점 랭킹 리스트 조회
+//   */
+//  public List<RankingDto> getRanking() {
+//    return mainRepository.getRanking();
+//  }
 
   /**
    * 카페명으로 정확히 일치하는 카페 이름 조회
