@@ -12,7 +12,7 @@ public class MenuInfoRespositoryTest {
 
   @Test
   public void findById() {
-    System.out.println(menuInfoRepository.findById(1L));
+    System.out.println(menuInfoRepository.findById(1));
 
   }
 }
