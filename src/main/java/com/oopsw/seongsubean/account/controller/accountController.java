@@ -1,4 +1,4 @@
-package com.oopsw.seongsubean.controller;
+package com.oopsw.seongsubean.account.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
