@@ -7,12 +7,15 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AccountRepository {
-  public UserDTO getUserInfo(UserDTO userDTO);
-  public boolean setUserInfo(UserDTO userDTO);
   public boolean addUser(UserDTO userDTO);
-  public UserDTO getPassWord(UserDTO userDTO);
+  public boolean removeUser(UserDTO userDTO);
+  public UserDTO getUserInfo(UserDTO userDTO);
+  public UserDTO getUserByEmailAndPassword(UserDTO userDTO);
   public boolean setImage(UserDTO userDTO);
+  public boolean setUserInfo(UserDTO userDTO);
   public List<Map<String, Object>> getMyBoards(String email);
   public List<Map<String, Object>> getMyReviews(String email);
   public List<Map<String, Object>> getMyCafes(String email);
+  public boolean existsEmail(String email);
+  public boolean existsNickName(String nickName);
 }
