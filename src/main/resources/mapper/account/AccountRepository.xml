@@ -4,35 +4,39 @@
   <update id="setUserInfo" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
     UPDATE USER_INFO
     <set>
-      <if test="passWord != null">
-        PASSWORD = #{passWord},
+      <if test="newPassword != null">
+        PASSWORD = #{newPassword},
       </if>
-      <if test="nickName != null">
-        NICKNAME = #{nickName},
+      <if test="newNickName != null">
+        NICKNAME = #{newNickName}
       </if>
     </set>
     WHERE EMAIL = #{email}
   </update>
+
   <update id="setImage" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
     update USER_INFO
     set IMAGE = #{image}
     where EMAIL = #{email}
   </update>
+  <delete id="removeUser" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
+    delete from user_info where EMAIL=#{email} and PASSWORD= #{password}
+  </delete>
 
   <select id="getUserInfo" parameterType="com.oopsw.seongsubean.account.dto.UserDTO"
     resultType="com.oopsw.seongsubean.account.dto.UserDTO">
     select nickname, image from USER_INFO
-    where EMAIL = #{email} AND PASSWORD = #{passWord}
+    where EMAIL = #{email} AND PASSWORD = #{password}
   </select>
 
   <insert id="addUser" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
     INSERT INTO USER_INFO (email, nickname, password, birthdate, phone_number, join_date)
-    VALUES (#{email}, #{nickName}, #{passWord}, #{birthDate}, #{phoneNumber}, NOW())
+    VALUES (#{email}, #{nickName}, #{password}, #{birthDate}, #{phoneNumber}, NOW())
   </insert>
-  <select id="getPassWord" parameterType="com.oopsw.seongsubean.account.dto.UserDTO"
+  <select id="getUserByEmailAndPassword" parameterType="com.oopsw.seongsubean.account.dto.UserDTO"
     resultType="com.oopsw.seongsubean.account.dto.UserDTO">
     select email, nickname from USER_INFO
-    where EMAIL = #{email} and PASSWORD = #{passWord}
+    where EMAIL = #{email} and PASSWORD = #{password}
   </select>
   <select id="getMyBoards" parameterType="String" resultType="java.util.Map">
     SELECT '자유' AS BOARD_TYPE, TITLE, CREATED_DATE
@@ -51,7 +55,7 @@
     select c.CAFE_NAME, r.REVIEW_CONTENTS, r.REVIEW_DATE
     from CAFE_INFO c
            join REVIEW r on c.CAFE_ID = r.CAFE_ID
-    where c.EMAIL= #{email}
+    where r.EMAIL= #{email}
     order by r.REVIEW_DATE desc
   </select>
   <select id="getMyCafes" resultType="java.util.Map">
@@ -65,5 +69,16 @@
            LEFT JOIN REVIEW r ON c.CAFE_ID = r.CAFE_ID
     WHERE c.EMAIL = #{email}
     GROUP BY c.CAFE_ID
+  </select>
+
+  <select id="existsEmail" parameterType="String" resultType="boolean">
+    SELECT COUNT(*) > 0
+    FROM USER_INFO
+    WHERE EMAIL = #{email}
+  </select>
+  <select id="existsNickName" parameterType="String" resultType="boolean">
+    SELECT COUNT(*) > 0
+    FROM USER_INFO
+    WHERE NICKNAME = #{nickName}
   </select>
 </mapper>

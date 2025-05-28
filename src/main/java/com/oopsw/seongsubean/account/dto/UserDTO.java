@@ -11,11 +11,14 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"passWord","phoneNumber"})
+@ToString(exclude = {"password","newPassword","newPasswordCheck","phoneNumber"})
 public class UserDTO {
   private String email;
   private String nickName;
-  private String passWord;
+  private String newNickName;
+  private String password;
+  private String newPassword;
+  private String newPasswordCheck;
   private String phoneNumber;
   private String image;
   private String role;
