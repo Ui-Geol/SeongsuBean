@@ -18,18 +18,18 @@ import lombok.ToString;
 public class MenuInfo {
 
   @Id
-  private Long menuId;
+  private Integer menuId;
   @Column(nullable = false)
   private String menuCategory;
   @Column(nullable = false)
   private String menuName;
   @Column(nullable = false)
-  private Long price;
+  private Integer price;
   @Column
   private String description;
   @Column
   private String imageUrl;
   @Column(nullable = false)
-  private Long cafeId;
+  private Integer cafeId;
 
 }
