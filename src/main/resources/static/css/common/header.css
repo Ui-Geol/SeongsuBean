@@ -1,29 +1,46 @@
 .navbar-custom {
-  background-color: #f5f0e6;
+  background-color: #ffffff;
+  border-bottom: 1px solid #8a6534;
   font-family: 'Noto Sans KR', sans-serif;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  height: 64px; /* ✅ 로고 높이에 맞게 고정 */
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  padding: 0;
 }
 
 .container {
-  max-width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-.navbar-custom .navbar-brand {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #6b4f1d;
+.navbar-custom .container-fluid {
   display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-left: 0;
+  padding-right: 0;
+}
+.navbar-brand {
+  display: flex;             /* ✅ 수평 정렬 */
+  gap: 0.8rem;
+  height: 100%;
+}
+
+.logo-icon {
+  height: 65px;
+  display: block;
+  align-items: flex-end;
+  margin-top: 8px;
+}
+
+
+.logo-text {
+  height: 35px;
+  display: block;
   align-items: center;
+  margin-top: 25px;
 }
-
-.navbar-custom .navbar-brand img {
-  height: 40px;
-  margin-right: 0.5rem;
-}
-
 .navbar-custom .nav-link {
   color: #6b4f1d;
   font-size: 1.1rem;
@@ -35,12 +52,20 @@
 }
 
 .btn-login {
-  background-color: #6b4f1d;
-  color: #fff;
-  border-radius: 0.25rem;
-  padding: 0.35rem 1rem;
+  position: relative;
+  z-index: 10;
+  background-color: #93653B !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 0.4rem 1.2rem;
   font-size: 1rem;
   font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+  margin-top: 7px;
 }
 
 .btn-login:hover {
@@ -52,5 +77,11 @@
 .navbar-nav {
   flex-grow: 1;
   justify-content: center;
+}
+.navbar-nav .nav-link {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #523820;
+  margin-top: 10px;
 }
 
