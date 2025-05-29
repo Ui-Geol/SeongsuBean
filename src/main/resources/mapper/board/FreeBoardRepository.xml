@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oopsw.seongsubean.board.repository.FreeBoardRepository">
+  <insert id="addFreeBoard" useGeneratedKeys="true" keyProperty="freeBoardId" parameterType="com.oopsw.seongsubean.board.dto.FreeBoardDTO">
+    INSERT INTO FREE_BOARD (TITLE, HEAD_WORD, CONTENT, CREATED_DATE, EMAIL)
+    VALUES (#{title}, #{headWord}, #{content}, NOW(), #{email})
+  </insert>
+  <insert id="addFreeBoardImages" parameterType="map">
+    INSERT INTO FREE_BOARD_IMAGE (IMAGE, FREE_BOARD_ID)
+    VALUES (#{image}, #{freeBoardId})
+  </insert>
+  <select id="getFreeBoardList" resultType="com.oopsw.seongsubean.board.dto.FreeBoardDTO">
+    SELECT
+      f.FREE_BOARD_ID,
+      f.TITLE,
+      f.CONTENT,
+      f.CREATED_DATE,
+      (SELECT i.IMAGE
+       FROM FREE_BOARD_IMAGE i
+       WHERE i.FREE_BOARD_ID = f.FREE_BOARD_ID
+       ORDER BY i.FREE_BOARD_IMAGE_ID ASC
+        LIMIT 1) AS image
+    FROM FREE_BOARD f
+    ORDER BY f.CREATED_DATE DESC
+  </select>
+  <select id="getFreeBoardDetail" parameterType="int" resultType="com.oopsw.seongsubean.board.dto.FreeBoardDTO">
+    SELECT TITLE, CONTENT, CREATED_DATE
+    FROM FREE_BOARD
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+  </select>
+  <select id="getFreeBoardDetailImages" parameterType="int" resultType="String">
+    SELECT IMAGE
+    FROM FREE_BOARD_IMAGE
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+  </select>
+  <update id="setFreeBoardDetail" parameterType="com.oopsw.seongsubean.board.dto.FreeBoardDTO">
+    UPDATE FREE_BOARD
+    SET
+      TITLE   = IF(#{title} IS NOT NULL, #{title}, TITLE),
+      CONTENT = IF(#{content} IS NOT NULL, #{content}, CONTENT)
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+  </update>
+  <delete id="removeFreeBoard" parameterType="int">
+    DELETE FROM FREE_BOARD
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+  </delete>
+  <delete id="removeFreeBoardImages" parameterType="int">
+    DELETE FROM FREE_BOARD_IMAGE
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+  </delete>
+  <insert id="addFreeBoardComment" useGeneratedKeys="true" keyProperty="freeBoardId" parameterType="com.oopsw.seongsubean.board.dto.FreeBoardCommentDTO">
+    INSERT INTO FREE_BOARD_COMMENT (`COMMENT`, COMMENT_DATE, FREE_BOARD_ID, EMAIL)
+    VALUES (#{content}, NOW(), #{freeBoardId}, #{email})
+  </insert>
+  <select id="getFreeBoardDetailComments" parameterType="int" resultType="com.oopsw.seongsubean.board.dto.FreeBoardCommentDTO">
+    SELECT
+      COMMENT AS content,
+      COMMENT_DATE AS createdDate,
+      EMAIL,
+      FREE_BOARD_COMMENT_ID
+    FROM FREE_BOARD_COMMENT
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+    ORDER BY COMMENT_DATE DESC
+  </select>
+  <delete id="removeFreeBoardComments" parameterType="int">
+    DELETE FROM FREE_BOARD_COMMENT
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+  </delete>
+</mapper>
