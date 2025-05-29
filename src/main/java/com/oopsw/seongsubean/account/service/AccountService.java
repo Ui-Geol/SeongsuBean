@@ -20,6 +20,7 @@ public class AccountService {
     }
     existsNickName(userDTO.getNickName());
     userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+
     return accountRepository.addUser(userDTO);
   }
 

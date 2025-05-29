@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oopsw.seongsubean.board.repository.ReportBoardRepository">
+  <insert id="addReportBoard" useGeneratedKeys="true" keyProperty="reportBoardId" parameterType="com.oopsw.seongsubean.board.dto.ReportBoardDTO">
+    INSERT INTO REPORT_BOARD (TITLE, CONTENT, CREATED_DATE, EMAIL)
+    VALUES (#{title}, #{content}, NOW(), #{email})
+  </insert>
+  <insert id="addReportBoardImage" parameterType="map">
+    INSERT INTO REPORT_BOARD_IMAGE (IMAGE, REPORT_BOARD_ID)
+    VALUES (#{image}, #{reportBoardId})
+  </insert>
+  <select id="getReportBoardList" resultType="com.oopsw.seongsubean.board.dto.ReportBoardDTO">
+    SELECT
+      r.REPORT_BOARD_ID,
+      r.TITLE,
+      r.CONTENT,
+      r.CREATED_DATE,
+      (SELECT i.IMAGE
+       FROM REPORT_BOARD_IMAGE i
+       WHERE i.REPORT_BOARD_ID = r.REPORT_BOARD_ID
+       ORDER BY i.REPORT_BOARD_IMAGE_ID ASC
+        LIMIT 1) AS image
+    FROM REPORT_BOARD r
+    ORDER BY r.CREATED_DATE DESC
+  </select>
+  <select id="getReportBoardDetail" parameterType="int" resultType="com.oopsw.seongsubean.board.dto.ReportBoardDTO">
+    SELECT TITLE, CONTENT, CREATED_DATE
+    FROM REPORT_BOARD
+    WHERE REPORT_BOARD_ID = #{reportBoardId}
+  </select>
+  <select id="getReportBoardDetailImages" parameterType="int" resultType="String">
+    SELECT IMAGE
+    FROM REPORT_BOARD_IMAGE
+    WHERE REPORT_BOARD_ID = #{reportBoardId}
+  </select>
+  <update id="setReportBoardDetail" parameterType="com.oopsw.seongsubean.board.dto.ReportBoardDTO">
+    UPDATE REPORT_BOARD
+    SET
+      TITLE   = IF(#{title} IS NOT NULL, #{title}, TITLE),
+      CONTENT = IF(#{content} IS NOT NULL, #{content}, CONTENT)
+    WHERE REPORT_BOARD_ID = #{reportBoardId}
+  </update>
+  <delete id="removeReportBoard" parameterType="int">
+    DELETE FROM REPORT_BOARD
+    WHERE REPORT_BOARD_ID = #{reportBoardId}
+  </delete>
+  <delete id="removeReportBoardImages" parameterType="int">
+    DELETE FROM REPORT_BOARD_IMAGE
+    WHERE REPORT_BOARD_ID = #{reportBoardId}
+  </delete>
+</mapper>
