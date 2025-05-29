@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountService {
   private final AccountRepository accountRepository;
-//  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   public boolean addUser(UserDTO userDTO) {
     if(accountRepository.existsEmail(userDTO.getEmail())){
       throw new IllegalArgumentException("이미 가입된 이메일입니다.");
     }
     existsNickName(userDTO.getNickName());
-//    userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+    userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
     return accountRepository.addUser(userDTO);
   }
@@ -44,7 +44,7 @@ public class AccountService {
       if(!userDTO.getNewPassword().equals(userDTO.getNewPasswordCheck())){
         throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
       }
-//      userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getNewPassword()));
+      userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getNewPassword()));
     }
     if(userDTO.getNewNickName() != null){
       existsNickName(userDTO.getNewNickName());
