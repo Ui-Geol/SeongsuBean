@@ -1,6 +1,6 @@
 package com.oopsw.seongsubean.board.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class FreeBoardCommentDTO {
   private Integer freeBoardId;
   private String content;
-  private LocalDate createdDate;
+  private LocalDateTime createdDate;
   private Integer freeBoardCommentId;
   private String email;
 }
