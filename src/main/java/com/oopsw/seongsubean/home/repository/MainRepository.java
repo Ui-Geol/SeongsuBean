@@ -1,18 +1,20 @@
 package com.oopsw.seongsubean.home.repository;
 
+import com.oopsw.seongsubean.cafe.dto.CafeDTO;
+import com.oopsw.seongsubean.cafe.dto.RankingDTO;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface MainRepository {
 
-//  List<CafeInfo> getMainCardView();
-//
-//  List<RankingDto> getRanking();
+  List<CafeDTO> getMainCardView();
+
+  List<RankingDTO> getRanking();
 
   String getSearchCafeName(String cafeName);
 
-  List<String> getSearchCafeMenu(String menuName);
+  List<String> getSearchCafeMenu(String menuCategory);
 
   List<String> getEachMenu(String menuName);
 
