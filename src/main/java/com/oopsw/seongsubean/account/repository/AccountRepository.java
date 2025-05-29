@@ -18,4 +18,5 @@ public interface AccountRepository {
   public List<Map<String, Object>> getMyCafes(String email);
   public boolean existsEmail(String email);
   public boolean existsNickName(String nickName);
+  public UserDTO findByEmail(String email);
 }
