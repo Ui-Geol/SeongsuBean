@@ -1,34 +1,35 @@
-//package com.oopsw.seongsubean.home;
-//
-//import com.oopsw.seongsubean.home.repository.MainRepository;
-//import java.util.List;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//@SpringBootTest()
-//public class MainRepositoryTest {
-//
-//  @Autowired
-//  private MainRepository mainRepository;
-//
-//  @Test
-//  public void getSearchCafeNameTest() {
-//    String cafe = mainRepository.getSearchCafeName("대림창고");
-//    System.out.println(cafe);
-//  }
-//
-//  @Test
-//  public void getSearchCafeMenuTest() {
-//    List<String> cafe = mainRepository.getSearchCafeMenu("바게트");
-//    System.out.println(cafe);
-//  }
-//
-//  @Test
-//  public void getEachMenuTest() {
-//    List<String> cafe = mainRepository.getEachMenu("바게트");
-//    System.out.println(cafe);
-//  }
+package com.oopsw.seongsubean.home;
+
+import com.oopsw.seongsubean.cafe.dto.CafeDTO;
+import com.oopsw.seongsubean.home.repository.MainRepository;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest()
+public class MainRepositoryTest {
+
+  @Autowired
+  private MainRepository mainRepository;
+
+  @Test
+  public void getSearchCafeNameTest() {
+    String cafe = mainRepository.getSearchCafeName("대림창고");
+    System.out.println(cafe);
+  }
+
+  @Test
+  public void getSearchCafeMenuTest() {
+    List<String> cafe = mainRepository.getSearchCafeMenu("빵");
+    System.out.println(cafe);
+  }
+
+  @Test
+  public void getEachMenuTest() {
+    List<String> cafe = mainRepository.getEachMenu("바게트");
+    System.out.println(cafe);
+  }
 
 //  @Test
 //  public void getMainCardViewTest(){
@@ -41,4 +42,4 @@
 //    List<RangkingDTO> cafe = mainRepository.getRanking();
 //    System.out.println(cafe);
 //}
-//}
+}

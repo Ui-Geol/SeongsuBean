@@ -1,14 +1,5 @@
 // 즉시 실행 함수로 스코프 격리
 (() => {
-    // 2) 실제 DB 연동 시 활성화할 fetch 예시
-    /*
-    fetch('/api/places/from-db')
-      .then(res => res.json())
-      .then(data => {
-        dbPlaces.splice(0, dbPlaces.length, ...data);
-      })
-      .catch(console.error);
-    */
 
     // 2. Kakao 지도 생성 (중심 좌표 및 줌 레벨 설정)
     const mapContainer = document.getElementById('map');
@@ -29,11 +20,8 @@
     geocoder.addressSearch('서울특별시 성동구 성수일로 56', (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
             const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            // 커스텀 마커
-            const beanContent = '<img src="/images/beanMarker.png" width="50">';
             const beanOverlay = new kakao.maps.CustomOverlay({
                 position: coords,
-                content: beanContent,
                 yAnchor: 1,
                 zIndex: 2
             });
@@ -46,7 +34,7 @@
                 content: '<img src="/images/common/SeongsuBean.png" width="1200" height="500" style="pointer-events: none;">',
                 xAnchor: 0.5,
                 yAnchor: 0.5,
-                zIndex: 1
+                zIndex: 0
             });
             illustration.setMap(map);
         } else {
@@ -54,6 +42,31 @@
         }
     });
 
+
+    // ① Top5 가져오기 + 마커 추가
+    function fetchTop5() {
+        fetch('/api/search/top5')
+            .then(res => res.json())
+            .then(list => {
+                clearMarkers();
+                list.forEach(addr => addMarkerByAddress(addr));
+            })
+            .catch(console.error);
+    }
+
+    document.querySelectorAll('#filterIcons .filter-icon-img')
+    document.getElementById('crownBtn')
+        .addEventListener('click', fetchTop5);
+
+// 아이콘 클릭 리스너
+    document.querySelectorAll('#filterIcons .filter-icon-img')
+    .forEach(img => {
+        img.addEventListener('click', () => {
+            const menuName = img.dataset.menu;
+            clearMarkers();
+            fetchCafeAddresses(menuName);
+        });
+    });
     // 4. 지도에 표시된 마커 객체들을 저장할 배열
     let markers = [];
 
@@ -63,54 +76,62 @@
         markers = [];
     }
 
-    const cafes = [
-        {
-            name: '아쿠아산타 성수카페',
-            desc: '분위기 맛집',
-            img: 'images/Cafe1.png'
-        },
-        {
-            name: '블루보틀 커피',
-            desc: '성수 카페',
-            img: 'images/Cafe2.png'
-        },
-        {
-            name: '미디엄 스톤',
-            desc: '아늑한 공간',
-            img: 'images/Cafe3.png'
-        },
-        {
-            name: '파케파케 성수',
-            desc: '전통 커피',
-            img: 'images/Cafe4.png'
-        },
-        {
-            name: '카페 에이',
-            desc: '신선한 원두',
-            img: 'images/Cafe5.png'
-        },
-        {   name: '카페 비',
-            desc: '넓은 테라스',
-            img: 'images/Cafe6.png'
-        },
-        {
-            name: '카페 씨',
-            desc: '달콤한 디저트',
-            img: 'images/Cafe7.png'
-        },
-        {
-            name: '카페 디',
-            desc: '모던 인테리어',
-            img: 'images/Cafe8.png'
-        },
-        // … 필요만큼 늘리세요
-    ];
+
+// 3) 주소→위경도 변환→마커 생성
+    function addMarkerByAddress(address) {
+        console.log('[addMarkerByAddress] 검색:', address);
+        geocoder.addressSearch(address, (result, status) => {
+            if (status === kakao.maps.services.Status.OK && result[0]) {
+                const { y: lat, x: lng } = result[0];
+                const pos = new kakao.maps.LatLng(lat, lng);
+
+                const marker = new kakao.maps.Marker({
+                    map: map,
+                    position: pos
+                });
+                markers.push(marker);
+            }
+        });
+    }
+    function fetchCafeAddresses(menuName) {
+        console.log('[fetchCafeAddresses] 요청하는 메뉴:', menuName);
+        fetch(`/api/search-by-menu?menuName=${encodeURIComponent(menuName)}`)
+
+        .then(res => res.json())
+        .then(addressList => {
+            console.log('[fetchCafeAddresses] 받은 데이터:', addressList);
+            if (!Array.isArray(addressList)) return;
+            clearMarkers();
+            addressList.forEach(addr => {
+                const addrs = Array.isArray(addr) ? addr : [addr];
+                addrs.forEach(a => addMarkerByAddress(a));
+            });
+        })
+        .catch(err => console.error(err));
+    }
+
 
     const ROW_SIZE = 4;      // 한 줄에 보여줄 카드 수
     let currentIndex = 0;    // 다음에 렌더링할 데이터 시작 인덱스
+    let cafes = [];                  // ← 여기에 API로 받은 데이터가 들어갑니다
 
     const wrapper = document.getElementById('cards-wrapper');
     const btn = document.getElementById('load-more');
+
+
+    // ─── 1. API 호출: cafes에 데이터 채우고 첫 줄 렌더링 ───
+    fetch('/api/main/cards')
+        .then(res => res.json())
+        .then(data => {
+            console.log('API 응답:', data);
+            cafes = data;
+            btn.style.display = cafes.length > ROW_SIZE ? 'block' : 'none';
+            renderRow();               // 첫 ROW_SIZE개 렌더링
+            // 더 로드 버튼 이벤트 바인딩 (한 번만)
+            btn.addEventListener('click', renderRow);
+        })
+        .catch(err => console.error('메인 카드 로딩 실패', err));
+
 
     // 카드 한 줄(row) 렌더링 함수
     function renderRow() {
@@ -131,12 +152,12 @@
             });
 
             card.innerHTML = `
-          <img src="${cafe.img}" alt="${cafe.name}">
-          <div class="info">
-            <h4>${cafe.name}</h4>
-            <p>${cafe.desc}</p>
-          </div>
-        `;
+            <img src="${cafe.mainImage}" alt="${cafe.cafeName}">
+            <div class="info">
+            <h4>${cafe.cafeName}</h4>
+            <p>${cafe.introduction || ''}</p>
+            </div>
+            `;
             row.appendChild(card);
         });
 
@@ -169,7 +190,10 @@
                 const markerImage = new kakao.maps.MarkerImage(imageSrc,
                     new kakao.maps.Size(24, 35));
                 const marker = new kakao.maps.Marker(
-                    {map, position: coords, image: markerImage, title: place.name});
+                    {map,
+                        position: coords,
+                        image: markerImage,
+                        title: place.name});
                 markers.push(marker);
                 map.setCenter(coords);
             } else {
