@@ -3,28 +3,37 @@ package com.oopsw.seongsubean.cafe.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.oopsw.seongsubean.cafe.domain.ReviewImage;
+import com.oopsw.seongsubean.config.PropertyConfig;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@SpringBootTest
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(PropertyConfig.class)
+@TestMethodOrder(OrderAnnotation.class)
 @Transactional
 class ReviewImageRepositoryTest {
 
   @Autowired
+  private PropertyConfig propertyConfig;
+
+  @Autowired
   private ReviewImageRepository reviewImageRepository;
 
-  //ReviewImage 쓰기
-
-  //  # 5. 리뷰 ID를 사용해서 리뷰 이미지 추가
-//  INSERT INTO REVIEW_IMAGE (IMAGE, REVIEW_ID) VALUES ('/images/cafe/Cafe39.png', (SELECT REVIEW_ID FROM REVIEW WHERE CAFE_ID = 3 AND EMAIL ='ANYUJIN0901@GMAIL.COM' ORDER BY REVIEW_DATE LIMIT 1));
   @Test
   @DisplayName("리뷰 이미지 추가 테스트")
+  @Order(2)
   public void addReviewImageTest() {
     ReviewImage newReviewImage = ReviewImage.builder()
         .image("/images/cafe/Cafe2.png")
@@ -38,10 +47,9 @@ class ReviewImageRepositoryTest {
     log.info(String.valueOf(savedReviewImage.getReviewImageId()));
   }
 
-  //  # 3. 리뷰 ID를 통해 이미지 불러오기
-//  SELECT IMAGE FROM REVIEW_IMAGE WHERE REVIEW_ID = 3;
   @Test
   @DisplayName("리뷰 이미지 조회 테스트")
+  @Order(1)
   public void getReviewImageByReviewIdTest() {
     Optional<ReviewImage> savedReviewImage = reviewImageRepository.findById(3);
     assertThat(savedReviewImage).isPresent();
@@ -49,10 +57,9 @@ class ReviewImageRepositoryTest {
 
   }
 
-  //  11) 리뷰 이미지 삭제
-//  DELETE FROM REVIEW_IMAGE WHERE REVIEW_ID = 3;
   @Test
   @DisplayName("리뷰 이미지 삭제 테스트")
+  @Order(3)
   public void removeReviewImageByReviewIdTest() {
     reviewImageRepository.deleteById(3);
     assertThat(reviewImageRepository.findById(3)).isNotPresent();
