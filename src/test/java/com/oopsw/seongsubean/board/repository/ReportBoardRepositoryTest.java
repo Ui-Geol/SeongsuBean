@@ -44,7 +44,7 @@ public class ReportBoardRepositoryTest {
     Map<String, Object> map = new HashMap<>();
     map.put("reportBoardId", 1); // 테스트 게시글 ID
     map.put("image", "/images/cafe/Cafe13.png");
-    boolean result = reportBoardRepository.addReportBoardImage(map);
+    boolean result = reportBoardRepository.addReportBoardImages(map);
     System.out.println("✅ 이미지 등록 결과: " + result);
   }
 
@@ -54,7 +54,7 @@ public class ReportBoardRepositoryTest {
     map.put("reportBoardId", 31); // 테스트 게시글 ID
     map.put("image", "/images/cafe/Cafe13.png");
     assertThrows(DataIntegrityViolationException.class, () -> {
-      reportBoardRepository.addReportBoardImage(map);
+      reportBoardRepository.addReportBoardImages(map);
     });
   }
 

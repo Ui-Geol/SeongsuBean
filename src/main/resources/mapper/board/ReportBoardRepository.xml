@@ -5,7 +5,7 @@
     INSERT INTO REPORT_BOARD (TITLE, CONTENT, CREATED_DATE, EMAIL)
     VALUES (#{title}, #{content}, NOW(), #{email})
   </insert>
-  <insert id="addReportBoardImage" parameterType="map">
+  <insert id="addReportBoardImages" parameterType="map">
     INSERT INTO REPORT_BOARD_IMAGE (IMAGE, REPORT_BOARD_ID)
     VALUES (#{image}, #{reportBoardId})
   </insert>

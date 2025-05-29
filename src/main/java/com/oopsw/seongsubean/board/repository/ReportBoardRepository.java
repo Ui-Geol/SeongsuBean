@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ReportBoardRepository {
   public boolean addReportBoard(ReportBoardDTO dto);
-  public boolean addReportBoardImage(Map<String, Object> map);
+  public boolean addReportBoardImages(Map<String, Object> map);
   public List<ReportBoardDTO> getReportBoardList(); //게시판 조회
   public ReportBoardDTO getReportBoardDetail(int reportBoardId); //게시글 조회
   public List<String> getReportBoardDetailImages(int reportBoardId);
