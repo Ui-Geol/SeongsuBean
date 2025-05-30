@@ -49,24 +49,17 @@ public class CafeRespositoryTest {
     assertThat(cafeRepository.getCafeIdByCafeNameAndAddress(cafe)).isEqualTo(1);
   }
 
-  //  4) 상세페이지 공통
-//# 1. 카페 이름, 평균 별점, 리뷰 개수, 메인 이미지 -> 뷰로 구현
   @Test
   public void getCafeSummaryViewByCafeIdTest() {
     assertThat(cafeRepository.getCafeHeaderByCafeId(3).getCafeName()).isEqualTo("오우드");
   }
 
-  //  5) 상세페이지 개요 조회
-//# 1. 아이디 값으로 (주소, 상세주소, 상태, 전화번호, 소개)
   @Test
   public void getAllByCafeIdTest() {
     log.info(cafeRepository.getAllByCafeId(3).toString());
     assertThat(cafeRepository.getAllByCafeId(3)).isNotNull();
   }
 
-  //# 2. 카페 업데이트
-//  UPDATE CAFE_INFO SET CAFE_NAME = '테스트 카페', ADDRESS = '서울시 성수로 3번지', DETAIL_ADDRESS='3층', ZIP_CODE='34323', CALL_NUMBER='010-2432-4523', INTRODUCTION='여기 맛도리입니다', MAIN_IMAGE='/images/cafe/Cafe4.png'
-//  WHERE CAFE_ID = 3;
   @Test
   public void setCafeTest() {
     CafeDTO cafe = cafeRepository.getAllByCafeId(1);
@@ -74,8 +67,6 @@ public class CafeRespositoryTest {
     assertThat(cafeRepository.setCafe(cafe)).isTrue();
   }
 
-  //13) 카페 삭제
-//  DELETE FROM CAFE_INFO WHERE CAFE_ID = 52;
   @Test
   public void removeCafeTest() {
     assertThat(cafeRepository.removeCafe(1)).isTrue();

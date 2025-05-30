@@ -26,7 +26,6 @@ public class OperationTimeRepositoryTest {
   @Autowired
   private OperationTimeRepository operationTimeRepository;
 
-  //카페 생성 시 사용
   @Test
   public void addOperationTimeTest() {
     OperationTime operationTime = OperationTime.builder()
@@ -41,7 +40,6 @@ public class OperationTimeRepositoryTest {
     assertThat(newOperationTime).isEqualTo(operationTime);
   }
 
-  //상세 페이지에 사용, 단일 출력
   @Test
   public void findByCafeIdAndWeekdayTest() {
     Optional<OperationTime> operationTime = operationTimeRepository.findByCafeIdAndWeekday(3,
@@ -52,7 +50,6 @@ public class OperationTimeRepositoryTest {
     assertThat(operationTime.get().getWeekday()).isEqualTo("월요일");
   }
 
-  //상세 페이지에 사용, 리스트 출력
   @Test
   public void findByCafeIdTest() {
     List<OperationTime> operationTimeList = operationTimeRepository.findAllByCafeId(3);
@@ -61,7 +58,6 @@ public class OperationTimeRepositoryTest {
     assertThat(operationTimeList.size()).isEqualTo(6);
   }
 
-  //영업시간 삭제
   @Test
   public void removeByOperationTimeIdTest() {
     operationTimeRepository.deleteById(3);
@@ -69,7 +65,6 @@ public class OperationTimeRepositoryTest {
     assertThat(operationTimeRepository.findById(3)).isNotPresent();
   }
 
-  //영업시간 수정
   @Test
   public void setOperationTimeTest() {
     OperationTime existingOperationTime = operationTimeRepository.findById(40)
