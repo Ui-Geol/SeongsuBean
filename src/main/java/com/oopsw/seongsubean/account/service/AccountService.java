@@ -15,10 +15,10 @@ public class AccountService {
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   public boolean addUser(UserDTO userDTO) {
-    if(accountRepository.existsEmail(userDTO.getEmail())){
-      throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+    if(existsEmail(userDTO.getEmail()) ||
+        existsNickName(userDTO.getNickName())){
+      throw new IllegalArgumentException("정보 중복");
     }
-    existsNickName(userDTO.getNickName());
     userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
     return accountRepository.addUser(userDTO);
@@ -42,7 +42,7 @@ public class AccountService {
   public boolean setUserInfo(UserDTO userDTO) {
     if(userDTO.getNewPassword() != null){
       if(!userDTO.getNewPassword().equals(userDTO.getNewPasswordCheck())){
-        throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        throw new IllegalArgumentException("비밀번호 불일치.");
       }
       userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getNewPassword()));
     }
@@ -65,9 +65,16 @@ public class AccountService {
     return accountRepository.getMyCafes(email);
   }
 
-  public void existsNickName(String nickName) {
+  public boolean existsNickName(String nickName) {
     if(accountRepository.existsNickName(nickName)){
-      throw new IllegalArgumentException("중복된 닉네임입니다.");
+      return true;
     }
+    return false;
+  }
+  public boolean existsEmail(String email) {
+    if(accountRepository.existsEmail(email)){
+      return true;
+    }
+    return false;
   }
 }

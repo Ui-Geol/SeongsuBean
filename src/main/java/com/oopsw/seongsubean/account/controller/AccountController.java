@@ -1,20 +1,38 @@
 package com.oopsw.seongsubean.account.controller;
 
+import com.oopsw.seongsubean.account.dto.UserDTO;
+import com.oopsw.seongsubean.account.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/account")
+@RequiredArgsConstructor
 public class AccountController {
+  private final AccountService accountService;
+
   @GetMapping("/login")
   public String login() {
     return "account/login-view";
   }
+
   @GetMapping("/join")
   public String join() {
     return "account/join-view";
   }
+
+  @PostMapping("/join")
+  public String joinAction(@ModelAttribute UserDTO form, Model model) {
+    accountService.addUser(form);
+    model.addAttribute("joinSuccess", true); // 메시지 전달
+    return "account/login-view";
+  }
+
   @GetMapping("/myPage")
   public String myPage() {
     return "account/my-page";

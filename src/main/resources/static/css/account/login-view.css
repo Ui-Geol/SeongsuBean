@@ -160,3 +160,7 @@ h2 {
   margin-bottom: 3px;
   color: #ff0000;
 }
+
+form{
+  width: 100%;
+}
