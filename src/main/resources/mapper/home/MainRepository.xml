@@ -73,11 +73,12 @@
   <!--랜덤으로 4개 카페(사진+이름) 조회-->
   <select id="getMainCardView"
     resultMap="CafeDTOResultMap">
-    SELECT CAFE_NAME,
+    SELECT CAFE_ID,
+           CAFE_NAME,
            INTRODUCTION,
            MAIN_IMAGE
     FROM CAFE_INFO
-    ORDER BY RAND() LIMIT 4
+    ORDER BY RAND()
   </select>
 
   <select id="getEachMenu"
@@ -89,5 +90,6 @@
                 ON ci.CAFE_ID = mi.CAFE_ID
     WHERE mi.MENU_NAME LIKE CONCAT('%', #{menuName}, '%')
   </select>
+
 
 </mapper>

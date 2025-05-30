@@ -28,7 +28,7 @@ public class MainServiceTest {
 
   @Test
   public void getSearchCafeNametest() {
-    String getSearchCafeName = mainService.getSearchCafeName("대림창고");
+    List<String> getSearchCafeName = mainService.getSearchCafeName("성수");
     System.out.println(getSearchCafeName);
   }
 
