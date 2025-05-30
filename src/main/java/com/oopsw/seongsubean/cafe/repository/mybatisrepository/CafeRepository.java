@@ -7,17 +7,17 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CafeRepository {
 
-  public CafeDTO getAllByCafeId(int cafeId);
+  CafeDTO getAllByCafeId(int cafeId);
 
-  public String getCafeNameByCafeId(int cafeId);
+  String getCafeNameByCafeId(int cafeId);
 
-  public Boolean addCafe(CafeDTO cafe);
+  Boolean addCafe(CafeDTO cafe);
 
-  public Integer getCafeIdByCafeNameAndAddress(CafeDTO cafe);
+  Integer getCafeIdByCafeNameAndAddress(CafeDTO cafe);
 
-  public CafeHeaderDTO getCafeHeaderByCafeId(int cafeId);
+  CafeHeaderDTO getCafeHeaderByCafeId(int cafeId);
 
-  public Boolean setCafe(CafeDTO cafe);
+  Boolean setCafe(CafeDTO cafe);
 
-  public Boolean removeCafe(int cafeId);
+  Boolean removeCafe(int cafeId);
 }

@@ -9,12 +9,12 @@ import org.springframework.data.domain.Pageable;
 @Mapper
 public interface ReviewRepository {
 
-  public Boolean addReview(ReviewDTO reviewDTO);
+  Boolean addReview(ReviewDTO reviewDTO);
 
-  public Integer getReviewIdByCafeIdAndEmail(ReviewDTO reviewDTO);
+  Integer getReviewIdByCafeIdAndEmail(ReviewDTO reviewDTO);
 
   List<ReviewDTO> getTwoReviews(@Param("pageable") Pageable pageable);
 
-  public Boolean removeReview(@Param("reviewId") Integer reviewId);
+  Boolean removeReview(@Param("reviewId") Integer reviewId);
 
 }
