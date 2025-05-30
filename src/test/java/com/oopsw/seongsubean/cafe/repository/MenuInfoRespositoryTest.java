@@ -1,32 +1,85 @@
 package com.oopsw.seongsubean.cafe.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.oopsw.seongsubean.cafe.domain.MenuInfo;
+import com.oopsw.seongsubean.cafe.repository.jparepository.MenuInfoRepository;
 import com.oopsw.seongsubean.config.PropertyConfig;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest
+@Slf4j
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(PropertyConfig.class)
+@Transactional
 public class MenuInfoRespositoryTest {
 
   @Autowired
   private MenuInfoRepository menuInfoRepository;
 
-//  # 1. 카페 테이블에 데이터 추가(카페 이름, 카페 주소, 카페 상세 주소, 카페 우편번호, 카페 전화번호, 카페 소개, 카폐 대표이미지)
+  @Test
+  public void addMenuInfo() {
+    MenuInfo newMenuInfo = MenuInfo.builder()
+        .menuCategory("커피")
+        .menuName("씨쏠트커피")
+        .image("/images/cafe/Cafe4.png")
+        .price(4000)
+        .description("씨솔트 커피는 짜요")
+        .cafeId(6)
+        .build();
+    MenuInfo savedMenuInfo = menuInfoRepository.save(newMenuInfo);
 
-//  # 2. 카페 이름과 주소를 통해 ID값을 가져오기
+    assertThat(savedMenuInfo).isNotNull();
+    assertThat(savedMenuInfo.getMenuName()).isEqualTo(newMenuInfo.getMenuName());
+  }
 
-//  # 3. 카페 ID 값을 사용하여 영업 시간에 값 삽입
+  @Test
+  public void getMenuInfo() {
+    Pageable pageable = PageRequest.of(0, 2); // 첫 번째 페이지, 사이즈 2
+    Page<MenuInfo> result = menuInfoRepository.findByCafeId(41, pageable);
 
-//  6) 상세페이지 메뉴 조회
+    // Then
+    assertThat(result).isNotNull();
+    assertThat(result.getSize()).isEqualTo(2);
+  }
 
-//  9) 메뉴 수정
+  @Test
+  public void getMenuInfoByMenuId() {
+    MenuInfo menuInfo = menuInfoRepository.findByMenuId(60);
 
-//  # 2. 메뉴 업데이트
+    assertThat(menuInfo).isNotNull();
+    assertThat(menuInfo.getMenuName()).isEqualTo("아샷추");
 
-//  12) 메뉴 삭제
+  }
+
+  @Test
+  public void setMenuInfo() {
+    MenuInfo existingMenu = menuInfoRepository.findById(40)
+        .orElseThrow(() -> new RuntimeException("메뉴 없음"));
+
+    existingMenu.setMenuName("아이스 아메리카노");
+    existingMenu.setPrice(30);
+
+    MenuInfo updatedMenuInfo = menuInfoRepository.save(existingMenu);
+
+    assertThat(updatedMenuInfo.getMenuName()).isEqualTo("아이스 아메리카노");
+  }
+
+  @Test
+  public void deleteMenuInfo() {
+    menuInfoRepository.deleteById(40);
+
+    assertThat(menuInfoRepository.findById(40)).isNotPresent();
+  }
 
 
 }

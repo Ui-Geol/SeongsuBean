@@ -31,7 +31,7 @@ public class MenuInfo {
   @Column
   private String description;
   @Column
-  private String imageUrl;
+  private String image;
   @Column(nullable = false)
   private Integer cafeId;
 
