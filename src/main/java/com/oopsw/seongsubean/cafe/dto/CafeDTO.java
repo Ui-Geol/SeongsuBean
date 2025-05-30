@@ -17,7 +17,6 @@ public class CafeDTO {
   private String detailAddress;
   private String zipCode;
   private String callNumber;
-  private String phoneNumber;
   private String introduction;
   private String status;
   private String mainImage;
