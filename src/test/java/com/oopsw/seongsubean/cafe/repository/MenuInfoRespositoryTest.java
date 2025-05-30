@@ -27,7 +27,7 @@ public class MenuInfoRespositoryTest {
   private MenuInfoRepository menuInfoRepository;
 
   @Test
-  public void addMenuInfo() {
+  public void addMenuInfoTest() {
     MenuInfo newMenuInfo = MenuInfo.builder()
         .menuCategory("커피")
         .menuName("씨쏠트커피")
@@ -43,7 +43,7 @@ public class MenuInfoRespositoryTest {
   }
 
   @Test
-  public void getMenuInfo() {
+  public void getMenuInfoTest() {
     Pageable pageable = PageRequest.of(0, 2); // 첫 번째 페이지, 사이즈 2
     Page<MenuInfo> result = menuInfoRepository.findByCafeId(41, pageable);
 
@@ -53,7 +53,7 @@ public class MenuInfoRespositoryTest {
   }
 
   @Test
-  public void getMenuInfoByMenuId() {
+  public void getMenuInfoByMenuIdTest() {
     MenuInfo menuInfo = menuInfoRepository.findByMenuId(60);
 
     assertThat(menuInfo).isNotNull();
@@ -62,7 +62,7 @@ public class MenuInfoRespositoryTest {
   }
 
   @Test
-  public void setMenuInfo() {
+  public void setMenuInfoTest() {
     MenuInfo existingMenu = menuInfoRepository.findById(40)
         .orElseThrow(() -> new RuntimeException("메뉴 없음"));
 
@@ -75,7 +75,7 @@ public class MenuInfoRespositoryTest {
   }
 
   @Test
-  public void deleteMenuInfo() {
+  public void deleteMenuInfoTest() {
     menuInfoRepository.deleteById(40);
 
     assertThat(menuInfoRepository.findById(40)).isNotPresent();
