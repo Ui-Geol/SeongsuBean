@@ -11,18 +11,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class CafeDTO {
+public class CafeHeaderDTO {
 
-  private Integer cafeId;
   private String cafeName;
-  private String address;
-  private String detailAddress;
-  private String zipCode;
-  private String callNumber;
-  private String introduction;
-  private String status;
+  private Float avgRating;
+  private Integer totalCount;
   private String mainImage;
-  private String pageCreatedDate;
-  private String email;
 
 }

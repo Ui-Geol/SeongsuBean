@@ -1,9 +1,23 @@
 package com.oopsw.seongsubean.cafe.repository.mybatisrepository;
 
+import com.oopsw.seongsubean.cafe.dto.CafeDTO;
+import com.oopsw.seongsubean.cafe.dto.CafeHeaderDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface CafeRepository {
 
-  public String getCafeName(int cafeId);
+  CafeDTO getAllByCafeId(int cafeId);
+
+  String getCafeNameByCafeId(int cafeId);
+
+  Boolean addCafe(CafeDTO cafe);
+
+  Integer getCafeIdByCafeNameAndAddress(CafeDTO cafe);
+
+  CafeHeaderDTO getCafeHeaderByCafeId(int cafeId);
+
+  Boolean setCafe(CafeDTO cafe);
+
+  Boolean removeCafe(int cafeId);
 }

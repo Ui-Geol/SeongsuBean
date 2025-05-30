@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oopsw.seongsubean.cafe.repository.mybatisrepository.ReviewRepository">
+  <insert id="addReview" parameterType="com.oopsw.seongsubean.cafe.dto.ReviewDTO">
+    INSERT INTO REVIEW (REVIEW_CONTENTS, STAR_SCORE, CAFE_ID, EMAIL, REVIEW_DATE)
+    VALUES (#{reviewContents}, #{starScore}, #{cafeId}, #{email}, NOW())
+  </insert>
+  <delete id="removeReview">
+    DELETE
+    FROM REVIEW
+    WHERE REVIEW_ID = #{reviewId};
+  </delete>
+
+  <select id="getReviewIdByCafeIdAndEmail" parameterType="com.oopsw.seongsubean.cafe.dto.ReviewDTO"
+    resultType="Integer">
+    SELECT REVIEW_ID
+    FROM REVIEW
+    WHERE CAFE_ID = #{cafeId}
+      AND EMAIL = #{email}
+    ORDER BY REVIEW_DATE LIMIT 1
+  </select>
+
+  <select id="getTwoReviews" resultType="com.oopsw.seongsubean.cafe.dto.ReviewDTO">
+    SELECT review_id       as reviewId,
+           review_contents as reviewContents,
+           review_date     as reviewDate,
+           star_score      as starScore,
+           cafe_id         as cafeId,
+           email           as email
+    FROM review
+    ORDER BY REVIEW_DATE
+      LIMIT #{pageable.pageSize}
+    OFFSET #{pageable.offset}
+  </select>
+
+</mapper>
