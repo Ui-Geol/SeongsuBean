@@ -2,17 +2,26 @@ package com.oopsw.seongsubean.board.repository;
 
 import com.oopsw.seongsubean.board.dto.FreeBoardCommentDTO;
 import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
+import com.oopsw.seongsubean.config.PropertyConfig;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
+
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+
+@MybatisTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(PropertyConfig.class)
 public class FreeBoardRepositoryTest {
   @Autowired
   FreeBoardRepository freeBoardRepository;
