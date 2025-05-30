@@ -1,4 +1,4 @@
-package com.oopsw.seongsubean.cafe.repository;
+package com.oopsw.seongsubean.cafe.repository.mybatisrepository;
 
 import org.apache.ibatis.annotations.Mapper;
 
