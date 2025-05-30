@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
-    <title layout:fragment="title">자유게시글 작성</title>
+    <title layout:fragment="title">제보 게시글 작성</title>
     <link layout:fragment="styles" rel="stylesheet" th:href="@{/css/board/post.css}" />
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
@@ -13,20 +13,33 @@
 <!-- Main Content -->
 <div layout:fragment="content">
     <div class="main-container">
-        <h1 class="page-title">게시글 쓰기</h1>
-        <form>
+        <h1 class="page-title" th:text="${mode} == 'update' ? '게시글 수정' : '게시글 쓰기'">게시글 쓰기</h1>
+
+        <form id="report-form" enctype="multipart/form-data">
             <!-- Title Input -->
             <div class="mb-4">
-                <input type="text" class="form-control" placeholder="제목을 입력하세요">
+                <input type="text" id="title" name="title" class="form-control" placeholder="제목을 입력하세요"
+                       th:value="${report?.title}" />
+
             </div>
 
-            <!-- ✅ Toast UI Editor 삽입 -->
+            <!-- Toast UI Editor -->
             <div class="mb-4">
                 <div id="editor" style="height: 500px;"></div>
-                <input type="hidden" name="contents" id="editor-contents">
+                <input type="hidden" name="content" id="editor-contents">
             </div>
 
-            <!-- Action Buttons -->
+            <!-- 이메일 hidden (로그인 연동 시 제거) -->
+            <input type="hidden" name="email" id="email" value="taylor1213@gmail.com" />
+            <!-- input type="hidden" name="email" id="email" th:value="${report?.email}" / -->
+
+
+            <!-- 이미지 업로드 -->
+            <div class="mb-4">
+                <input type="file" name="images" id="images" multiple>
+            </div>
+
+            <!-- Buttons -->
             <div class="action-buttons">
                 <button type="button" class="btn btn-cancel">취소</button>
                 <button type="submit" class="btn btn-submit">게시하기</button>
@@ -35,7 +48,7 @@
     </div>
 </div>
 <th:block layout:fragment="scripts">
-    <script th:src="@{/js/board/post.js}"></script>
+    <script th:src="@{/js/board/report-post.js}"></script>
 </th:block>
 </body>
 </html>
