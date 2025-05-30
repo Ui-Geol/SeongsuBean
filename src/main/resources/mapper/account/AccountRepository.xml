@@ -81,4 +81,10 @@
     FROM USER_INFO
     WHERE NICKNAME = #{nickName}
   </select>
+
+  <select id="findByEmail" resultType="com.oopsw.seongsubean.account.dto.UserDTO">
+    SELECT email, password, role
+    FROM user_info
+    WHERE email = #{email}
+  </select>
 </mapper>

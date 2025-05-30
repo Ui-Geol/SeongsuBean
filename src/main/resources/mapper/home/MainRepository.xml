@@ -3,38 +3,45 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oopsw.seongsubean.home.repository.MainRepository">
 
-<!--  <resultMap id="RankingResultMap" type="com.oopsw.seongsubean.home.dto.RankingDto">-->
-<!--    <result property="cafeId" column="CAFE_ID"/>-->
-<!--    <result property="cafeName" column="CAFE_NAME"/>-->
-<!--    <result property="avgStarScore" column="AVG_STAR_SCORE"/>-->
-<!--    <result property="reviewCount" column="REVIEW_COUNT"/>-->
-<!--  </resultMap>-->
+  <resultMap id="RankingResultMap" type="com.oopsw.seongsubean.cafe.dto.RankingDTO">
+    <result property="cafeId" column="CAFE_ID"/>
+    <result property="cafeName" column="CAFE_NAME"/>
+    <result property="avgStarScore" column="AVG_STAR_SCORE"/>
+    <result property="reviewCount" column="REVIEW_COUNT"/>
+  </resultMap>
 
-<!--  <resultMap id="CafeInfoResultMap" type="com.oopsw.seongsubean.home.dto.CafeInfo">-->
-<!--    <id property="cafeId" column="CAFE_ID"/>-->
-<!--    <result property="cafeName" column="CAFE_NAME"/>-->
-<!--    <result property="address" column="ADDRESS"/>-->
-<!--    <result property="detailAddress" column="DETAIL_ADDRESS"/>-->
-<!--    <result property="zipCode" column="ZIP_CODE"/>-->
-<!--    <result property="callNumber" column="CALL_NUMBER"/>-->
-<!--    <result property="status" column="STATUS"/>-->
-<!--    <result property="mainImage" column="MAIN_IMAGE"/>-->
-<!--  </resultMap>-->
+    <resultMap id="CafeDTOResultMap" type="com.oopsw.seongsubean.cafe.dto.CafeDTO">
+        <!-- 기본 키 -->
+        <id     property="cafeId"         column="CAFE_ID"         />
+        <!-- 일반 컬럼 -->
+        <result property="cafeName"       column="CAFE_NAME"       />
+        <result property="address"        column="ADDRESS"         />
+        <result property="detailAddress"   column="DETAIL_ADDRESS"  />
+        <result property="zipCode"        column="ZIP_CODE"        />
+        <result property="callNumber"     column="CALL_NUMBER"     />
+        <result property="phoneNumber"    column="PHONE_NUMBER"    />
+        <result property="introduction"   column="INTRODUCTION"    />
+        <result property="status"         column="STATUS"          />
+        <result property="mainImage"      column="MAIN_IMAGE"      />
+        <result property="pageCreatedDate" column="PAGE_CREATED_DATE"/>
+        <result property="email"          column="EMAIL"           />
+    </resultMap>
 
-<!--  &lt;!&ndash;카페랭킹조회(평균별점높은순으로 정렬)&ndash;&gt;-->
-<!--  <select id="getRanking"-->
-<!--    resultMap="RankingResultMap">-->
-<!--    SELECT ci.CAFE_ID,-->
-<!--           ci.CAFE_NAME,-->
-<!--      ROUND(AVG(r.STAR_SCORE), 2) AS AVG_STAR_SCORE,-->
-<!--           COUNT(r.REVIEW_ID)          AS REVIEW_COUNT-->
-<!--    FROM CAFE_INFO AS ci-->
-<!--           LEFT JOIN REVIEW AS r-->
-<!--                     ON ci.CAFE_ID = r.CAFE_ID-->
-<!--    GROUP BY ci.CAFE_ID,-->
-<!--             ci.CAFE_NAME-->
-<!--    ORDER BY AVG_STAR_SCORE DESC-->
-<!--  </select>-->
+  <!--카페랭킹조회(평균별점높은순으로 정렬)-->
+  <select id="getRanking"
+    resultMap="RankingResultMap">
+    SELECT ci.CAFE_ID,
+           ci.CAFE_NAME,
+      ROUND(AVG(r.STAR_SCORE), 2) AS AVG_STAR_SCORE,
+           COUNT(r.REVIEW_ID)          AS REVIEW_COUNT
+    FROM CAFE_INFO AS ci
+           LEFT JOIN REVIEW AS r
+                     ON ci.CAFE_ID = r.CAFE_ID
+    GROUP BY ci.CAFE_ID,
+             ci.CAFE_NAME
+    ORDER BY AVG_STAR_SCORE DESC
+    LIMIT 5
+  </select>
 
   <!--카페명으로주소조회-->
   <select id="getSearchCafeName"
@@ -49,22 +56,29 @@
   <select id="getSearchCafeMenu"
     parameterType="string"
     resultType="string">
-    SELECT DISTINCT ci.ADDRESS
-    FROM MENU_INFO AS mi
-           JOIN CAFE_INFO AS ci
-                ON mi.CAFE_ID = ci.CAFE_ID
-    WHERE mi.MENU_NAME LIKE CONCAT('%', #{menuName}, '%')
+      SELECT
+          concat(ci.ADDRESS,' ',ci.DETAIL_ADDRESS) as TOTAL_ADRESS
+      FROM
+          CAFE_INFO ci
+              JOIN (
+              SELECT DISTINCT
+                  CAFE_ID
+              FROM
+                  MENU_INFO
+              WHERE
+                  menu_category = #{menuCategory}
+          ) mi ON ci.CAFE_ID = mi.CAFE_ID;
   </select>
 
-<!--  &lt;!&ndash;랜덤으로 4개 카페(사진+이름) 조회&ndash;&gt;-->
-<!--  <select id="getMainCardView"-->
-<!--    resultMap="CafeInfoResultMap">-->
-<!--    SELECT CAFE_ID,-->
-<!--           CAFE_NAME,-->
-<!--           MAIN_IMAGE-->
-<!--    FROM CAFE_INFO-->
-<!--    ORDER BY RAND() LIMIT 4-->
-<!--  </select>-->
+  <!--랜덤으로 4개 카페(사진+이름) 조회-->
+  <select id="getMainCardView"
+    resultMap="CafeDTOResultMap">
+    SELECT CAFE_NAME,
+           INTRODUCTION,
+           MAIN_IMAGE
+    FROM CAFE_INFO
+    ORDER BY RAND() LIMIT 4
+  </select>
 
   <select id="getEachMenu"
     parameterType="string"

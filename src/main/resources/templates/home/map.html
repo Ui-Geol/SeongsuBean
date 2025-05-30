@@ -4,7 +4,7 @@
       layout:decorate="~{common/common}">
 <head>
   <title layout:fragment="title">SeongsuBean</title>
-  <link layout:fragment="styles" rel="stylesheet" href="/css/home/map.css" />
+  <link layout:fragment="styles" rel="stylesheet" href="/css/home/map.css"/>
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
   <link rel="stylesheet"
@@ -17,8 +17,8 @@
       <!-- 1) 맵 전체를 감싸는 컨테이너 -->
       <div id="map">
         <!-- 검색 입력창 (지도 우상단) -->
+        <div class="input-group">
         <div id="searchBox">
-          <div class="input-group">
             <input type="text" id="searchInput" class="form-control" placeholder="검색어 입력"/>
             <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i></button>
           </div>
@@ -29,17 +29,17 @@
 
         <!-- 카테고리 필터 아이콘들 (지도 우측) -->
         <div id="filterIcons" class="d-flex flex-column">
-          <button class="btn btn-light mb-2" data-category="coffee"><img src="/images/common/coffee.png" alt="Bread" class="filter-icon-img">
+          <button class="btn btn-light mb-2" data-category="coffee"><img src="/images/common/coffee.png" alt="Bread" data-menu="아메리카노" class="filter-icon-img">
           </button>
-          <button class="btn btn-light mb-2" data-category="bean"><img src="/images/common/bean.png" alt="Bread" class="filter-icon-img">
+          <button class="btn btn-light mb-2" data-category="bean"><img src="/images/common/bean.png" alt="bean" data-menu="원두" class="filter-icon-img">
           </button>
-          <button class="btn btn-light mb-2" data-category="cake"><img src="/images/common/bread.png" alt="Bread" class="filter-icon-img">
+          <button class="btn btn-light mb-2" data-category="cake"><img src="/images/common/bread.png" alt="bread" data-menu="빵" class="filter-icon-img">
           </button>
-          <button class="btn btn-light mb-2" data-category="cake"><img src="/images/common/cake.png" alt="Bread" class="filter-icon-img">
+          <button class="btn btn-light mb-2" data-category="cake"><img src="/images/common/cake.png" alt="cake." data-menu="케이크" class="filter-icon-img">
           </button>
-          <button class="btn btn-light mb-2" data-category="pie"><img src="/images/common/pie.png" alt="Bread" class="filter-icon-img">
+          <button class="btn btn-light mb-2" data-category="pie"><img src="/images/common/pie.png" alt="pie" data-menu="파이" class="filter-icon-img">
           </button>
-          <button class="btn btn-light mb-2" data-category="etc"><img src="/images/common/etc.png" alt="Bread" class="filter-icon-img">
+          <button class="btn btn-light mb-2" data-category="etc"><img src="/images/common/etc.png" alt="etc" data-menu="기타" class="filter-icon-img">
           </button>
         </div>
       </div>
@@ -47,19 +47,19 @@
         성수 카페 전체
       </div>
       <!-- 2) 카드 뷰 -->
+
       <div id="card-section">
-        <button id="cafe-registration">카페 만들기</button>
         <div id="cards-wrapper">
-          <div class="card"></div>
         </div>
         <button id="load-more" >더보기</button>
+        <button id="cafe-registration">카페 만들기</button>
       </div>
     </div>
   </div>
 </div>
 <th:block layout:fragment="scripts">
   <!-- API 키 값 없음 -->
-  <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=&libraries=services"></script>
+  <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=72b998ab46bbcf9abab9d7e0735f1b6f&libraries=services"></script>
   <script th:src="@{/js/home/map.js}"></script>
 </th:block>
 </body>

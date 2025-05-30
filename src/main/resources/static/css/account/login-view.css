@@ -144,12 +144,19 @@ h2 {
 
 .divider {
   width: 100%;
-  height: 1px;
-  background-color: #aea5a5; /* 회색 선 */
+  border-top: 1px solid #aea5a5;
   margin: 10px 0;
 }
 
 .footer {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.51);
+}
+
+.form-error{
+  font-size: 13px;
+  margin-left: -100px;
+  margin-top: -14px;
+  margin-bottom: 3px;
+  color: #ff0000;
 }

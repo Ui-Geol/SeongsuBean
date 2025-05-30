@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class cafeDTO {
+public class CafeDTO {
 
   private Integer cafeId;
   private String cafeName;
   private String address;
-  private String detailAdress;
+  private String detailAddress;
   private String zipCode;
   private String callNumber;
   private String phoneNumber;

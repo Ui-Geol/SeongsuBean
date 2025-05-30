@@ -8,13 +8,14 @@
 }
 
 .footer-container {
-  max-width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
 .footer-logo-img {
-  height: 60px;
+  max-width: 100%;
+  height: auto;
 }
 
 .footer-brand {
