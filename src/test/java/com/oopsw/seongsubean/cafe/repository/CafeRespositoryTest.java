@@ -1,5 +1,6 @@
 package com.oopsw.seongsubean.cafe.repository;
 
+import com.oopsw.seongsubean.cafe.repository.mybatisrepository.CafeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

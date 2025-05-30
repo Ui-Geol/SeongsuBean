@@ -3,6 +3,7 @@ package com.oopsw.seongsubean.cafe.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.oopsw.seongsubean.cafe.domain.ReviewImage;
+import com.oopsw.seongsubean.cafe.repository.jparepository.ReviewImageRepository;
 import com.oopsw.seongsubean.config.PropertyConfig;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;

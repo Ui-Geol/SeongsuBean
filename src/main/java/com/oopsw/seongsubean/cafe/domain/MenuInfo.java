@@ -2,6 +2,8 @@ package com.oopsw.seongsubean.cafe.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +20,7 @@ import lombok.ToString;
 public class MenuInfo {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer menuId;
   @Column(nullable = false)
   private String menuCategory;
@@ -28,7 +31,7 @@ public class MenuInfo {
   @Column
   private String description;
   @Column
-  private String imageUrl;
+  private String image;
   @Column(nullable = false)
   private Integer cafeId;
 

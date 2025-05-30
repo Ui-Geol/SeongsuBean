@@ -1,4 +1,4 @@
-package com.oopsw.seongsubean.cafe.repository;
+package com.oopsw.seongsubean.cafe.repository.jparepository;
 
 import com.oopsw.seongsubean.cafe.domain.ReviewImage;
 import org.springframework.data.jpa.repository.JpaRepository;
