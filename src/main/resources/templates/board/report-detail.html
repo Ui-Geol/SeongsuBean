@@ -10,44 +10,35 @@
 <div layout:fragment="content">
   <!-- Main Content -->
   <div class="main-container">
-    <!-- Breadcrumb -->
-    <div class="breadcrumb">
-      <select>
-        <option>자유</option>
-        <option>리뷰</option>
-        <option>정보</option>
-      </select>
-    </div>
 
     <!-- Post Container -->
     <article class="post-container">
       <div class="post-header">
-        <h1 class="post-title">성수 수플레 맛집 브런치 카페 "Daylight" 리뷰</h1>
+        <h1 class="post-title" id="post-title">성수 수플레 맛집 브런치 카페 "Daylight" 리뷰</h1>
         <div class="post-meta">
           <div class="author-info">
             <div class="author-avatar">👤</div>
             <div class="author-details">
-              <span class="author-name">수입푸들</span>
-              <span class="post-date">2022-05-18</span>
+              <span class="author-name" id="author-name">수입푸들</span>
+              <span class="post-date" id="post-date">2022-05-18</span>
             </div>
           </div>
           <div class="post-actions">
-            <button class="action-btn delete-btn" onclick="location.href='/report-list'">삭제하기</button>
-            <button class="action-btn edit-btn" onclick="location.href='/report-post'">수정하기</button>
+            <button class="action-btn delete-btn" onclick="location.href='/report-list'" id="delete-btn">삭제하기</button>
+            <button class="action-btn edit-btn" id="edit-btn">수정하기</button>
           </div>
         </div>
       </div>
 
       <div class="post-content">
-        <img src="/images/dessert2.png" alt="Daylight 카페의 다양한 색깔의 소프트 아이스크림이 올려진 수플레 팬케이크들" class="post-image">
-
-        <div class="post-text">여기 크로플 먹고 아예 다른 곳 못먹게됨...
-          젓떡새삼을 동치고 이 도시를 잡아먹 내 말가는 대로 가족절의 가족별 날짜에
-          그곳이 어디든 날개를 펼치고 I'm flying
-          저렇지지는</div>
+        <img id="post-image" class="post-image" />
+        <div class="post-text" id="post-content"></div>
       </div>
     </article>
   </div>
 </div>
+<th:block layout:fragment="scripts">
+  <script th:src="@{/js/board/report-detail.js}"></script>
+</th:block>
 </body>
 </html>
