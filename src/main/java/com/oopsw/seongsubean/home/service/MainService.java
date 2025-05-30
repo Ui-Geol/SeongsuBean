@@ -30,7 +30,7 @@ public class MainService {
   /**
    * 카페명으로 정확히 일치하는 카페 이름 조회
    */
-  public String getSearchCafeName(String cafeName) {
+  public List<String> getSearchCafeName(String cafeName) {
     return mainRepository.getSearchCafeName(cafeName);
   }
 
@@ -50,4 +50,5 @@ public class MainService {
   public List<String> getEachMenu(String menuName) {
     return mainRepository.getEachMenu(menuName);
   }
+
 }

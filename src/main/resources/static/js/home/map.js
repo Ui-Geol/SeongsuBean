@@ -147,6 +147,7 @@
         slice.forEach(cafe => {
             const card = document.createElement('div');
             card.className = 'card';
+            card.dataset.cafeId = cafe.cafeId;
             card.addEventListener('click', () => {
                 window.location.href = '/cafe-detail';
             });
@@ -159,6 +160,13 @@
             </div>
             `;
             row.appendChild(card);
+
+            card.addEventListener('click', () => {
+                const id = card.dataset.cafeId;
+                // URL 파라미터에 id를 실어서 상세 페이지로 이동
+                window.location.href = `/cafe-detail?cafeId=${id}`;
+            });
+
         });
 
         wrapper.appendChild(row);
@@ -175,50 +183,44 @@
     // 버튼 클릭 시 다음 줄 렌더링
     btn.addEventListener('click', renderRow);
 
-    // 6. 이름으로 검색 및 표시
-    function searchPlaceByName(name) {
-        const place = dbPlaces.find(p => p.name === name);
-        if (!place) {
-            alert('검색 결과가 없습니다.');
-            return;
-        }
-        clearMarkers();
-        geocoder.addressSearch(place.address, (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-                const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
-                const markerImage = new kakao.maps.MarkerImage(imageSrc,
-                    new kakao.maps.Size(24, 35));
-                const marker = new kakao.maps.Marker(
-                    {map,
-                        position: coords,
-                        image: markerImage,
-                        title: place.name});
-                markers.push(marker);
-                map.setCenter(coords);
-            } else {
-                console.warn('주소 검색 실패:', place.address, status);
-            }
-        });
-    }
+       /**
+     +    * 키워드로 통합 검색 → 주소 리스트 반환 → 카카오 지오코딩 → 마커 표시
+     +    */
+           function searchByKeyword(keyword) {
+                   console.log('[searchByKeyword] 요청 키워드:', keyword);
+                   fetch(`/api/search?keyword=${encodeURIComponent(keyword)}`)
+                     .then(res => res.json())
+                     .then(addressList => {
+                             if (!Array.isArray(addressList) || addressList.length === 0) {
+                                     alert('검색 결과가 없습니다.');
+                                     return;
+                                 }
+                             clearMarkers();
+                             addressList.forEach(addr => {
+                                     // addr 은 "주소 + 상세주소" 형태의 문자열
+                                         addMarkerByAddress(addr);
+                                 });
+                         })
+                     .catch(err => {
+                             console.error('[searchByKeyword] 에러:', err);
+                             alert('검색 중 오류가 발생했습니다.');
+                         });
+               }
 
     // 7. 검색창 이벤트 핸들러
     const input = document.getElementById('searchInput');
     const searchbtn = document.getElementById('searchBtn');
+
     searchbtn.addEventListener('click', () => {
-        const keyword = input.value.trim();
-        if (keyword) {
-            searchPlaceByName(keyword);
-        }
-    });
-    input.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-            const keyword = input.value.trim();
-            if (keyword) {
-                searchPlaceByName(keyword);
-            }
-        }
-    });
+               const keyword = input.value.trim();
+               if (keyword) searchByKeyword(keyword);
+           });
+       input.addEventListener('keydown', e => {
+               if (e.key === 'Enter') {
+                       const keyword = input.value.trim();
+                       if (keyword) searchByKeyword(keyword);
+                   }
+           });
 
     // 8. 카페 등록 버튼 클릭 시 이동
     const registerBtn = document.getElementById('cafe-registration');

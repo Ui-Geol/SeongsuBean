@@ -12,12 +12,11 @@ public interface MainRepository {
 
   List<RankingDTO> getRanking();
 
-  String getSearchCafeName(String cafeName);
+  List<String> getSearchCafeName(String cafeName);
 
   List<String> getSearchCafeMenu(String menuCategory);
 
   List<String> getEachMenu(String menuName);
-
 }
 
 

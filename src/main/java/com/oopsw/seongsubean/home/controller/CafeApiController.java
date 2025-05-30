@@ -1,8 +1,11 @@
 package com.oopsw.seongsubean.home.controller;
 
+import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.home.service.MainService;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,10 +29,14 @@ public class CafeApiController {
   public List<String> top5CafesByRating() {
     return mainService.getRanking().stream()
         .limit(5)
-        .map(r -> mainService.getSearchCafeName(r.getCafeName()))
+        .flatMap(r -> {
+          List<String> names = mainService.getSearchCafeName(r.getCafeName());
+          return names != null
+              ? names.stream()
+              : Stream.empty();
+        })
         .filter(Objects::nonNull)
+        .distinct()
         .collect(Collectors.toList());
   }
-
-
 }
