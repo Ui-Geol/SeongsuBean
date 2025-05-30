@@ -18,8 +18,6 @@ public class MainController {
     return "home/map";
   }
 
-  /*
-                                 게시판 테스트 */
   @GetMapping("/free-list")
   public String free() {
     return "board/free-list";

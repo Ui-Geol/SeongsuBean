@@ -15,7 +15,7 @@ public class MainRepositoryTest {
 
   @Test
   public void getSearchCafeNameTest() {
-    String cafe = mainRepository.getSearchCafeName("대림창고");
+    List<String> cafe = mainRepository.getSearchCafeName("대림창고");
     System.out.println(cafe);
   }
 
