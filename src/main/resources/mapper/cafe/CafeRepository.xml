@@ -2,9 +2,72 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oopsw.seongsubean.cafe.repository.mybatisrepository.CafeRepository">
-  <select id="getCafeName" parameterType="int" resultType="String">
+
+  <select id="getAllByCafeId" parameterType="int"
+    resultType="com.oopsw.seongsubean.cafe.dto.CafeDTO">
+    SELECT CAFE_ID           as cafeId,
+           CAFE_NAME         as cafeName,
+           ADDRESS           as address,
+           DETAIL_ADDRESS    as detailAddress,
+           ZIP_CODE          as zipCode,
+           CALL_NUMBER       as callNumber,
+           INTRODUCTION      as introduction,
+           STATUS            as status,
+           MAIN_IMAGE        as mainImage,
+           PAGE_CREATED_DATE as pageCreatedDate,
+           EMAIL             as email
+    FROM CAFE_INFO
+    WHERE CAFE_ID = #{cafeId}
+  </select>
+
+  <select id="getCafeNameByCafeId" parameterType="int" resultType="String">
     SELECT CAFE_NAME
     FROM CAFE_INFO
     WHERE CAFE_ID = #{cafeId}
   </select>
+
+  <insert id="addCafe" parameterType="com.oopsw.seongsubean.cafe.dto.CafeDTO">
+    INSERT INTO CAFE_INFO (CAFE_NAME, ADDRESS, DETAIL_ADDRESS, ZIP_CODE, CALL_NUMBER, INTRODUCTION,
+                           MAIN_IMAGE, PAGE_CREATED_DATE, EMAIL)
+    VALUES (#{cafeName}, #{address}, #{detailAddress}, #{zipCode}, #{callNumber}, #{introduction},
+            #{mainImage}, NOW(), #{email})
+  </insert>
+
+  <select id="getCafeIdByCafeNameAndAddress" parameterType="com.oopsw.seongsubean.cafe.dto.CafeDTO"
+    resultType="Integer">
+    SELECT CAFE_ID
+    from CAFE_INFO
+    WHERE CAFE_NAME = #{cafeName}
+      AND ADDRESS = #{address}
+  </select>
+
+  <select id="getCafeHeaderByCafeId" parameterType="int"
+    resultType="com.oopsw.seongsubean.cafe.dto.CafeHeaderDTO">
+    SELECT CAFE_NAME   as cafeName,
+           AVG_RATING  as avgRating,
+           TOTAL_COUNT as totalCount,
+           MAIN_IMAGE  as mainImage
+    FROM CAFE_SUMMARY_VIEW
+    WHERE CAFE_ID = #{cafeId}
+  </select>
+
+  <update id="setCafe" parameterType="com.oopsw.seongsubean.cafe.dto.CafeDTO">
+    UPDATE CAFE_INFO
+    SET CAFE_NAME     = #{cafeName},
+        ADDRESS       = #{address},
+        DETAIL_ADDRESS= #{detailAddress},
+        ZIP_CODE=#{zipCode},
+        CALL_NUMBER=#{callNumber},
+        INTRODUCTION=#{introduction},
+        MAIN_IMAGE=#{mainImage}
+    WHERE CAFE_ID = 3;
+  </update>
+
+  <delete id="removeCafe" parameterType="int">
+    DELETE
+    FROM CAFE_INFO
+    WHERE CAFE_ID = #{cafeId};
+  </delete>
+
+
 </mapper>
