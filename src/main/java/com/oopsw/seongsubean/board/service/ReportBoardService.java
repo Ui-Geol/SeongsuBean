@@ -39,17 +39,18 @@ public class ReportBoardService {
     return result;
   }
   @Transactional
-  public boolean deleteReportBoard(Integer ReportBoardId) {
-    reportBoardRepository.removeReportBoardImages(ReportBoardId);
-    return reportBoardRepository.removeReportBoard(ReportBoardId);
+  public boolean deleteReportBoard(Integer reportBoardId) {
+    reportBoardRepository.removeReportBoardImages(reportBoardId);
+    int deletedCount = reportBoardRepository.removeReportBoard(reportBoardId);
+    return deletedCount > 0;
   }
   public List<ReportBoardDTO> getReportBoardList() {
     return reportBoardRepository.getReportBoardList();
   }
-  public ReportBoardDTO getReportBoardDetail(Integer ReportBoardId) {
-    ReportBoardDTO dto = reportBoardRepository.getReportBoardDetail(ReportBoardId);
+  public ReportBoardDTO getReportBoardDetail(Integer reportBoardId) {
+    ReportBoardDTO dto = reportBoardRepository.getReportBoardDetail(reportBoardId);
     if (dto == null) return null; //nullpointexception
-    dto.setImages(reportBoardRepository.getReportBoardDetailImages(ReportBoardId));
+    dto.setImages(reportBoardRepository.getReportBoardDetailImages(reportBoardId));
     return dto;
   }
 }

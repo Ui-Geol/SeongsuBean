@@ -73,6 +73,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         // content hidden input에 실제 값 저장
         contentInput.value = contentHtml;
 
+        const imageInput = document.getElementById('images');
+        const files = imageInput.files;
+
+        if (files.length > 5) {
+            alert('이미지는 최대 5개까지만 업로드할 수 있습니다.');
+            return;
+        }
         const formData = new FormData(form);
         const url = reportId ? `/api/report/post/${reportId}` : '/api/report';
         const method = reportId ? 'PUT' : 'POST';

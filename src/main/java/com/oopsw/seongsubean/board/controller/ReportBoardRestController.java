@@ -2,9 +2,18 @@ package com.oopsw.seongsubean.board.controller;
 
 import com.oopsw.seongsubean.board.dto.ReportBoardDTO;
 import com.oopsw.seongsubean.board.service.ReportBoardService;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,19 +46,39 @@ public class ReportBoardRestController {
         .email(email)
         .build();
     List<String> fileNames = new ArrayList<>();
+    // 1. 게시글 먼저 등록 (ID 확보)
+    reportBoardService.addReportBoard(dto, fileNames); // ID 생성됨
+
+    // 2. 이미지 저장 처리
     if (images != null) {
+      // 저장 경로 설정 (절대 경로로 바꿔야 함)
+      String uploadDir = "/path/to/static/images/board/report/" + dto.getReportBoardId();
+
+      File dir = new File(uploadDir);
+      if (!dir.exists()) dir.mkdirs();
+
       for (MultipartFile file : images) {
-        // 실제 저장 로직
-        String fileName = file.getOriginalFilename();
-        fileNames.add(fileName);
+        if (!file.isEmpty()) {
+          String originalFilename = file.getOriginalFilename();
+          Path filePath = Paths.get(uploadDir, originalFilename);
+          try {
+            Files.copy(file.getInputStream(), filePath);
+            fileNames.add(originalFilename); // DB에는 파일명만 저장
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
       }
     }
+    // 3. 이미지 파일명까지 포함해서 서비스에 전달
     boolean success = reportBoardService.addReportBoard(dto, fileNames);
     return ResponseEntity.ok(Map.of("success", success, "id", dto.getReportBoardId()));
   }
 
   @GetMapping("/list")
   public ResponseEntity<List<ReportBoardDTO>> getReportBoardList() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
     List<ReportBoardDTO> list = reportBoardService.getReportBoardList();
     return ResponseEntity.ok(list);
   }
