@@ -26,8 +26,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     const pathParts = window.location.pathname.split('/');
-    const reportId = pathParts[pathParts.length - 1];
-    const isEdit = !isNaN(reportId);
+    const last = pathParts[pathParts.length - 1];
+    const reportId = /^\d+$/.test(last) ? last : null;
+    const isEdit = reportId !== null;
 
 
     const form = document.getElementById('report-form');
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         contentInput.value = contentHtml;
 
         const formData = new FormData(form);
-        const url = reportId ? `/api/report/${reportId}` : '/api/report';
+        const url = reportId ? `/api/report/post/${reportId}` : '/api/report';
         const method = reportId ? 'PUT' : 'POST';
 
         try {
