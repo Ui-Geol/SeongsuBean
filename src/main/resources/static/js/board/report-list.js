@@ -68,8 +68,8 @@ function renderReportList() {
       window.location.href = `/report/detail/${item.reportBoardId}`;
     };
 
-    const imageUrl = item.thumbnail
-        ? `/images/upload/report/${item.reportBoardId}/${item.thumbnail}`
+    const imageUrl = item.thumbnail && item.thumbnail.trim() !== ""
+        ? `/images/board/report/${item.reportBoardId}/${item.thumbnail}`
         : '/images/board/default.png';
 
     article.innerHTML = `

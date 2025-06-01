@@ -114,3 +114,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const cancelBtn = document.getElementById('cancel-btn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            window.location.href = '/report/list';
+        });
+    }
+});

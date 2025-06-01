@@ -115,3 +115,11 @@ function formatDate(dateStr) {
 function escapeHtml(str) {
   return str?.replace(/</g, "&lt;").replace(/>/g, "&gt;") || '';
 }
+document.addEventListener('DOMContentLoaded', () => {
+  const cancelBtn = document.getElementById('cancel-btn');
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      window.location.href = '/report/list';
+    });
+  }
+});
