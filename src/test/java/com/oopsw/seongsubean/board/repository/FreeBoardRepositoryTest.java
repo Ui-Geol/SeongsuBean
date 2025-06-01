@@ -127,14 +127,14 @@ public class FreeBoardRepositoryTest {
 
   @Test
   public void successRemoveFreeBoardTest() {
-    boolean result = freeBoardRepository.removeFreeBoard(31);
+    int result = freeBoardRepository.removeFreeBoard(31);
     System.out.println("🗑️ 게시글 삭제 결과: " + result);
   }
 
   @Test
   public void failRemoveFreeBoardTest() {
-    boolean result = freeBoardRepository.removeFreeBoard(31);
-    assertFalse(result, "존재하지 않는 게시글인데 삭제된 것으로 나옴");
+    int result = freeBoardRepository.removeFreeBoard(31);
+    assertEquals(result, "존재하지 않는 게시글인데 삭제된 것으로 나옴");
   }
 
   @Test
@@ -173,7 +173,7 @@ public class FreeBoardRepositoryTest {
 
   @Test
   public void successRemoveFreeBoardComments(){
-    boolean result = freeBoardRepository.removeFreeBoardComments(1);
+    int result = freeBoardRepository.removeFreeBoardComments(1);
     System.out.println("🗑️ 댓글 삭제 결과: " + result);
   }
 }

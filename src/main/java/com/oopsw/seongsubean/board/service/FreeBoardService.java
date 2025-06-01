@@ -2,6 +2,7 @@ package com.oopsw.seongsubean.board.service;
 
 import com.oopsw.seongsubean.board.dto.FreeBoardCommentDTO;
 import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
+import com.oopsw.seongsubean.board.dto.ReportBoardDTO;
 import com.oopsw.seongsubean.board.repository.FreeBoardRepository;
 import java.util.HashMap;
 import java.util.List;
@@ -42,22 +43,32 @@ public class FreeBoardService {
   @Transactional
   public boolean removeFreeBoard(Integer freeBoardId) {
     freeBoardRepository.removeFreeBoardImages(freeBoardId);
-    freeBoardRepository.removeFreeBoardComments(freeBoardId);
-    return freeBoardRepository.removeFreeBoard(freeBoardId);
+    int deletedCount = freeBoardRepository.removeFreeBoard(freeBoardId);
+    return deletedCount > 0;
   }
   public List<FreeBoardDTO> getFreeBoardList() {
     return freeBoardRepository.getFreeBoardList();
   }
+  public List<FreeBoardDTO> getFreeBoardList(int offset, int size) {
+    return freeBoardRepository.getFreeBoardList(offset, size);
+  }
   public FreeBoardDTO getFreeBoardDetail(Integer freeBoardId) {
     FreeBoardDTO dto = freeBoardRepository.getFreeBoardDetail(freeBoardId);
-    dto.setImages(freeBoardRepository.getFreeBoardDetailImages(freeBoardId));
-    dto.setComments(freeBoardRepository.getFreeBoardDetailComments(freeBoardId));
+    if (dto == null) return null;
+    List<String> images = freeBoardRepository.getFreeBoardDetailImages(freeBoardId);
+    dto.setImages(images.stream().distinct().toList());
     return dto;
   }
+
+
   public boolean addFreeBoardComment(FreeBoardCommentDTO dto) {
     return freeBoardRepository.addFreeBoardComment(dto);
   }
-  public boolean removeFreeBoardComments(Integer freeBoardId) {
-    return freeBoardRepository.removeFreeBoardComments(freeBoardId);
+  public List<FreeBoardCommentDTO> getFreeBoardComments(Integer freeBoardId) {
+    return freeBoardRepository.getFreeBoardDetailComments(freeBoardId);
+  }
+  public boolean removeFreeBoardComment(Integer freeBoardId) {
+    int deletedCount = freeBoardRepository.removeFreeBoardComments(freeBoardId);
+    return deletedCount > 0;
   }
 }

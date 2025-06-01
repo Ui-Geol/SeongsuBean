@@ -39,7 +39,7 @@ public class ReportBoardService {
     return result;
   }
   @Transactional
-  public boolean deleteReportBoard(Integer reportBoardId) {
+  public boolean removeReportBoard(Integer reportBoardId) {
     reportBoardRepository.removeReportBoardImages(reportBoardId);
     int deletedCount = reportBoardRepository.removeReportBoard(reportBoardId);
     return deletedCount > 0;

@@ -46,7 +46,6 @@ public class ReportBoardRestController {
             .content(content)
             .email(email)
             .build();
-
     List<String> fileNames = new ArrayList<>();
     if (images != null) {
       for (MultipartFile file : images) {
@@ -66,15 +65,9 @@ public class ReportBoardRestController {
         }
       }
     }
-
-    // ✅ 이 한 줄로 끝
     boolean success = reportBoardService.addReportBoard(dto, fileNames);
-
     return ResponseEntity.ok(Map.of("success", success, "id", dto.getReportBoardId()));
   }
-
-
-
   @GetMapping("/list")
   public ResponseEntity<List<ReportBoardDTO>> getReportBoardList() {
     HttpHeaders headers = new HttpHeaders();
@@ -82,7 +75,6 @@ public class ReportBoardRestController {
     List<ReportBoardDTO> list = reportBoardService.getReportBoardList();
     return ResponseEntity.ok(list);
   }
-
   @GetMapping("/{id}")
   public ResponseEntity<?> getReportBoardDetail(@PathVariable("id") Integer id) {
     ReportBoardDTO dto = reportBoardService.getReportBoardDetail(id);
@@ -92,7 +84,6 @@ public class ReportBoardRestController {
     }
     return ResponseEntity.ok(dto);
   }
-
   @PutMapping("/post/{id}")
   public Map<String, Object> setReportBoard(@PathVariable("id") Integer id,
       @RequestBody ReportBoardDTO dto) {
@@ -100,10 +91,9 @@ public class ReportBoardRestController {
     boolean result = reportBoardService.setReportBoard(dto, List.of());
     return Map.of("updated", result);
   }
-
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteReportBoard(@PathVariable("id") Integer id) {
-    boolean result = reportBoardService.deleteReportBoard(id);
+    boolean result = reportBoardService.removeReportBoard(id);
     return ResponseEntity.ok(Map.of("deleted", result));
   }
 }
