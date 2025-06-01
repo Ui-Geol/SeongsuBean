@@ -14,13 +14,6 @@ import java.util.List;
 public class SearchController {
 
   private final MainService mainService;
-
-  /**
-   * 키워드에 대해
-   * 1) 카페명 일치 검색(getSearchCafeName)
-   * 2) 메뉴명 검색(getEachMenu)
-   * 결과 주소들을 합쳐서 반환
-   */
   @GetMapping("/api/search")
   public List<String> searchByKeyword(@RequestParam String keyword) {
     List<String> results = new ArrayList<>();

@@ -1,7 +1,7 @@
 package com.oopsw.seongsubean.home;
 import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.cafe.dto.RankingDTO;
-import com.oopsw.seongsubean.home.repository.MainRepository;
+import com.oopsw.seongsubean.home.dto.CafeInfoDTO;
 import com.oopsw.seongsubean.home.service.MainService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ public class MainServiceTest {
 
   @Test
   public void getSearchCafeMenutest() {
-    List<String> getSearchCafeMenu = mainService.getSearchCafeMenu("케이크");
+    List<String> getSearchCafeMenu = mainService.getSearchCafeMenu("커피");
     System.out.println(getSearchCafeMenu);
   }
 
