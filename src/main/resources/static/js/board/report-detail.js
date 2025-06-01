@@ -36,15 +36,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('post-date').textContent = formatDate(data.createdDate);
     document.getElementById('post-content').innerHTML = data.content;
 
-    const imageTag = document.getElementById('post-image');
-    if (data.images && Array.isArray(data.images) && data.images[0]) {
-      imageTag.src = `/images/board/${data.images[0]}`;
-      imageTag.alt = '게시글 이미지';
-    } else {
-      imageTag.src = '/images/board/default.png';
-      imageTag.alt = '기본 이미지';
+    const imageContainer = document.getElementById('image-container');
+    imageContainer.innerHTML = ''; // 초기화
+
+    if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+      data.images.forEach(imgName => {
+        const imgTag = document.createElement('img');
+        imgTag.src = `/images/board/${imgName}`;
+        imgTag.alt = '게시글 이미지';
+        imgTag.classList.add('post-image');
+
+        if (imgName === 'default.png') {
+          imgTag.style.display = 'none';
+        }
+
+        imageContainer.appendChild(imgTag);
+      });
     }
-    imageTag.style.display = 'block';
   } catch (err) {
     console.error('불러오기 실패:', err);
     alert('게시글을 불러오는 데 실패했습니다.');
