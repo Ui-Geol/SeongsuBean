@@ -16,9 +16,9 @@ public class AccountDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     UserDTO user = accountRepository.findByEmail(email);
-    if(user != null) {
-      return new AccountDetails(user);
+    if (user == null) {
+      throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + email);
     }
-    return null;
+    return new AccountDetails(user);
   }
 }
