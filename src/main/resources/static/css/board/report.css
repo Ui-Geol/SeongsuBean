@@ -15,6 +15,7 @@ body {
     max-width: 1200px;
     margin: 40px auto;
     padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .article-list {
@@ -145,11 +146,6 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        gap: 15px;
-    }
-
     .nav-menu {
         gap: 20px;
     }
@@ -171,15 +167,5 @@ body {
         margin-left: 0;
         margin-top: 10px;
         min-width: auto;
-    }
-
-    .footer-container {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
-
-    .footer-info {
-        text-align: center;
     }
 }
