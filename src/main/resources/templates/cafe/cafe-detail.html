@@ -4,32 +4,30 @@
       layout:decorate="~{common/common}">
 <head>
   <title layout:fragment="title">카페 상세</title>
-  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/cafe-detail.css" />
+  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/cafe-detail.css"/>
 </head>
 <body>
 <div layout:fragment="content">
   <div class="cafe-container">
     <div class="cafe-header">
-      <h1 class="cafe-name" >아쿠아 아티산
+      <h1 class="cafe-name" th:text="${cafeHeaderDTO.getCafeName()}">
         <span class="icon-button" id="editCafe" title="수정">✏️</span>
         <span class="icon-button" id="deleteCafe" title="삭제">🗑️</span>
       </h1>
 
 
       <div class="rating-container">
-        <span class="rating-score" >4.1</span>
-        <!-- 테스트용 그냥 4개 채워진 별, 1개 빈 별을 직접 씀 구현때 다시 원상복구 해야 함 -->
-        <span class="star">★</span>
-        <span class="star">★</span>
-        <span class="star">★</span>
-        <span class="star">★</span>
-        <span class="star empty">★</span>
+        <span class="rating-score" th:text="${cafeHeaderDTO.getAvgRating()}"></span>
 
-        <span class="review-count" >（41）</span>
+        <!-- 각 별을 개별적으로 처리 -->
+        <span th:each="i : ${#numbers.sequence(1, 5)}"
+              th:class="${cafeHeaderDTO.isStarFilled(i)} ? 'star' : 'star empty'">★</span>
+
+        <span class="review-count" th:text="'（' + ${cafeHeaderDTO.getTotalCount()} + '）'"></span>
       </div>
 
       <img class="cafe-image"
-           src="/images/Cafe1.png"
+           th:src="${cafeHeaderDTO.getMainImage()}"
            alt="카페 이미지">
     </div>
 
@@ -48,7 +46,7 @@
                     d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                     clip-rule="evenodd"></path>
             </svg>
-            <span class="info-text" >서울 성동구 성수로이 97 5층</span>
+            <span class="info-text" th:text="${cafeDTO.getFullAddress()}"></span>
           </div>
 
           <div class="info-item">
@@ -59,7 +57,8 @@
             </svg>
             <div class="info-text">
               <div class="hours-container">
-                <button class="status-badge status" id="statusBadge" onclick="toggleStatus()">영업중</button>
+                <button class="status-badge status" id="statusBadge" onclick="toggleStatus()">영업중
+                </button>
                 <button class="hours-dropdown" onclick="toggleHours()">
                   <span>08:30에 영업 시작</span>
                   <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -67,17 +66,17 @@
                         d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
                   </svg>
                 </button>
-                <button class="status-badge status today-closed" id="todayClosedBtn" onclick="toggleTodayClosed()">오늘 휴무</button>
+                <button class="status-badge status today-closed" id="todayClosedBtn"
+                        onclick="toggleTodayClosed()">오늘 휴무
+                </button>
 
 
                 <div class="hours-detail" id="hoursDetail">
-                  <div class="hours-day"><span>월요일</span><span>08:30 - 22:00</span></div>
-                  <div class="hours-day"><span>화요일</span><span>08:30 - 22:00</span></div>
-                  <div class="hours-day"><span>수요일</span><span>08:30 - 22:00</span></div>
-                  <div class="hours-day"><span>목요일</span><span>08:30 - 22:00</span></div>
-                  <div class="hours-day"><span>금요일</span><span>08:30 - 22:00</span></div>
-                  <div class="hours-day"><span>토요일</span><span>09:00 - 23:00</span></div>
-                  <div class="hours-day"><span>일요일</span><span>09:00 - 23:00</span></div>
+                  <div class="hours-day" th:each="operationTime : ${operationTimes}">
+                    <span th:text="${operationTime.getWeekday()}">요일</span>
+                    <span
+                        th:text="${operationTime.getOpenTime()} + ' - ' + ${operationTime.getCloseTime()}">시간</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -88,17 +87,14 @@
               <path
                   d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
             </svg>
-            <span class="info-text" >0542-1234-1652</span>
+            <span class="info-text" th:text="${cafeDTO.getCallNumber()}"></span>
           </div>
         </div>
 
         <div class="description-section">
           <h2 class="section-title">소개</h2>
           <div class="description-box">
-            <p class="description-text" >
-              저희 카페는 직접 로스팅한 신선한 원두위 매일 구워내는 디저트가 자랑입니다.
-              아늑한 분위기에서 향긋한 커피 한 잔과 함께 여유로운 시간을 보내세요
-            </p>
+            <p class="description-text" th:text="${cafeDTO.getIntroduction()}"></p>
           </div>
         </div>
       </div>

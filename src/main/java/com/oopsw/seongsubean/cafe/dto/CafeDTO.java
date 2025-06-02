@@ -25,4 +25,16 @@ public class CafeDTO {
   private String pageCreatedDate;
   private String email;
 
+  public String getFullAddress() {
+    return address + ", " + detailAddress;
+  }
+
+  public boolean isRestDay() {
+    if (status.equals("휴무일")) {
+      return true;
+    }
+
+    return false;
+  }
+
 }

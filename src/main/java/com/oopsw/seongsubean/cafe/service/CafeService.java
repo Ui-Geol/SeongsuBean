@@ -6,6 +6,7 @@ import com.oopsw.seongsubean.cafe.dto.CafeHeaderDTO;
 import com.oopsw.seongsubean.cafe.repository.jparepository.OperationTimeRepository;
 import com.oopsw.seongsubean.cafe.repository.mybatisrepository.CafeRepository;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +58,22 @@ public class CafeService {
 
   //상세 페이지 개요 카페 운영시간 조회
   public List<OperationTime> getOperationTimes(Integer cafeId) {
-    return operationTimeRepository.findAllByCafeId(cafeId);
+    List<OperationTime> operationTimes = operationTimeRepository.findAllByCafeId(cafeId);
+
+    // 요일 순서 정의
+    Map<String, Integer> dayOrder = Map.of(
+        "월요일", 1, "화요일", 2, "수요일", 3, "목요일", 4,
+        "금요일", 5, "토요일", 6, "일요일", 7
+    );
+
+    // 요일 순서로 정렬
+    operationTimes.sort((a, b) -> {
+      int orderA = dayOrder.getOrDefault(a.getWeekday(), 8);
+      int orderB = dayOrder.getOrDefault(b.getWeekday(), 8);
+      return Integer.compare(orderA, orderB);
+    });
+
+    return operationTimes;
   }
 
 
