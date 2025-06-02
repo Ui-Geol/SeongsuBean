@@ -11,6 +11,7 @@ public class AccountDetails implements UserDetails {
   private UserDTO user;
   public AccountDetails(UserDTO user) {this.user = user;}
 
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(user.getRole()));
@@ -45,4 +46,9 @@ public class AccountDetails implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
+
+  public UserDTO getUser() {
+    return this.user;
+  }
+
 }

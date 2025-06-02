@@ -27,7 +27,7 @@
     resultType="com.oopsw.seongsubean.account.dto.UserDTO">
     select nickname, image from USER_INFO
     where EMAIL = #{email} AND PASSWORD = #{password}
-  </select>
+  </select> <!--안쓸듯?-->
 
   <insert id="addUser" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
     INSERT INTO USER_INFO (email, nickname, password, birthdate, phone_number, join_date)
@@ -83,7 +83,7 @@
   </select>
 
   <select id="findByEmail" resultType="com.oopsw.seongsubean.account.dto.UserDTO">
-    SELECT email, password, role
+    SELECT email, password, role, nickname, image
     FROM user_info
     WHERE email = #{email}
   </select>

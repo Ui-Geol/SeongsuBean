@@ -11,9 +11,11 @@
 <div class="container-fluid py-5">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      <!-- 로고 섹션 -->1
+      <!-- 로고 섹션 -->
       <div class="logo-section">
-        <img class="logo-image" th:src="@{/images/common/logo.png}" style="cursor: pointer;">
+        <a th:href="@{/map}">
+          <img class="logo-image" th:src="@{/images/common/logo.png}">
+        </a>
       </div>
 
       <!-- 메인 카드 -->
@@ -23,34 +25,27 @@
           <input type="file" id="profile-upload" accept="image/*" style="display: none;">
           <label for="profile-upload">
             <img id="profile-img"
-                 th:src="@{/images/common/default.png}"
+                 th:src="@{/images/account/{img}(img=${
+                 user.image != null && !#strings.isEmpty(user.image) ? user.image : 'default.png'})}"
                  alt="프로필 이미지"
                  class="rounded-circle profile-img"
                  style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
           </label>
-          <div class="username">honghong님</div>
+          <div class="username" th:text="${user.nickName}"></div>
         </div>
 
         <!-- 메뉴 섹션 -->
         <div class="menu-section">
-          <button type="button" class="btn menu-item">
-            내가 쓴 리뷰 보기
-          </button>
-
-          <button type="button" class="btn menu-item">
-            내 카페 보기
-          </button>
-
-          <button type="button" class="btn menu-item">
-            내가 쓴 글 보기
-          </button>
+          <a th:href="@{/account/myReview}" class="btn menu-item" role="button">내가 쓴 리뷰 보기</a>
+          <a th:href="@{/account/myCafe}" class="btn menu-item" role="button">내 카페 보기</a>
+          <a th:href="@{/account/myPost}" class="btn menu-item" role="button">내가 쓴 글 보기</a>
         </div>
 
         <!-- 개인정보 수정 버튼 -->
         <div class="text-center">
-          <button type="button" class="btn edit-profile-btn">
+          <a th:href="@{/account/checkPw}" class="btn edit-profile-btn" role="button">
             개인정보 수정
-          </button>
+          </a>
         </div>
       </div>
     </div>
