@@ -2,45 +2,62 @@ package com.oopsw.seongsubean.cafe.service;
 
 import com.oopsw.seongsubean.cafe.domain.MenuInfo;
 import com.oopsw.seongsubean.cafe.repository.jparepository.MenuInfoRepository;
-import java.awt.Menu;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MenuService {
+
   private final MenuInfoRepository menuInfoRepository;
+
   //메뉴 생성
   public boolean addMenu(MenuInfo menuInfo) {
     MenuInfo newMenuInfo = menuInfoRepository.save(menuInfo);
 
     return newMenuInfo == menuInfo;
   }
+
   //메뉴 조회
   public Page<MenuInfo> getMenuList(Integer cafeId, Pageable pageable) {
-     return menuInfoRepository.findByCafeId(cafeId, pageable);
+    return menuInfoRepository.findByCafeId(cafeId, pageable);
   }
+
   //메뉴 수정
-  public boolean updateMenu(Integer menuId, MenuInfo newMenuInfo) {
-    Optional<MenuInfo> menuInfo = menuInfoRepository.findById(menuId);
-    menuInfo.get().setMenuName(newMenuInfo.getMenuName());
-    menuInfo.get().setMenuCategory(newMenuInfo.getMenuCategory());
-    menuInfo.get().setPrice(newMenuInfo.getPrice());
-    menuInfo.get().setImage(newMenuInfo.getImage());
-    menuInfo.get().setDescription(newMenuInfo.getDescription());
-    menuInfo.ifPresent(menuInfoRepository::save);
+  @Transactional
+  public boolean setMenu(Integer menuId, MenuInfo newMenuInfo) {
+    // 입력값 검증
+    if (menuId == null || newMenuInfo == null) {
+      throw new IllegalArgumentException("메뉴 ID와 메뉴 정보는 필수입니다.");
+    }
 
-    Optional<MenuInfo> updatedMenuInfo = menuInfoRepository.findById(menuId);
+    // 메뉴 존재 여부 확인 및 수정
+    Optional<MenuInfo> optionalMenu = menuInfoRepository.findById(menuId);
 
-    return updatedMenuInfo.get().equals(newMenuInfo);
+    if (optionalMenu.isEmpty()) {
+      return false; // 또는 throw new EntityNotFoundException
+    }
+
+    MenuInfo existingMenu = optionalMenu.get();
+
+    // 필드 업데이트
+    existingMenu.setMenuName(newMenuInfo.getMenuName());
+    existingMenu.setMenuCategory(newMenuInfo.getMenuCategory());
+    existingMenu.setPrice(newMenuInfo.getPrice());
+    existingMenu.setImage(newMenuInfo.getImage());
+    existingMenu.setDescription(newMenuInfo.getDescription());
+
+    return true;
   }
+
   //메뉴 삭제
-  public boolean deleteMenu(Integer menuId) {
+  public boolean removeMenu(Integer menuId) {
     menuInfoRepository.deleteById(menuId);
     Optional<MenuInfo> menuInfo = menuInfoRepository.findById(menuId);
     return menuInfo.isPresent();
