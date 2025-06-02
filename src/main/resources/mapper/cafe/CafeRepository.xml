@@ -62,7 +62,7 @@
         MAIN_IMAGE=#{mainImage}
     WHERE CAFE_ID = #{cafeId};
   </update>
-  <update id="setCateStatus">
+  <update id="setCafeStatus">
     UPDATE CAFE_INFO
     SET STATUS = #{status}
     WHERE CAFE_ID = #{cafeId};

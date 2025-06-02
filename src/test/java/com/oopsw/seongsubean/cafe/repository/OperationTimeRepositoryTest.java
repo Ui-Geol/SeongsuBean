@@ -60,9 +60,11 @@ public class OperationTimeRepositoryTest {
 
   @Test
   public void removeByOperationTimeIdTest() {
-    operationTimeRepository.deleteById(3);
+    operationTimeRepository.deleteAllByCafeId(3);
 
-    assertThat(operationTimeRepository.findById(3)).isNotPresent();
+    List<OperationTime> operationTimeList = operationTimeRepository.findAllByCafeId(3);
+
+    assertThat(operationTimeList.size()).isEqualTo(0);
   }
 
   @Test
