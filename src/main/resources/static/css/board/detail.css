@@ -235,6 +235,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
 }
 /* 프로필 이미지용 comment-avatar 클래스 */
 .comment-avatar img {
@@ -243,15 +244,29 @@ body {
     object-fit: cover;
     border-radius: 50%;
 }
+/* HeadWord 셀렉트 영역 */
+.headword-container {
+    margin-bottom: 20px;
+    padding: 0 30px;
+}
 
-/* 기본 스타일 (이미지를 못 받아올 때 fallback도 이걸 사용 가능) */
-.comment-avatar.default {
-    background-color: #8B4513;
-    color: white;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#headword-select {
+    appearance: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    color: #333;
+    cursor: default;
+    width: 200px;
+}
+
+#headword-select:disabled {
+    background-color: #f1f1f1;
+    color: #888;
+    border-color: #ddd;
 }
 
 /* Responsive Design */

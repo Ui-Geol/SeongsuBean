@@ -49,8 +49,8 @@ public class FreeBoardService {
   public List<FreeBoardDTO> getFreeBoardList() {
     return freeBoardRepository.getFreeBoardList();
   }
-  public List<FreeBoardDTO> getFreeBoardList(int offset, int size) {
-    return freeBoardRepository.getFreeBoardList(offset, size);
+  public List<FreeBoardDTO> getFreeBoardList(int size, int offset) {
+    return freeBoardRepository.getFreeBoardList(size, offset);
   }
   public FreeBoardDTO getFreeBoardDetail(Integer freeBoardId) {
     FreeBoardDTO dto = freeBoardRepository.getFreeBoardDetail(freeBoardId);

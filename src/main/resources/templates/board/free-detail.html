@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
@@ -9,11 +10,10 @@
 <body>
 <div layout:fragment="content">
     <div class="container">
-        <div class="breadcrumb">
-            <select>
-                <option>자유</option>
-                <option>리뷰</option>
-                <option>정보</option>
+        <div class="headword-container">
+            <select id="headword-select" disabled>
+                <option value="자유::리뷰">자유::리뷰</option>
+                <option value="자유::정보">자유::정보</option>
             </select>
         </div>
 
@@ -29,7 +29,7 @@
                             <span class="post-date" id="post-date"></span>
                         </div>
                     </div>
-                    <div class="post-actions">
+                    <div class="post-actions" sec:authorize="isAuthenticated()">
                         <button class="action-btn delete-btn" onclick="location.href='/free-list'" id="delete-btn">삭제하기</button>
                         <button class="action-btn edit-btn" id="edit-btn">수정하기</button>
                     </div>
@@ -46,7 +46,7 @@
         <section class="comment-section">
             <div class="comment-form">
                 <div class="comment-avatar"></div>
-                <div class="comment-input-container">
+                <div class="comment-input-container" sec:authorize="isAuthenticated()">
                     <textarea class="comment-input" placeholder="댓글을 작성하세요"></textarea>
                     <button class="comment-submit">등록</button>
                 </div>

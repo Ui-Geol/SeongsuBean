@@ -61,14 +61,14 @@
     DELETE FROM FREE_BOARD_IMAGE
     WHERE FREE_BOARD_ID = #{freeBoardId}
   </delete>
-  <insert id="addFreeBoardComment" useGeneratedKeys="true" keyProperty="freeBoardId" parameterType="com.oopsw.seongsubean.board.dto.FreeBoardCommentDTO">
-    INSERT INTO FREE_BOARD_COMMENT (`COMMENT`, COMMENT_DATE, FREE_BOARD_ID, EMAIL)
+  <insert id="addFreeBoardComment" useGeneratedKeys="true" keyProperty="freeBoardCommentId" parameterType="com.oopsw.seongsubean.board.dto.FreeBoardCommentDTO">
+    INSERT INTO FREE_BOARD_COMMENT (COMMENTS, COMMENT_DATE, FREE_BOARD_ID, EMAIL)
     VALUES (#{content}, NOW(), #{freeBoardId}, #{email})
   </insert>
   <select id="getFreeBoardDetailComments" parameterType="int" resultType="com.oopsw.seongsubean.board.dto.FreeBoardCommentDTO">
     SELECT
     c.FREE_BOARD_COMMENT_ID AS freeBoardCommentId,
-    c.`COMMENT` AS content,
+    c.COMMENTS AS content,
     c.EMAIL AS email,
     u.NICKNAME AS nickName,
     u.IMAGE AS profileImage,

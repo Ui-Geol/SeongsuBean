@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
@@ -23,8 +24,8 @@
           </button>
         </div>
       </div>
-      <div class="col-md-3 text-end">
-        <button class="btn search-btn" onclick="location.href='/free-post'">새 글쓰기</button>
+      <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
+        <button  class="btn search-btn" onclick="location.href='/free-post'">새 글쓰기</button>
       </div>
     </div>
   </div>

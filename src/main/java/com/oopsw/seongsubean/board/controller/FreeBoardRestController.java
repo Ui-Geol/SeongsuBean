@@ -81,11 +81,9 @@ public class FreeBoardRestController {
   public ResponseEntity<List<FreeBoardDTO>> getFreeBoardList(
           @RequestParam(defaultValue = "1") int page,
           @RequestParam(defaultValue = "12") int size) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
     int offset = (page - 1) * size;
     List<FreeBoardDTO> list = freeBoardService.getFreeBoardList(offset, size);
-    return new ResponseEntity<>(list, headers, HttpStatus.OK);
+    return new ResponseEntity<>(list, HttpStatus.OK);
   }
   @GetMapping("/{id}")
   public ResponseEntity<?> getFreeBoardDetail(@PathVariable("id") Integer id) {
@@ -113,8 +111,19 @@ public class FreeBoardRestController {
 
   /* comment */
   @PostMapping("/comment")
-  public ResponseEntity<?> addComment(@RequestBody FreeBoardCommentDTO comment) {
-    boolean result = freeBoardService.addFreeBoardComment(comment);
+  public ResponseEntity<?> addComment(@AuthenticationPrincipal AccountDetails accountDetails,
+      @RequestParam String comment,
+      @RequestParam Integer freeBoardId) {
+    if (accountDetails == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
+    }
+    String email = accountDetails.getUser().getEmail(); // 로그인한 사용자의 이메일
+    FreeBoardCommentDTO dto = FreeBoardCommentDTO.builder()
+        .content(comment)
+        .freeBoardId(freeBoardId)
+        .email(email)
+        .build();
+    boolean result = freeBoardService.addFreeBoardComment(dto);
     return ResponseEntity.ok(Map.of("success", result));
   }
   @GetMapping("/comment/{id}")

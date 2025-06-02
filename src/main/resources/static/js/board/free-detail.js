@@ -31,15 +31,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('author-name').textContent = data.nickName;
         document.getElementById('post-date').textContent = formatDate(data.createdDate);
         document.getElementById('post-content').innerHTML = data.content;
+        // headWord select 설정
+        const headwordSelect = document.getElementById("headword-select");
+        if (headwordSelect && data.headWord) {
+            headwordSelect.value = data.headWord;
+
+            // 글 수정 모드가 아니라면 비활성화
+            const isEditPage = window.location.pathname.includes("/set/");
+            if (!isEditPage) {
+                headwordSelect.disabled = true;
+            }
+        }
 
         const imageContainer = document.getElementById('image-container');
         imageContainer.innerHTML = '';
         if (data.images && Array.isArray(data.images) && data.images.length > 0) {
-            data.images .forEach((img) => {
-                const imgTag = document.createElement("img");
-                imgTag.src = img;
-                imgTag.alt = "게시글 이미지";
-                imgTag.classList.add("post-image");
+            data.images.forEach(imgName => {
+                const imgTag = document.createElement('img');
+                imgTag.src = `/images/board/${imgName}`;
+                imgTag.alt = '게시글 이미지';
+                imgTag.classList.add('post-image');
+
+                if (imgName === 'default.png') {
+                    imgTag.style.display = 'none';
+                }
+
                 imageContainer.appendChild(imgTag);
             });
         }
