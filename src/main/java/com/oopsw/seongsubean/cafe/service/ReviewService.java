@@ -2,18 +2,19 @@ package com.oopsw.seongsubean.cafe.service;
 
 import com.oopsw.seongsubean.cafe.domain.ReviewImage;
 import com.oopsw.seongsubean.cafe.dto.ReviewDTO;
+import com.oopsw.seongsubean.cafe.dto.TotalReviewDTO;
 import com.oopsw.seongsubean.cafe.repository.jparepository.ReviewImageRepository;
 import com.oopsw.seongsubean.cafe.repository.mybatisrepository.ReviewRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
+
   private final ReviewRepository reviewRepository;
   private final ReviewImageRepository reviewImageRepository;
 
@@ -26,13 +27,23 @@ public class ReviewService {
 
     return result;
   }
+
   //리뷰 삭제
   public boolean removeReview(Integer reviewId) {
     return reviewRepository.removeReview(reviewId);
   }
+
   //리뷰 조회
-  public List<ReviewDTO> getReviews(Pageable pageable) {
-    return reviewRepository.getTwoReviews(pageable);
+  public List<TotalReviewDTO> getReviews(Pageable pageable) {
+    List<ReviewDTO> reviewDTOList = reviewRepository.getTwoReviews(pageable);
+    List<TotalReviewDTO> totalReviewDTOList = new ArrayList<>();
+    for (ReviewDTO reviewDTO : reviewDTOList) {
+      totalReviewDTOList.add(TotalReviewDTO.builder().reviewDTO(reviewDTO)
+          .reviewImage(reviewImageRepository.findReviewImageByReviewId(
+              reviewDTO.getReviewId())).build());
+
+    }
+    return totalReviewDTOList;
   }
 
 }
