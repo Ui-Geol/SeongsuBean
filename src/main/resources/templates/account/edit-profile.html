@@ -15,7 +15,9 @@
     <div class="col-12 col-md-8 col-lg-6">
       <!-- 로고 섹션 -->
       <div class="logo-section">
-        <img class="logo-image" th:src="@{/images/common/logo.png}" style="cursor: pointer;">
+        <a th:href="@{/map}">
+        <img class="logo-image" th:src="@{/images/common/logo.png}">
+        </a>
       </div>
 
       <!-- 메인 카드 -->
@@ -25,7 +27,8 @@
           <input type="file" id="profile-upload" accept="image/*" style="display: none;">
           <label for="profile-upload">
             <img id="profile-img"
-                 th:src="@{/images/common/default.png}"
+                 th:src="@{/images/account/{img}(img=${
+                 user.image != null && !#strings.isEmpty(user.image) ? user.image : 'default.png'})}"
                  alt="프로필 이미지"
                  class="rounded-circle profile-img"
                  style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
@@ -41,13 +44,13 @@
             <!-- 이메일 주소 -->
             <div class="form-row">
               <label for="email" class="form-label">이메일</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요" value="oo**w@gmail.com" required disabled readonly>
+              <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요" th:value="${user.email}"  required disabled readonly>
             </div>
 
             <!-- 닉네임 -->
             <div class="form-row">
               <label for="nickname" class="form-label">닉네임</label>
-              <input type="text" class="form-control" id="nickname" name="nickname" placeholder="(사용자 닉네임)" required maxlength="20">
+              <input type="text" class="form-control" id="nickname" name="nickname" th:placeholder="${user.nickName}" required maxlength="20">
             </div>
 
             <!-- 비밀번호 -->

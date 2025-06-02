@@ -38,6 +38,9 @@
         <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
           <!-- ✅ 로그인 상태 -->
           <div sec:authorize="isAuthenticated()">
+            <form th:action="@{/account/myPage}" method="get">
+              <button type="submit">마이페이지</button>
+            </form>
             <form th:action="@{/account/logout}" method="post">
               <button type="submit">로그아웃</button>
             </form>
