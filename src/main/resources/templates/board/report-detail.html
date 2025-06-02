@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
@@ -17,13 +18,13 @@
         <h1 class="post-title" id="post-title"></h1>
         <div class="post-meta">
           <div class="author-info">
-            <div class="author-avatar">👤</div>
+            <div class="author-avatar" id="author-avatar"></div>
             <div class="author-details">
               <span class="author-name" id="author-name"></span>
               <span class="post-date" id="post-date"></span>
             </div>
           </div>
-          <div class="post-actions">
+          <div class="post-actions" sec:authorize="isAuthenticated()">
             <button class="action-btn delete-btn" onclick="location.href='/report-list'" id="delete-btn">삭제하기</button>
             <button class="action-btn edit-btn" id="edit-btn">수정하기</button>
           </div>
