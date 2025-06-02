@@ -3,6 +3,7 @@ package com.oopsw.seongsubean.cafe.repository.mybatisrepository;
 import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.cafe.dto.CafeHeaderDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface CafeRepository {
@@ -20,4 +21,6 @@ public interface CafeRepository {
   Boolean setCafe(CafeDTO cafe);
 
   Boolean removeCafe(int cafeId);
+
+  Boolean setCateStatus(@Param("cafeId") Integer cafeId, @Param("status") String status);
 }

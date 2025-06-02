@@ -60,8 +60,14 @@
         CALL_NUMBER=#{callNumber},
         INTRODUCTION=#{introduction},
         MAIN_IMAGE=#{mainImage}
-    WHERE CAFE_ID = 3;
+    WHERE CAFE_ID = #{cafeId};
   </update>
+  <update id="setCateStatus">
+    UPDATE CAFE_INFO
+    SET STATUS = #{status}
+    WHERE CAFE_ID = #{cafeId};
+  </update>
+
 
   <delete id="removeCafe" parameterType="int">
     DELETE
