@@ -54,8 +54,8 @@
 .btn-login {
   position: relative;
   z-index: 10;
-  background-color: #93653B !important;
-  color: #fff !important;
+  background-color: #93653B;
+  color: #fff;
   border: none;
   border-radius: 1.5rem;
   padding: 0.4rem 1.2rem;
@@ -69,8 +69,8 @@
 }
 
 .btn-login:hover {
-  background-color: #8a6534;
-  color: #fff;
+  background-color: #ff0000;
+  color: #1df800;
 }
 
 /* 중앙 정렬을 위해 flex-grow 활용 */

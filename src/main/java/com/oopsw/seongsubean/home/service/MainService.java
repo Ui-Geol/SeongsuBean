@@ -54,11 +54,5 @@ public class MainService {
 
 
 
-  // 단일 카페 상세 조회
-  public CafeInfoDTO getCafeDetail(Long cafeId) {
-    return mainRepository.selectCafeInfo(cafeId);
-  }
-
-
 
 }

@@ -1,4 +1,27 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+  // searchAddress 함수 정의
+  function searchAddress() {
+    new daum.Postcode({
+      oncomplete: function(data) {
+        // data.address   : 도로명 주소 또는 지번
+        // data.zonecode  : 우편번호(5자리)
+        document.getElementById('address').value = data.address;
+        document.getElementById('zipCode').value = data.zonecode;
+        document.getElementById('detailAddress').focus();
+      }
+    }).open();
+  }
+
+  // "주소검색" 버튼에 클릭 이벤트 바인딩
+  const btnAddressSearch = document.getElementById('btnAddressSearch');
+  if (btnAddressSearch) {
+    btnAddressSearch.addEventListener('click', function(event) {
+      event.preventDefault(); // 혹시 폼 내 버튼이라면 form 제출 방지
+      searchAddress();
+    });
+  }
+
   // 폼 요소들 가져오기
   const form = document.getElementById('cafeForm');
   const descriptionTextarea = document.getElementById('description');
@@ -94,6 +117,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const formData = {
       cafeName: document.getElementById('cafeName').value,
       address: document.getElementById('address').value,
+      zipCode: document.getElementById('zipCode').value,
+      detailAddress: document.getElementById('detailAddress').value,
       phone: document.getElementById('phone').value,
       description: document.getElementById('description').value,
       businessHours: businessHours,

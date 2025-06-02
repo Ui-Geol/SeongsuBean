@@ -24,9 +24,33 @@
           <input type="text" id="cafeName" name="cafeName" placeholder="이름을 입력해주세요" required>
         </div>
 
+        <!-- ①: 주소 검색 필드 (변경된 부분) -->
         <div class="form-group">
           <label for="address">주소</label>
-          <input type="text" id="address" name="address" placeholder="주소를 입력해주세요" required>
+          <button type="button" id="btnAddressSearch">주소검색</button>
+          <input
+              type="text"
+              id="address"
+              name="address"
+              placeholder="주소를 입력해주세요"
+              readonly
+              required
+          />
+          <label for="zipCode"></label><input
+              type="text"
+              id="zipCode"
+              name="zipCode"
+              placeholder="우편번호"
+              readonly
+              required
+          />
+          <label for="detailAddress"></label><input
+              type="text"
+              id="detailAddress"
+              name="detailAddress"
+              placeholder="상세주소를 입력해주세요"
+              required
+          />
         </div>
 
         <div class="form-group">
@@ -63,58 +87,70 @@
                 <option value="12시">12시</option>
 
               </select>
-              <select name="startMinute" class="minute-select">
-                <option value="">분</option>
-                <option value="0분">0분</option>
-                <option value="15분">15분</option>
-                <option value="30분">30분</option>
-                <option value="45분">45분</option>
-              </select>
-              <select name="startPeriod" class="period-select">
-                <option>AM</option>
-                <option>PM</option>
-              </select>
+              <label>
+                <select name="startMinute" class="minute-select">
+                  <option value="">분</option>
+                  <option value="0분">0분</option>
+                  <option value="15분">15분</option>
+                  <option value="30분">30분</option>
+                  <option value="45분">45분</option>
+                </select>
+              </label>
+              <label>
+                <select name="startPeriod" class="period-select">
+                  <option>AM</option>
+                  <option>PM</option>
+                </select>
+              </label>
             </div>
             <span class="time-separator">~</span>
             <div class="time-group">
-              <select name="endHour" class="hour-select">
-                <option value="">시</option>
-                <option value="1시">1시</option>
-                <option value="2시">2시</option>
-                <option value="3시">3시</option>
-                <option value="4시">4시</option>
-                <option value="5시">5시</option>
-                <option value="6시">6시</option>
-                <option value="7시">7시</option>
-                <option value="8시">8시</option>
-                <option value="9시">9시</option>
-                <option value="10시">10시</option>
-                <option value="11시">11시</option>
-                <option value="12시">12시</option>
-              </select>
-              <select name="endMinute" class="minute-select">
-                <option value="">분</option>
-                <option value="0분">0분</option>
-                <option value="15분">15분</option>
-                <option value="30분">30분</option>
-                <option value="45분">45분</option>
-              </select>
-              <select name="endPeriod" class="period-select">
-                <option>AM</option>
-                <option>PM</option>
-              </select>
+              <label>
+                <select name="endHour" class="hour-select">
+                  <option value="">시</option>
+                  <option value="1시">1시</option>
+                  <option value="2시">2시</option>
+                  <option value="3시">3시</option>
+                  <option value="4시">4시</option>
+                  <option value="5시">5시</option>
+                  <option value="6시">6시</option>
+                  <option value="7시">7시</option>
+                  <option value="8시">8시</option>
+                  <option value="9시">9시</option>
+                  <option value="10시">10시</option>
+                  <option value="11시">11시</option>
+                  <option value="12시">12시</option>
+                </select>
+              </label>
+              <label>
+                <select name="endMinute" class="minute-select">
+                  <option value="">분</option>
+                  <option value="0분">0분</option>
+                  <option value="15분">15분</option>
+                  <option value="30분">30분</option>
+                  <option value="45분">45분</option>
+                </select>
+              </label>
+              <label>
+                <select name="endPeriod" class="period-select">
+                  <option>AM</option>
+                  <option>PM</option>
+                </select>
+              </label>
             </div>
-            <select name="weekday" class="weekday-select">
-              <option value="">요일</option>
-              <option value="월">월</option>
-              <option value="화">화</option>
-              <option value="수">수</option>
-              <option value="목">목</option>
-              <option value="금">금</option>
-              <option value="토">토</option>
-              <option value="일">일</option>
+            <label>
+              <select name="weekday" class="weekday-select">
+                <option value="">요일</option>
+                <option value="월">월</option>
+                <option value="화">화</option>
+                <option value="수">수</option>
+                <option value="목">목</option>
+                <option value="금">금</option>
+                <option value="토">토</option>
+                <option value="일">일</option>
 
-            </select>
+              </select>
+            </label>
             <button type="button" class="btn-remove-hours">삭제</button>
           </div>
         </template>
@@ -148,6 +184,7 @@
   </div>
 </div>
 <th:block layout:fragment="scripts">
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script th:src="@{/js/cafe/cafe-registration.js}"></script>
 </th:block>
 </body>

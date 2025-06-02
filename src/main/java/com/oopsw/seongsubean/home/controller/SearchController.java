@@ -24,7 +24,7 @@ public class SearchController {
       results.addAll(cafeAddr);
     }
 
-    // 2) 메뉴명(키워드)으로 판매 카페들의 주소 조회
+    // 2) 메뉴명(키워드)으로 특정메뉴 판매 카페들의 주소 조회
     List<String> menuAddrs = mainService.getEachMenu(keyword);
     if (menuAddrs != null && !menuAddrs.isEmpty()) {
       results.addAll(menuAddrs);

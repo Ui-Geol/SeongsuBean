@@ -19,8 +19,6 @@ public interface MainRepository {
   List<String> getSearchCafeMenu(String menuCategory);
 
   List<String> getEachMenu(String menuName);
-
-  CafeInfoDTO selectCafeInfo(@Param("cafeId") Long cafeId);
 }
 
 
