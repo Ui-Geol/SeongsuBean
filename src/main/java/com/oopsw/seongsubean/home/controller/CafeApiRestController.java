@@ -11,11 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class CafeApiController {
+public class CafeApiRestController {
 
   private final MainService mainService;
 
-  public CafeApiController(MainService mainService) {
+  public CafeApiRestController(MainService mainService) {
     this.mainService = mainService;
   }
 

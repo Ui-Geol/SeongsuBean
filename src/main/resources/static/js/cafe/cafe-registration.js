@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const imageUpload = document.getElementById('imageUpload');
   const imageInput = document.getElementById('imageInput');
   const imagePreview = document.getElementById('imagePreview');
-  const cancelBtn = document.getElementById('cancelBtn');
+  const hiddenInput = document.getElementById('businessHoursJson');
   // 글자 수 카운터
   descriptionTextarea.addEventListener('input', function () {
     charCount.textContent = this.value.length;
@@ -46,10 +46,32 @@ document.addEventListener('DOMContentLoaded', function () {
     .addEventListener('click', () => {
       if (container.children.length > 1) {
         clone.remove();
+        reorderNames(); // 삭제 후 인덱스 재정렬
       }
     });
     container.appendChild(clone);
+    reorderNames(); // 추가 후 인덱스 재정렬
   }
+
+  // 각 그룹(.business-hours-group) 안의 select · input에
+  // 'operationTimes[idx].xxx' 형태로 name 속성을 다시 부여하는 함수
+  function reorderNames() {
+    container.querySelectorAll('.business-hours-group').forEach((group, idx) => {
+      // ① 요일 select
+      const weekdaySel = group.querySelector('.weekday-select');
+      weekdaySel.setAttribute('name', `operationTimes[${idx}].weekday`);
+
+      // ② openTime input
+      const openInput = group.querySelector('.open-time-input');
+      openInput.setAttribute('name', `operationTimes[${idx}].openTime`);
+
+      // ③ closeTime input
+      const closeInput = group.querySelector('.close-time-input');
+      closeInput.setAttribute('name', `operationTimes[${idx}].closeTime`);
+    });
+  }
+
+
 
   addGroup();                  // 초기 1개 그룹 자동 생성
   addBtn.addEventListener('click', addGroup);
@@ -98,21 +120,17 @@ document.addEventListener('DOMContentLoaded', function () {
   // 폼 제출 이벤트 (현재는 화면 테스트용)
   form.addEventListener('submit', function (e) {
     // 동적 그룹별로 businessHours 배열 생성
+    // ─── 바뀐 부분: 영업시간 수집 로직 ───
     const businessHours = Array.from(container.children).map(group => {
-      const hours = group.querySelectorAll('.hour-select');
-      const minutes = group.querySelectorAll('.minute-select');
-      const periods = group.querySelectorAll('.period-select');
       const weekday = group.querySelector('.weekday-select').value;
-      return {
-        startHour: hours[0].value,
-        startMinute: minutes[0].value,
-        startPeriod: periods[0].value,
-        endHour: hours[1].value,
-        endMinute: minutes[1].value,
-        endPeriod: periods[1].value,
-        weekday: weekday
-      };
+      const openTime = group.querySelector('.open-time-input').value;
+      const closeTime = group.querySelector('.close-time-input').value;
+      return { weekday, openTime, closeTime };
     });
+
+    // addGroup();
+
+    // ─────────────────────────────────────
 
     const formData = {
       cafeName: document.getElementById('cafeName').value,
@@ -126,6 +144,9 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     console.log('카페 등록 데이터:', formData);
     alert('카페가 성공적으로 등록되었습니다! (콘솔에서 데이터 확인 가능)');
+
+
+    hiddenInput.value = JSON.stringify(businessHours);
 
     // 실제 서버 연동 시 사용할 코드 (현재 주석처리)
     /*
@@ -155,8 +176,12 @@ document.addEventListener('DOMContentLoaded', function () {
       form.reset();
       charCount.textContent = '0';
       imagePreview.innerHTML = '';
+      // 영업시간 그룹 리셋: 첫 그룹만 남기고 나머지 제거
+      const container = document.getElementById('business-hours-container');
+      container.innerHTML = '';
+      addGroup();  // 초기 그룹 1개 복원
     }
-  });
+  })
 });
 
 // 데이터베이스 연동 시 사용할 Spring Boot Controller 예시 (현재 주석처리)
