@@ -7,15 +7,15 @@ import com.oopsw.seongsubean.board.repository.FreeBoardRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class FreeBoardService {
   private final FreeBoardRepository freeBoardRepository;
-  public FreeBoardService(FreeBoardRepository freeBoardRepository) {
-    this.freeBoardRepository = freeBoardRepository;
-  }
+
   @Transactional
   public boolean addFreeBoard(FreeBoardDTO dto, List<String> imagePaths) {
     boolean result = freeBoardRepository.addFreeBoard(dto);

@@ -5,15 +5,14 @@ import com.oopsw.seongsubean.board.repository.ReportBoardRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class ReportBoardService {
   private final ReportBoardRepository reportBoardRepository;
-  public ReportBoardService(ReportBoardRepository reportBoardRepository) {
-    this.reportBoardRepository = reportBoardRepository;
-  }
   @Transactional
   public boolean addReportBoard(ReportBoardDTO dto, List<String> imagePaths) {
     boolean result = reportBoardRepository.addReportBoard(dto);
