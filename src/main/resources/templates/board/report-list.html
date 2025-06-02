@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
@@ -10,7 +11,7 @@
 <!-- Main Content -->
 <div layout:fragment="content">
   <div class="container">
-    <div class="d-flex justify-content-end mb-3">
+    <div class="d-flex justify-content-end mb-3" sec:authorize="isAuthenticated()">
       <button class="btn report-write-btn" onclick="location.href='/report/post'">새 글쓰기</button>
     </div>
     <div class="article-list">

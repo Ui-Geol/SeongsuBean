@@ -29,12 +29,12 @@
     ORDER BY r.CREATED_DATE DESC
   </select>
   <select id="getReportBoardDetail" parameterType="int" resultType="com.oopsw.seongsubean.board.dto.ReportBoardDTO">
-    SELECT r.REPORT_BOARD_ID AS reportBoardId,
-           r.TITLE AS title,
-           r.CONTENT AS content,
-           r.CREATED_DATE AS createdDate,
-           r.EMAIL AS email
-    FROM REPORT_BOARD r
+    SELECT REPORT_BOARD_ID AS reportBoardId,
+           TITLE AS title,
+           CONTENT AS content,
+           CREATED_DATE AS createdDate,
+           EMAIL AS email
+    FROM REPORT_BOARD
     WHERE REPORT_BOARD_ID = #{reportBoardId}
   </select>
   <select id="getReportBoardDetailImages" parameterType="int" resultType="String">
