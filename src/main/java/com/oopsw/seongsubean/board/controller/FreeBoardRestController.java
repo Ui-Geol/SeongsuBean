@@ -1,6 +1,7 @@
 package com.oopsw.seongsubean.board.controller;
 
 import com.oopsw.seongsubean.account.dto.UserDTO;
+import com.oopsw.seongsubean.auth.AccountDetails;
 import com.oopsw.seongsubean.board.dto.FreeBoardCommentDTO;
 import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
 import com.oopsw.seongsubean.board.service.FreeBoardService;
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
@@ -29,29 +31,50 @@ public class FreeBoardRestController {
   public FreeBoardRestController(FreeBoardService freeBoardService) {
     this.freeBoardService = freeBoardService;
   }
+
   @PostMapping
   public ResponseEntity<?> addFreeBoard(
-          @AuthenticationPrincipal UserDTO loginUser,
-          @ModelAttribute FreeBoardDTO dto,
+          @AuthenticationPrincipal AccountDetails accountDetails,
+          @RequestParam String title,
+          @RequestParam String content,
+          @RequestParam String headWord,
           @RequestParam(required = false) List<MultipartFile> images) throws IOException {
-    if (loginUser == null) {
+    UserDTO user = accountDetails.getUser();
+    System.out.println(accountDetails);
+    System.out.println("login" + user.getEmail());
+    if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
     }
 
-    String email = loginUser.getEmail(); // 로그인된 유저의 이메일
+    String email = user.getEmail(); // 로그인된 유저의 이메일
+    FreeBoardDTO dto = FreeBoardDTO.builder()
+        .title(title)
+        .content(content)
+        .email(email)
+        .headWord(headWord)
+        .build();
     List<String> imagePaths = new ArrayList<>();
     if (images != null) {
       for (MultipartFile file : images) {
         if (!file.isEmpty()) {
-          String fileName = file.getOriginalFilename();
-          Path savePath = Paths.get("/images/board/free", fileName);
-          Files.copy(file.getInputStream(), savePath);
-          imagePaths.add("/images/board/free" + fileName);
+          String originalFilename = file.getOriginalFilename();
+          String uploadDir = "/path/to/static/images/upload/free/" + email; // 임시 경로 (ID 아직 없음)
+          File dir = new File(uploadDir);
+          if (!dir.exists())
+            dir.mkdirs();
+          Path filePath = Paths.get(uploadDir, originalFilename);
+          try {
+            Files.copy(file.getInputStream(), filePath);
+            imagePaths.add(originalFilename);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
         }
       }
     }
-    boolean success = freeBoardService.addFreeBoard(dto, imagePaths);
-    return ResponseEntity.ok(Map.of("success", success, "id", dto.getFreeBoardId()));
+      boolean success = freeBoardService.addFreeBoard(dto, imagePaths);
+      return ResponseEntity.ok(Map.of("success", success, "id", dto.getFreeBoardId()));
+      //return null;
   }
 
   @GetMapping("/list")

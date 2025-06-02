@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     const form = document.getElementById('free-form');
     const titleInput = document.getElementById('title');
     const contentInput = document.getElementById('editor-contents');
-    //const emailInput = document.getElementById('email');
     const cancelBtn = document.getElementById('cancel-btn');
     const headWordSelect = document.getElementById('head-word');
 

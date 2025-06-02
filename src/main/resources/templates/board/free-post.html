@@ -14,7 +14,7 @@
 <div layout:fragment="content">
     <div class="main-container">
         <h1 class="page-title">게시글 쓰기</h1>
-        <form id="free-form" method="post" action="javascript:void(0);" enctype="multipart/form-data">
+        <form id="free-form" method="post" action="api/free" enctype="multipart/form-data">
 
         <!-- Category Selection -->
             <div class="mb-4">
@@ -33,11 +33,8 @@
             <!-- ✅ Toast UI Editor 삽입 -->
             <div class="mb-4">
                 <div id="editor" style="height: 500px;"></div>
-                <input type="hidden" name="contents" id="editor-contents">
+                <input type="hidden" name="content" id="editor-contents">
             </div>
-
-            <!-- 이메일 (숨김) -->
-            <!-- <input type="hidden" id="email" name="email" th:value="${loginUser != null ? loginUser.email : ''}" /> -->
 
             <div class="mb-4">
                 <label for="images">이미지 업로드 (최대 5개):</label>
