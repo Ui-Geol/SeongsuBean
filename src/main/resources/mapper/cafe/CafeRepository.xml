@@ -60,7 +60,7 @@
         CALL_NUMBER=#{callNumber},
         INTRODUCTION=#{introduction},
         MAIN_IMAGE=#{mainImage}
-    WHERE CAFE_ID = 3;
+    WHERE CAFE_ID = #{cafeId};
   </update>
   <update id="setCateStatus">
     UPDATE CAFE_INFO
