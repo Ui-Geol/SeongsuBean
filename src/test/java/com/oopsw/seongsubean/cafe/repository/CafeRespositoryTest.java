@@ -74,7 +74,7 @@ public class CafeRespositoryTest {
 
   @Test
   public void setCafeStatusTest() {
-    assertThat(cafeRepository.setCateStatus(3, "휴무일")).isTrue();
+    assertThat(cafeRepository.setCafeStatus(3, "휴무일")).isTrue();
 
   }
 

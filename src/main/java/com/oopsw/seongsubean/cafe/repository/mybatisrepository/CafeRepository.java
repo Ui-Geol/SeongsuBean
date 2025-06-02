@@ -18,9 +18,9 @@ public interface CafeRepository {
 
   CafeHeaderDTO getCafeHeaderByCafeId(int cafeId);
 
-  Boolean setCafe(CafeDTO cafe);
+  Boolean setCafe(CafeDTO updatedCafe);
 
   Boolean removeCafe(int cafeId);
 
-  Boolean setCateStatus(@Param("cafeId") Integer cafeId, @Param("status") String status);
+  Boolean setCafeStatus(@Param("cafeId") Integer cafeId, @Param("status") String status);
 }

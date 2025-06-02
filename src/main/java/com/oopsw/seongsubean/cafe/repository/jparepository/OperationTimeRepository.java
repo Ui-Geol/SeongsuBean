@@ -9,6 +9,9 @@ public interface OperationTimeRepository extends JpaRepository<OperationTime, In
 
   Optional<OperationTime> findByCafeIdAndWeekday(Integer cafeId, String weekday);
 
+  Optional<OperationTime> findByCafeId(Integer cafeId);
+
   List<OperationTime> findAllByCafeId(Integer cafeId);
 
+  void deleteAllByCafeId(int cafeId);
 }
