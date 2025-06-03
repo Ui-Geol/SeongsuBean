@@ -1,22 +1,21 @@
 package com.oopsw.seongsubean.home.controller;
 
-import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.home.service.MainService;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class CafeApiController {
+public class CafeApiRestController {
 
   private final MainService mainService;
 
-  public CafeApiController(MainService mainService) {
+  public CafeApiRestController(MainService mainService) {
     this.mainService = mainService;
   }
 

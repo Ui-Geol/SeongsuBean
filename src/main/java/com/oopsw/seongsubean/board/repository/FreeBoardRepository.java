@@ -5,18 +5,20 @@ import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface FreeBoardRepository {
   public boolean addFreeBoard(FreeBoardDTO dto);
   public boolean addFreeBoardImages(Map<String, Object> map);
   public List<FreeBoardDTO> getFreeBoardList(); //게시판 조회
-  public FreeBoardDTO getFreeBoardDetail(int freeBoardId); //게시글 조회
-  public List<String> getFreeBoardDetailImages(int freeBoardId);
-  public List<FreeBoardCommentDTO> getFreeBoardDetailComments(int freeBoardId);
+  List<FreeBoardDTO> getFreeBoardList(@Param("offset") int offset, @Param("size") int size); //게시판 페이징용
+  public FreeBoardDTO getFreeBoardDetail(Integer freeBoardId); //게시글 조회
+  public List<String> getFreeBoardDetailImages(Integer freeBoardId);
+  public List<FreeBoardCommentDTO> getFreeBoardDetailComments(Integer freeBoardId);
   public boolean setFreeBoardDetail(FreeBoardDTO dto);
-  public boolean removeFreeBoard(int freeBoardId);
-  public boolean removeFreeBoardImages(int freeBoardId);
-  public boolean removeFreeBoardComments(int freeBoardId);
+  public Integer removeFreeBoard(Integer freeBoardId);
+  public boolean removeFreeBoardImages(Integer freeBoardId);
+  public Integer removeFreeBoardComments(Integer freeBoardId);
   public boolean addFreeBoardComment(FreeBoardCommentDTO dto);
 }

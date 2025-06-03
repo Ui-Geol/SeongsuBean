@@ -23,6 +23,7 @@ public class UserDTO {
   private String phoneNumber;
   private String image;
   private String role;
+  private boolean oauth;
   private LocalDate birthDate;
   private LocalDate joinDate;
 }

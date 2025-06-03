@@ -45,13 +45,18 @@ public class AccountController {
   @GetMapping("/myPage")
   public String myPage(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
     UserDTO user = accountDetails.getUser();
+
     model.addAttribute("user", user);
+
     return "account/my-page";
   }
 
   @GetMapping("/editProfile")
   public String editProfile(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
     UserDTO user = accountDetails.getUser();
+    //OAuth2로 로그인 한 유저인지 확인
+    boolean isOAuth2 = user.isOauth();
+    model.addAttribute("isOAuth2User", isOAuth2);
     model.addAttribute("user", user);
     return "account/edit-profile";
   }
@@ -59,7 +64,13 @@ public class AccountController {
   @GetMapping("/checkPw")
   public String checkPw(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
     UserDTO user = accountDetails.getUser();
+    //OAuth2로 로그인 한 유저인지 확인
+    boolean isOAuth2 = user.isOauth();
+    model.addAttribute("isOAuth2User", isOAuth2);
     model.addAttribute("user", user);
+    if(isOAuth2) {
+      return "redirect:/account/editProfile";
+    }
     return "account/check-pw";
   }
 

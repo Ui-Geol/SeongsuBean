@@ -11,16 +11,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class SearchController {
+public class SearchRestController {
 
   private final MainService mainService;
-
-  /**
-   * 키워드에 대해
-   * 1) 카페명 일치 검색(getSearchCafeName)
-   * 2) 메뉴명 검색(getEachMenu)
-   * 결과 주소들을 합쳐서 반환
-   */
   @GetMapping("/api/search")
   public List<String> searchByKeyword(@RequestParam String keyword) {
     List<String> results = new ArrayList<>();
@@ -31,7 +24,7 @@ public class SearchController {
       results.addAll(cafeAddr);
     }
 
-    // 2) 메뉴명(키워드)으로 판매 카페들의 주소 조회
+    // 2) 메뉴명(키워드)으로 특정메뉴 판매 카페들의 주소 조회
     List<String> menuAddrs = mainService.getEachMenu(keyword);
     if (menuAddrs != null && !menuAddrs.isEmpty()) {
       results.addAll(menuAddrs);
