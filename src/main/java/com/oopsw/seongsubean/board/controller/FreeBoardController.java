@@ -1,7 +1,6 @@
 package com.oopsw.seongsubean.board.controller;
 
 import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
-import com.oopsw.seongsubean.board.dto.ReportBoardDTO;
 import com.oopsw.seongsubean.board.service.FreeBoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

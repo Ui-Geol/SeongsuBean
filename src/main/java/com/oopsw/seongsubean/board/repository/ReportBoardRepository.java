@@ -1,6 +1,5 @@
 package com.oopsw.seongsubean.board.repository;
 
-import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
 import com.oopsw.seongsubean.board.dto.ReportBoardDTO;
 import java.util.List;
 import java.util.Map;
