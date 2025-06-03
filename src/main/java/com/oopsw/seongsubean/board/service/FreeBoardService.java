@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class FreeBoardService {
   private final FreeBoardRepository freeBoardRepository;
-
   @Transactional
   public boolean addFreeBoard(FreeBoardDTO dto, List<String> imagePaths) {
     boolean result = freeBoardRepository.addFreeBoard(dto);
@@ -59,8 +58,6 @@ public class FreeBoardService {
     dto.setImages(images.stream().distinct().toList());
     return dto;
   }
-
-
   public boolean addFreeBoardComment(FreeBoardCommentDTO dto) {
     return freeBoardRepository.addFreeBoardComment(dto);
   }
@@ -68,9 +65,7 @@ public class FreeBoardService {
     return freeBoardRepository.getFreeBoardDetailComments(freeBoardId);
   }
   public boolean removeFreeBoardComment(Integer freeBoardCommentId) {
-    //System.out.println("🛠 삭제 시도 ID: " + freeBoardCommentId);
     int deletedCount = freeBoardRepository.removeFreeBoardComment(freeBoardCommentId);
-    //System.out.println("🧾 실제 삭제된 행 수: " + deletedCount);
     return deletedCount > 0;
   }
   public String getCommentOwnerEmail(Integer freeBoardCommentId) {
@@ -81,5 +76,8 @@ public class FreeBoardService {
   }
   public int getTotalFreeBoardCount() {
     return freeBoardRepository.getTotalFreeBoardCount();
+  }
+  public List<FreeBoardDTO> searchFreeBoard(String type, String keyword) {
+    return freeBoardRepository.searchFreeBoard(type, keyword.trim());
   }
 }

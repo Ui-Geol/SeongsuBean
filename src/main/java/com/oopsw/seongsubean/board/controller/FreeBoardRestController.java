@@ -46,7 +46,7 @@ public class FreeBoardRestController {
     if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
     }
-    String email = user.getEmail(); // 로그인된 유저의 이메일
+    String email = user.getEmail();
     FreeBoardDTO dto = FreeBoardDTO.builder()
         .title(title)
         .content(content)
@@ -93,7 +93,8 @@ public class FreeBoardRestController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getFreeBoardDetail(@PathVariable("id") Integer id) {
+  public ResponseEntity<?> getFreeBoardDetail(
+          @PathVariable("id") Integer id) {
     FreeBoardDTO dto = freeBoardService.getFreeBoardDetail(id);
     if (dto == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -103,9 +104,10 @@ public class FreeBoardRestController {
   }
 
   @PutMapping("/post/{id}")
-  public ResponseEntity<Map<String, Object>> setFreeBoard(@AuthenticationPrincipal AccountDetails accountDetails,
-                                          @PathVariable("id") Integer id,
-                                          @RequestBody FreeBoardDTO dto) {
+  public ResponseEntity<Map<String, Object>> setFreeBoard(
+          @AuthenticationPrincipal AccountDetails accountDetails,
+          @PathVariable("id") Integer id,
+          @RequestBody FreeBoardDTO dto) {
     if (accountDetails == null || accountDetails.getUser() == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
               .body(Map.of("updated", false, "message", "로그인이 필요합니다."));
@@ -122,8 +124,9 @@ public class FreeBoardRestController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteFreeBoard(@AuthenticationPrincipal AccountDetails accountDetails,
-                                           @PathVariable("id") Integer id) {
+  public ResponseEntity<?> deleteFreeBoard(
+          @AuthenticationPrincipal AccountDetails accountDetails,
+          @PathVariable("id") Integer id) {
     if (accountDetails == null || accountDetails.getUser() == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
               .body(Map.of("deleted", false, "message", "로그인이 필요합니다."));
@@ -140,9 +143,10 @@ public class FreeBoardRestController {
 
   /* comment */
   @PostMapping("/comment")
-  public ResponseEntity<?> addComment(@AuthenticationPrincipal AccountDetails accountDetails,
-      @RequestParam String comment,
-      @RequestParam Integer freeBoardId) {
+  public ResponseEntity<?> addComment(
+          @AuthenticationPrincipal AccountDetails accountDetails,
+          @RequestParam String comment,
+          @RequestParam Integer freeBoardId) {
     if (accountDetails == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
@@ -157,13 +161,15 @@ public class FreeBoardRestController {
   }
 
   @GetMapping("/comment/{id}")
-  public ResponseEntity<List<FreeBoardCommentDTO>> getComments(@PathVariable("id") Integer boardId) {
+  public ResponseEntity<List<FreeBoardCommentDTO>> getComments(
+          @PathVariable("id") Integer boardId) {
     List<FreeBoardCommentDTO> comments = freeBoardService.getFreeBoardComments(boardId);
     return ResponseEntity.ok(comments);
   }
 
   @GetMapping("/auth/email")
-  public ResponseEntity<?> getCurrentUserEmail(@AuthenticationPrincipal AccountDetails accountDetails) {
+  public ResponseEntity<?> getCurrentUserEmail(
+          @AuthenticationPrincipal AccountDetails accountDetails) {
     if (accountDetails == null) {
       return ResponseEntity.ok(Map.of(
               "success", false,
@@ -179,8 +185,9 @@ public class FreeBoardRestController {
   }
 
   @DeleteMapping("/comment/{commentId}")
-  public ResponseEntity<?> removeComment(@PathVariable("commentId") Integer freeBoardCommentId,
-                                         @AuthenticationPrincipal AccountDetails accountDetails) {
+  public ResponseEntity<?> removeComment(
+          @PathVariable("commentId") Integer freeBoardCommentId,
+          @AuthenticationPrincipal AccountDetails accountDetails) {
     if (accountDetails == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
@@ -194,5 +201,24 @@ public class FreeBoardRestController {
   }
 
   /* search */
-
+  @GetMapping("/search")
+  public ResponseEntity<Map<String, Object>> getFreeBoardListSearch(
+          @RequestParam("type") String type,
+          @RequestParam("keyword") String keyword,
+          @RequestParam("page") int page,
+          @RequestParam("size") int size) {
+    if (keyword == null || keyword.trim().isEmpty()) {
+      throw new IllegalArgumentException("검색어는 null이거나 공백일 수 없습니다."); //서비스는 간단하게 유지
+    }
+    List<FreeBoardDTO> all = freeBoardService.searchFreeBoard(type, keyword);
+    int total = all.size();
+    int from = Math.min((page-1) * size, total);
+    int to = Math.min(from + size, total);
+    List<FreeBoardDTO> paged = all.subList(from, to);
+    return ResponseEntity.ok(Map.of(
+            "content", paged,
+            "totalPages", (int) Math.ceil((double) total / size),
+            "currentPage", page
+    ));
+  }
 }
