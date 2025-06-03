@@ -88,4 +88,7 @@
     FROM FREE_BOARD_COMMENT
     WHERE FREE_BOARD_COMMENT_ID = #{freeBoardCommentId}
   </select>
+  <select id="getTotalFreeBoardCount" resultType="int">
+    SELECT COUNT(*) FROM FREE_BOARD
+  </select>
 </mapper>

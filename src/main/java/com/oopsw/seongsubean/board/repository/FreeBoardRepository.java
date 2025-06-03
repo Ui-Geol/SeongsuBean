@@ -22,4 +22,5 @@ public interface FreeBoardRepository {
   public Integer removeFreeBoardComments(Integer freeBoardId);
   public boolean addFreeBoardComment(FreeBoardCommentDTO dto);
   public String getCommentOwnerEmail(Integer freeBoardCommentId);
+  public int getTotalFreeBoardCount();
 }

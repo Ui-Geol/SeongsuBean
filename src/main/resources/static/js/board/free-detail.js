@@ -48,7 +48,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (data.images && Array.isArray(data.images) && data.images.length > 0) {
             data.images.forEach(imgName => {
                 const imgTag = document.createElement('img');
-                imgTag.src = `/images/board/${imgName}`;
+                if (imgName.startsWith('/')) {
+                    imgTag.src = imgName;
+                } else {
+                    imgTag.src = `/images/board/${imgName}`;
+                }
                 imgTag.alt = '게시글 이미지';
                 imgTag.classList.add('post-image');
 

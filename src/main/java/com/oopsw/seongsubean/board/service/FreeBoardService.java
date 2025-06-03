@@ -74,4 +74,8 @@ public class FreeBoardService {
   public String getCommentOwnerEmail(Integer freeBoardCommentId) {
     return freeBoardRepository.getCommentOwnerEmail(freeBoardCommentId);
   }
+
+  public int getTotalFreeBoardCount() {
+    return freeBoardRepository.getTotalFreeBoardCount();
+  }
 }

@@ -78,12 +78,19 @@ public class FreeBoardRestController {
   }
 
   @GetMapping("/list")
-  public ResponseEntity<List<FreeBoardDTO>> getFreeBoardList(
+  public ResponseEntity<Map<String, Object>> getFreeBoardList(
           @RequestParam(defaultValue = "1") int page,
           @RequestParam(defaultValue = "12") int size) {
     int offset = (page - 1) * size;
     List<FreeBoardDTO> list = freeBoardService.getFreeBoardList(offset, size);
-    return new ResponseEntity<>(list, HttpStatus.OK);
+    int totalCount = freeBoardService.getTotalFreeBoardCount();
+    int totalPages = (int) Math.ceil((double) totalCount / size);
+    Map<String, Object> result = Map.of(
+            "content", list,
+            "currentPage", page,
+            "totalPages", totalPages
+    );
+    return ResponseEntity.ok(result);
   }
   @GetMapping("/{id}")
   public ResponseEntity<?> getFreeBoardDetail(@PathVariable("id") Integer id) {
