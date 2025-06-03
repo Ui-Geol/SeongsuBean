@@ -68,15 +68,17 @@ public class FreeBoardService {
     return freeBoardRepository.getFreeBoardDetailComments(freeBoardId);
   }
   public boolean removeFreeBoardComment(Integer freeBoardCommentId) {
-    System.out.println("🛠 삭제 시도 ID: " + freeBoardCommentId);
+    //System.out.println("🛠 삭제 시도 ID: " + freeBoardCommentId);
     int deletedCount = freeBoardRepository.removeFreeBoardComment(freeBoardCommentId);
-    System.out.println("🧾 실제 삭제된 행 수: " + deletedCount);
+    //System.out.println("🧾 실제 삭제된 행 수: " + deletedCount);
     return deletedCount > 0;
   }
   public String getCommentOwnerEmail(Integer freeBoardCommentId) {
     return freeBoardRepository.getCommentOwnerEmail(freeBoardCommentId);
   }
-
+  public String getFreeBoardOwnerEmail(Integer freeBoardId) {
+    return freeBoardRepository.getFreeBoardOwnerEmail(freeBoardId);
+  }
   public int getTotalFreeBoardCount() {
     return freeBoardRepository.getTotalFreeBoardCount();
   }

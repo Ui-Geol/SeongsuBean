@@ -15,27 +15,28 @@
       r.TITLE AS title,
       r.CONTENT AS content,
       r.CREATED_DATE AS createdDate,
-      r.EMAIL AS email,
       u.NICKNAME AS nickname,
-      (
-        SELECT i.IMAGE
-        FROM REPORT_BOARD_IMAGE i
-        WHERE i.REPORT_BOARD_ID = r.REPORT_BOARD_ID
-        ORDER BY i.REPORT_BOARD_IMAGE_ID ASC
-                           LIMIT 1
-      ) AS thumbnail
+      (SELECT i.IMAGE
+       FROM REPORT_BOARD_IMAGE i
+       WHERE i.REPORT_BOARD_ID = r.REPORT_BOARD_ID
+       ORDER BY i.REPORT_BOARD_IMAGE_ID ASC
+       LIMIT 1) AS thumbnailImage
     FROM REPORT_BOARD r
-      JOIN USER_INFO u ON r.EMAIL = u.EMAIL
+    LEFT JOIN USER_INFO u ON r.EMAIL = u.EMAIL
     ORDER BY r.CREATED_DATE DESC
+    LIMIT #{size} OFFSET #{offset}
   </select>
   <select id="getReportBoardDetail" parameterType="int" resultType="com.oopsw.seongsubean.board.dto.ReportBoardDTO">
-    SELECT REPORT_BOARD_ID AS reportBoardId,
-           TITLE AS title,
-           CONTENT AS content,
-           CREATED_DATE AS createdDate,
-           EMAIL AS email
-    FROM REPORT_BOARD
-    WHERE REPORT_BOARD_ID = #{reportBoardId}
+    SELECT r.REPORT_BOARD_ID AS reportBoardId,
+           r.TITLE AS title,
+           r.CONTENT AS content,
+           r.CREATED_DATE AS createdDate,
+           u.EMAIL AS email,
+           u.IMAGE AS profileImage,
+           u.NICKNAME AS nickName
+    FROM REPORT_BOARD r
+    JOIN USER_INFO u ON r.EMAIL = u.EMAIL
+    WHERE r.REPORT_BOARD_ID = #{reportBoardId}
   </select>
   <select id="getReportBoardDetailImages" parameterType="int" resultType="String">
     SELECT IMAGE
@@ -57,4 +58,12 @@
     DELETE FROM REPORT_BOARD_IMAGE
     WHERE REPORT_BOARD_ID = #{reportBoardId}
   </delete>
+  <select id="getReportBoardOwnerEmail" resultType="string" parameterType="int">
+    SELECT EMAIL
+    FROM REPORT_BOARD
+    WHERE REPORT_BOARD_ID = #{reportBoardId}
+  </select>
+  <select id="getTotalReportBoardCount" resultType="int">
+    SELECT COUNT(*) FROM REPORT_BOARD
+  </select>
 </mapper>

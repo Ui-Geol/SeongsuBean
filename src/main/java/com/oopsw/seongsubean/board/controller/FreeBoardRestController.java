@@ -124,7 +124,7 @@ public class FreeBoardRestController {
     if (accountDetails == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
-    String email = accountDetails.getUser().getEmail(); // 로그인한 사용자의 이메일
+    String email = accountDetails.getUser().getEmail();
     FreeBoardCommentDTO dto = FreeBoardCommentDTO.builder()
         .content(comment)
         .freeBoardId(freeBoardId)
@@ -138,14 +138,8 @@ public class FreeBoardRestController {
     List<FreeBoardCommentDTO> comments = freeBoardService.getFreeBoardComments(boardId);
     return ResponseEntity.ok(comments);
   }
-//  @DeleteMapping("/comment/{id}")
-//  public ResponseEntity<?> removeComment(@PathVariable("id") Integer commentId){
-//    boolean result = freeBoardService.removeFreeBoardComment(commentId);
-//    return ResponseEntity.ok(Map.of("success", result));
-//  }
   @GetMapping("/auth/email")
   public ResponseEntity<?> getCurrentUserEmail(@AuthenticationPrincipal AccountDetails accountDetails) {
-    // 로그인 안 된 사용자도 접근 가능하게 처리
     if (accountDetails == null) {
       return ResponseEntity.ok(Map.of(
               "success", false,
@@ -153,7 +147,6 @@ public class FreeBoardRestController {
               "message", "비회원입니다."
       ));
     }
-
     String email = accountDetails.getUser().getEmail();
     return ResponseEntity.ok(Map.of(
             "success", true,
@@ -164,23 +157,18 @@ public class FreeBoardRestController {
   @DeleteMapping("/comment/{commentId}")
   public ResponseEntity<?> removeComment(@PathVariable("commentId") Integer freeBoardCommentId,
                                          @AuthenticationPrincipal AccountDetails accountDetails) {
-
     if (accountDetails == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
-
     String loginEmail = accountDetails.getUser().getEmail();
     String commentOwnerEmail = freeBoardService.getCommentOwnerEmail(freeBoardCommentId);
-
-    System.out.println("✔ 로그인 사용자 email: " + loginEmail);
-    System.out.println("✔ 댓글 작성자 email: " + commentOwnerEmail);
+    //System.out.println("로그인 사용자 email: " + loginEmail);
+    //System.out.println("댓글 작성자 email: " + commentOwnerEmail);
     if (!loginEmail.equals(commentOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("success", false, "message", "본인의 댓글만 삭제할 수 있습니다."));
     }
-
     boolean result = freeBoardService.removeFreeBoardComment(freeBoardCommentId);
-    System.out.println("🗑 댓글 삭제 결과: " + result);
-
+    //System.out.println("댓글 삭제 결과: " + result);
     return ResponseEntity.ok(Map.of("success", result));
   }
 
