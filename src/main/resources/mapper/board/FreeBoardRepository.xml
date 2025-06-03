@@ -79,8 +79,21 @@
     WHERE c.FREE_BOARD_ID = #{freeBoardId}
     ORDER BY c.COMMENT_DATE ASC
   </select>
-  <delete id="removeFreeBoardComments" parameterType="int">
+  <delete id="removeFreeBoardComment" parameterType="int">
     DELETE FROM FREE_BOARD_COMMENT
-    WHERE FREE_BOARD_ID = #{freeBoardId}
+    WHERE FREE_BOARD_COMMENT_ID = #{freeBoardCommentId}
   </delete>
+  <select id="getCommentOwnerEmail" resultType="string" parameterType="int">
+    SELECT EMAIL
+    FROM FREE_BOARD_COMMENT
+    WHERE FREE_BOARD_COMMENT_ID = #{freeBoardCommentId}
+  </select>
+  <select id="getFreeBoardOwnerEmail" resultType="string" parameterType="int">
+    SELECT EMAIL
+    FROM FREE_BOARD
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+  </select>
+  <select id="getTotalFreeBoardCount" resultType="int">
+    SELECT COUNT(*) FROM FREE_BOARD
+  </select>
 </mapper>

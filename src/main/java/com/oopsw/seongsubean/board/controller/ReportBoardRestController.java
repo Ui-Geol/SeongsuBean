@@ -1,5 +1,7 @@
 package com.oopsw.seongsubean.board.controller;
 
+import com.oopsw.seongsubean.account.dto.UserDTO;
+import com.oopsw.seongsubean.auth.AccountDetails;
 import com.oopsw.seongsubean.board.dto.ReportBoardDTO;
 import com.oopsw.seongsubean.board.service.ReportBoardService;
 
@@ -9,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +19,8 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,11 +41,15 @@ public class ReportBoardRestController {
   }
   @PostMapping
   public ResponseEntity<?> addReportBoard(
+          @AuthenticationPrincipal AccountDetails accountDetails,
           @RequestParam String title,
           @RequestParam String content,
-          @RequestParam String email,
-          @RequestParam(required = false) List<MultipartFile> images) {
-
+          @RequestParam(required = false) List<MultipartFile> images) throws IOException {
+    UserDTO user = accountDetails.getUser();
+    if(user == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+    }
+    String email = user.getEmail();
     ReportBoardDTO dto = ReportBoardDTO.builder()
             .title(title)
             .content(content)
@@ -53,8 +62,8 @@ public class ReportBoardRestController {
           String originalFilename = file.getOriginalFilename();
           String uploadDir = "/path/to/static/images/upload/report/" + email; // 임시 경로 (ID 아직 없음)
           File dir = new File(uploadDir);
-          if (!dir.exists()) dir.mkdirs();
-
+          if (!dir.exists())
+            dir.mkdirs();
           Path filePath = Paths.get(uploadDir, originalFilename);
           try {
             Files.copy(file.getInputStream(), filePath);
@@ -69,11 +78,18 @@ public class ReportBoardRestController {
     return ResponseEntity.ok(Map.of("success", success, "id", dto.getReportBoardId()));
   }
   @GetMapping("/list")
-  public ResponseEntity<List<ReportBoardDTO>> getReportBoardList() {
-    HttpHeaders headers = new HttpHeaders();
-    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-    List<ReportBoardDTO> list = reportBoardService.getReportBoardList();
-    return ResponseEntity.ok(list);
+  public ResponseEntity<Map<String, Object>> getReportBoardList(
+          @RequestParam(defaultValue = "1") int page,
+          @RequestParam(defaultValue = "7") int size) {
+    int offset=(page-1)*size;
+    List<ReportBoardDTO> list = reportBoardService.getReportBoardList(offset, size);
+    int totalCount = reportBoardService.getTotalReportBoardCount();
+    int totalPages = (int)Math.ceil((double)totalCount/size);
+    Map<String, Object> result = Map.of(
+            "content", list,
+            "currentPages", page,
+            "totalPages", totalPages);
+    return ResponseEntity.ok(result);
   }
   @GetMapping("/{id}")
   public ResponseEntity<?> getReportBoardDetail(@PathVariable("id") Integer id) {
@@ -84,6 +100,21 @@ public class ReportBoardRestController {
     }
     return ResponseEntity.ok(dto);
   }
+  @GetMapping("/auth/email")
+  public ResponseEntity<?> getCurrentUserEmail(@AuthenticationPrincipal AccountDetails accountDetails) {
+    if (accountDetails == null) {
+      return ResponseEntity.ok(Map.of(
+              "success", false,
+              "email", "",
+              "message", "비회원입니다."
+      ));
+    }
+    String email = accountDetails.getUser().getEmail();
+    return ResponseEntity.ok(Map.of(
+            "success", true,
+            "email", email
+    ));
+  }
   @PutMapping("/post/{id}")
   public Map<String, Object> setReportBoard(@PathVariable("id") Integer id,
       @RequestBody ReportBoardDTO dto) {
@@ -92,7 +123,17 @@ public class ReportBoardRestController {
     return Map.of("updated", result);
   }
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteReportBoard(@PathVariable("id") Integer id) {
+  public ResponseEntity<?> deleteReportBoard(@AuthenticationPrincipal AccountDetails accountDetails,
+                                             @PathVariable("id") Integer id) {
+    if(accountDetails.getUser() == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false,"message","로그인이 필요합니다"));
+    }
+    String loginEmail = accountDetails.getUser().getEmail();
+    String reportBoardOwnerEmail = reportBoardService.getReportBoardOwnerEmail(id);
+    if (!loginEmail.equals(reportBoardOwnerEmail)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+              .body(Map.of("deleted", false, "message", "본인의 게시글만 삭제할 수 있습니다."));
+    }
     boolean result = reportBoardService.removeReportBoard(id);
     return ResponseEntity.ok(Map.of("deleted", result));
   }
