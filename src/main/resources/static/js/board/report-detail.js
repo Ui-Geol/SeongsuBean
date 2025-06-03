@@ -1,4 +1,17 @@
 let reportId = null;
+let loginUserEmail = '';
+
+async function fetchLoginEmail() {
+  try {
+    const res = await fetch('/api/report/auth/email');
+    const data = await res.json();
+    if (data.success) {
+      loginUserEmail = data.email;
+    }
+  } catch (err) {
+    console.warn("로그인 이메일 조회 실패:", err);
+  }
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   const pathParts = window.location.pathname.split('/');
@@ -31,8 +44,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const data = await response.json();
 
+    await fetchLoginEmail();
+    const isMyPost = loginUserEmail && loginUserEmail === data.email;
+    if (isMyPost) {
+      document.getElementById('edit-btn').style.display = 'inline-block';
+      document.getElementById('delete-btn').style.display = 'inline-block';
+    }
+
+
     document.getElementById('post-title').textContent = data.title;
-    document.getElementById('author-name').textContent = data.email;
+    document.getElementById('author-name').textContent = data.nickName;
     document.getElementById('post-date').textContent = formatDate(data.createdDate);
     document.getElementById('post-content').innerHTML = data.content;
 

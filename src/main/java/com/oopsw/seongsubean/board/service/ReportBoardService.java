@@ -1,5 +1,6 @@
 package com.oopsw.seongsubean.board.service;
 
+import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
 import com.oopsw.seongsubean.board.dto.ReportBoardDTO;
 import com.oopsw.seongsubean.board.repository.ReportBoardRepository;
 import java.util.HashMap;
@@ -46,10 +47,21 @@ public class ReportBoardService {
   public List<ReportBoardDTO> getReportBoardList() {
     return reportBoardRepository.getReportBoardList();
   }
+  public List<ReportBoardDTO> getReportBoardList(int size, int offset) {
+    return reportBoardRepository.getReportBoardList(size, offset);
+  }
   public ReportBoardDTO getReportBoardDetail(Integer reportBoardId) {
     ReportBoardDTO dto = reportBoardRepository.getReportBoardDetail(reportBoardId);
     if (dto == null) return null; //nullpointexception
-    dto.setImages(reportBoardRepository.getReportBoardDetailImages(reportBoardId));
+    List<String> images = reportBoardRepository.getReportBoardDetailImages(reportBoardId);
+    dto.setImages(images.stream().distinct().toList());
     return dto;
+  }
+
+  public String getReportBoardOwnerEmail(Integer reportBoardId) {
+    return reportBoardRepository.getReportBoardOwnerEmail(reportBoardId);
+  }
+  public int getTotalReportBoardCount() {
+    return reportBoardRepository.getTotalReportBoardCount();
   }
 }
