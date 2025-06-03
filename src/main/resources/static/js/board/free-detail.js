@@ -181,7 +181,7 @@ async function loadComments() {
             ${
                     isMyComment
                         ? `<div class="comment-actions">
-                        <button class="comment-delete-btn" data-id="${comment.commentId}">삭제하기</button>
+                        <button class="comment-delete-btn" data-id="${comment.freeBoardCommentId}">삭제하기</button>
                        </div>`
                         : ""
                 }

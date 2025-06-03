@@ -19,7 +19,7 @@ public interface FreeBoardRepository {
   public boolean setFreeBoardDetail(FreeBoardDTO dto);
   public Integer removeFreeBoard(Integer freeBoardId);
   public boolean removeFreeBoardImages(Integer freeBoardId);
-  public Integer removeFreeBoardComments(Integer freeBoardId);
+  public Integer removeFreeBoardComment(Integer freeBoardId);
   public boolean addFreeBoardComment(FreeBoardCommentDTO dto);
   public String getCommentOwnerEmail(Integer freeBoardCommentId);
   public int getTotalFreeBoardCount();

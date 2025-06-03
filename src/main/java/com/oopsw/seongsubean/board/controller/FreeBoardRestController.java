@@ -162,7 +162,7 @@ public class FreeBoardRestController {
   }
 
   @DeleteMapping("/comment/{commentId}")
-  public ResponseEntity<?> removeComment(@PathVariable Integer commentId,
+  public ResponseEntity<?> removeComment(@PathVariable("commentId") Integer freeBoardCommentId,
                                          @AuthenticationPrincipal AccountDetails accountDetails) {
 
     if (accountDetails == null) {
@@ -170,13 +170,17 @@ public class FreeBoardRestController {
     }
 
     String loginEmail = accountDetails.getUser().getEmail();
-    String commentOwnerEmail = freeBoardService.getCommentOwnerEmail(commentId);
+    String commentOwnerEmail = freeBoardService.getCommentOwnerEmail(freeBoardCommentId);
 
+    System.out.println("✔ 로그인 사용자 email: " + loginEmail);
+    System.out.println("✔ 댓글 작성자 email: " + commentOwnerEmail);
     if (!loginEmail.equals(commentOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("success", false, "message", "본인의 댓글만 삭제할 수 있습니다."));
     }
 
-    boolean result = freeBoardService.removeFreeBoardComment(commentId);
+    boolean result = freeBoardService.removeFreeBoardComment(freeBoardCommentId);
+    System.out.println("🗑 댓글 삭제 결과: " + result);
+
     return ResponseEntity.ok(Map.of("success", result));
   }
 

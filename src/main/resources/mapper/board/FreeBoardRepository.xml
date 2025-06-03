@@ -79,9 +79,9 @@
     WHERE c.FREE_BOARD_ID = #{freeBoardId}
     ORDER BY c.COMMENT_DATE ASC
   </select>
-  <delete id="removeFreeBoardComments" parameterType="int">
+  <delete id="removeFreeBoardComment" parameterType="int">
     DELETE FROM FREE_BOARD_COMMENT
-    WHERE FREE_BOARD_ID = #{freeBoardId}
+    WHERE FREE_BOARD_COMMENT_ID = #{freeBoardCommentId}
   </delete>
   <select id="getCommentOwnerEmail" resultType="string" parameterType="int">
     SELECT EMAIL
