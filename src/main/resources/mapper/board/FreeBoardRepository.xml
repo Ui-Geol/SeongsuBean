@@ -83,4 +83,9 @@
     DELETE FROM FREE_BOARD_COMMENT
     WHERE FREE_BOARD_ID = #{freeBoardId}
   </delete>
+  <select id="getCommentOwnerEmail" resultType="string" parameterType="int">
+    SELECT EMAIL
+    FROM FREE_BOARD_COMMENT
+    WHERE FREE_BOARD_COMMENT_ID = #{freeBoardCommentId}
+  </select>
 </mapper>

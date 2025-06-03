@@ -71,4 +71,7 @@ public class FreeBoardService {
     int deletedCount = freeBoardRepository.removeFreeBoardComments(freeBoardId);
     return deletedCount > 0;
   }
+  public String getCommentOwnerEmail(Integer freeBoardCommentId) {
+    return freeBoardRepository.getCommentOwnerEmail(freeBoardCommentId);
+  }
 }

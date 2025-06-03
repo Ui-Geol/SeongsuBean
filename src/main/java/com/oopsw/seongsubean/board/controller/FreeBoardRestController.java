@@ -131,9 +131,46 @@ public class FreeBoardRestController {
     List<FreeBoardCommentDTO> comments = freeBoardService.getFreeBoardComments(boardId);
     return ResponseEntity.ok(comments);
   }
-  @DeleteMapping("/comment/{id}")
-  public ResponseEntity<?> removeComment(@PathVariable("id") Integer commentId){
+//  @DeleteMapping("/comment/{id}")
+//  public ResponseEntity<?> removeComment(@PathVariable("id") Integer commentId){
+//    boolean result = freeBoardService.removeFreeBoardComment(commentId);
+//    return ResponseEntity.ok(Map.of("success", result));
+//  }
+  @GetMapping("/auth/email")
+  public ResponseEntity<?> getCurrentUserEmail(@AuthenticationPrincipal AccountDetails accountDetails) {
+    // 로그인 안 된 사용자도 접근 가능하게 처리
+    if (accountDetails == null) {
+      return ResponseEntity.ok(Map.of(
+              "success", false,
+              "email", "",
+              "message", "비회원입니다."
+      ));
+    }
+
+    String email = accountDetails.getUser().getEmail();
+    return ResponseEntity.ok(Map.of(
+            "success", true,
+            "email", email
+    ));
+  }
+
+  @DeleteMapping("/comment/{commentId}")
+  public ResponseEntity<?> removeComment(@PathVariable Integer commentId,
+                                         @AuthenticationPrincipal AccountDetails accountDetails) {
+
+    if (accountDetails == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
+    }
+
+    String loginEmail = accountDetails.getUser().getEmail();
+    String commentOwnerEmail = freeBoardService.getCommentOwnerEmail(commentId);
+
+    if (!loginEmail.equals(commentOwnerEmail)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("success", false, "message", "본인의 댓글만 삭제할 수 있습니다."));
+    }
+
     boolean result = freeBoardService.removeFreeBoardComment(commentId);
     return ResponseEntity.ok(Map.of("success", result));
   }
+
 }

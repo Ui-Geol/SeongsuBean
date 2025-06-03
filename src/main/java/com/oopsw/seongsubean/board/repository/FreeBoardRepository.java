@@ -21,4 +21,5 @@ public interface FreeBoardRepository {
   public boolean removeFreeBoardImages(Integer freeBoardId);
   public Integer removeFreeBoardComments(Integer freeBoardId);
   public boolean addFreeBoardComment(FreeBoardCommentDTO dto);
+  public String getCommentOwnerEmail(Integer freeBoardCommentId);
 }

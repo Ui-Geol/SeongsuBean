@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert("게시글을 불러오는 데 실패했습니다.");
     }
 
-    loadComments();
+    await loadComments();
 
     const cancelBtn = document.getElementById("cancel-btn");
     if (cancelBtn) {
@@ -137,7 +137,19 @@ function escapeHtml(str) {
 }
 
 // 💬 댓글 처리 함수 분리
-function loadComments() {
+async function loadComments() {
+    let currentUserEmail = null;
+    try {
+        const userRes = await fetch('/api/free/auth/email');
+        if (userRes.ok) {
+            const userData = await userRes.json();
+            currentUserEmail = userData.email;
+        }
+    } catch (err) {
+        console.warn("로그인 사용자 이메일 확인 실패", err);
+        currentUserEmail = null;
+    }
+
     fetch(`/api/free/comment/${freeBoardId}`)
         .then(res => res.json())
         .then(comments => {
@@ -147,6 +159,8 @@ function loadComments() {
             comments.forEach(comment => {
                 const avatarUrl = comment.profileImage || "/images/board/SampleProfile.png";
                 const createdDate = new Date(comment.createdDate).toLocaleString("ko-KR");
+
+                const isMyComment = comment.email === currentUserEmail;
 
                 const item = document.createElement("div");
                 item.className = "comment-item";
@@ -160,9 +174,13 @@ function loadComments() {
               <span class="comment-date">${createdDate}</span>
             </div>
             <div class="comment-text">${comment.content}</div>
-            <div class="comment-actions">
-              <button class="comment-delete-btn" data-id="${comment.commentId}">삭제하기</button>
-            </div>
+            ${
+                    isMyComment
+                        ? `<div class="comment-actions">
+                        <button class="comment-delete-btn" data-id="${comment.commentId}">삭제하기</button>
+                       </div>`
+                        : ""
+                }
           </div>
         `;
                 commentList.appendChild(item);
@@ -181,7 +199,7 @@ function loadComments() {
                                     alert("댓글이 삭제되었습니다.");
                                     location.reload();
                                 } else {
-                                    alert("삭제 실패");
+                                    alert(data.message || "삭제 실패");
                                 }
                             })
                             .catch(err => {
@@ -197,25 +215,33 @@ function loadComments() {
 // 💬 댓글 등록
 document.querySelector(".comment-submit").addEventListener("click", () => {
     const content = document.querySelector(".comment-input").value.trim();
-    const email = sessionStorage.getItem("email");
 
     if (!content) {
         alert("댓글을 입력해주세요.");
         return;
     }
 
+    const formData = new FormData();
+    formData.append("comment", content);
+    formData.append("freeBoardId", freeBoardId);
+
     fetch("/api/free/comment", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content, email, freeBoardId })
+        body: formData
     })
-        .then(res => res.json())
-        .then(data => {
+        .then(async res => {
+            if (res.status === 401) {
+                alert("로그인이 필요한 기능입니다.");
+                window.location.href = "/account/login";
+                return;
+            }
+
+            const data = await res.json();
             if (data.success) {
                 alert("댓글이 등록되었습니다.");
                 location.reload();
             } else {
-                alert("등록 실패");
+                alert(data.message || "등록 실패");
             }
         })
         .catch(err => {
@@ -223,3 +249,4 @@ document.querySelector(".comment-submit").addEventListener("click", () => {
             alert("댓글 등록 중 오류 발생");
         });
 });
+
