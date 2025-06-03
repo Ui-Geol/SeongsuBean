@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class SearchController {
+public class SearchRestController {
 
   private final MainService mainService;
   @GetMapping("/api/search")

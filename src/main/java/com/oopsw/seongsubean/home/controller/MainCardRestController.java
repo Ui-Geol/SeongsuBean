@@ -10,11 +10,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/main")
-public class MainCardController {
+public class MainCardRestController {
 
   private final MainService mainService;
 
-  public MainCardController(MainService mainService) {
+  public MainCardRestController(MainService mainService) {
     this.mainService = mainService;
   }
 

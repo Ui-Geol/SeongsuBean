@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
@@ -12,134 +13,93 @@
     <div class="form-wrapper">
       <h1 class="form-title">카페 만들기</h1>
 
-      <!-- 실제 서버 전송 시 사용할 폼 (현재 주석처리) -->
-      <!--
-      <form id="cafeForm" class="cafe-form" th:action="@{/cafe/register}" th:object="${cafeForm}" method="post" enctype="multipart/form-data">
-      -->
+      <form id="cafeForm" class="cafe-form" th:action="@{/cafe-register}" th:object="${cafeForm}"
+            method="post" enctype="multipart/form-data">
 
-      <!-- 화면 테스트용 폼 -->
-      <form id="cafeForm" class="cafe-form" onsubmit="return false;">
+        <!-- 1) 카페 이름 -->
         <div class="form-group">
           <label for="cafeName">카페이름</label>
-          <input type="text" id="cafeName" name="cafeName" placeholder="이름을 입력해주세요" required>
+          <input type="text"
+                 id="cafeName"
+                 name="cafeName"
+                 placeholder="이름을 입력해주세요"
+                 required>
         </div>
 
-        <!-- ①: 주소 검색 필드 (변경된 부분) -->
+        <!-- 2) 주소 검색 필드 -->
         <div class="form-group">
           <label for="address">주소</label>
           <button type="button" id="btnAddressSearch">주소검색</button>
-          <input
-              type="text"
-              id="address"
-              name="address"
-              placeholder="주소를 입력해주세요"
-              readonly
-              required
-          />
-          <label for="zipCode"></label><input
-              type="text"
-              id="zipCode"
-              name="zipCode"
-              placeholder="우편번호"
-              readonly
-              required
-          />
-          <label for="detailAddress"></label><input
-              type="text"
-              id="detailAddress"
-              name="detailAddress"
-              placeholder="상세주소를 입력해주세요"
-              required
-          />
+          <input type="text"
+                 id="address"
+                 name="address"
+                 placeholder="주소를 입력해주세요"
+                 readonly
+                 required>
+          <input type="text"
+                 id="zipCode"
+                 name="zipCode"
+                 placeholder="우편번호"
+                 readonly
+                 required>
+          <input type="text"
+                 id="detailAddress"
+                 name="detailAddress"
+                 placeholder="상세주소를 입력해주세요"
+                 required>
         </div>
 
+        <!-- 3) 전화번호 -->
         <div class="form-group">
           <label for="phone">전화번호</label>
-          <input type="tel" id="phone" name="phone" placeholder="전화번호를 입력해주세요" required>
+          <input type="tel"
+                 id="phone"
+                 name="phone"
+                 placeholder="전화번호를 입력해주세요"
+                 required>
         </div>
 
+        <!-- 4) 소개 -->
         <div class="form-group">
           <label for="description">소개</label>
-          <textarea id="description" name="description" placeholder="최대 300자"
+          <textarea id="description"
+                    name="description"
+                    placeholder="최대 300자"
                     maxlength="300"></textarea>
           <div class="char-count">
             <span id="charCount">0</span>/300
           </div>
         </div>
 
-        <!-- ①: 복제용 영업시간 템플릿 -->
-        <template id="tpl-business-hours">
-          <div class="business-hours-group">
-            <div class="time-group">
-              <select name="startHour" class="hour-select">
-                <option value="">시</option>
-                <option value="1시">1시</option>
-                <option value="2시">시</option>
-                <option value="3시">3시</option>
-                <option value="4시">4시</option>
-                <option value="5시">5시</option>
-                <option value="6시">6시</option>
-                <option value="7시">7시</option>
-                <option value="8시">8시</option>
-                <option value="9시">9시</option>
-                <option value="10시">10시</option>
-                <option value="11시">11시</option>
-                <option value="12시">12시</option>
+        <!-- 5) 숨겨진 input: JS가 JSON을 채워넣습니다 -->
+        <input type="hidden" id="businessHoursJson" name="businessHours" th:value="''" />
 
-              </select>
-              <label>
-                <select name="startMinute" class="minute-select">
-                  <option value="">분</option>
-                  <option value="0분">0분</option>
-                  <option value="15분">15분</option>
-                  <option value="30분">30분</option>
-                  <option value="45분">45분</option>
-                </select>
-              </label>
-              <label>
-                <select name="startPeriod" class="period-select">
-                  <option>AM</option>
-                  <option>PM</option>
-                </select>
-              </label>
-            </div>
-            <span class="time-separator">~</span>
-            <div class="time-group">
-              <label>
-                <select name="endHour" class="hour-select">
-                  <option value="">시</option>
-                  <option value="1시">1시</option>
-                  <option value="2시">2시</option>
-                  <option value="3시">3시</option>
-                  <option value="4시">4시</option>
-                  <option value="5시">5시</option>
-                  <option value="6시">6시</option>
-                  <option value="7시">7시</option>
-                  <option value="8시">8시</option>
-                  <option value="9시">9시</option>
-                  <option value="10시">10시</option>
-                  <option value="11시">11시</option>
-                  <option value="12시">12시</option>
-                </select>
-              </label>
-              <label>
-                <select name="endMinute" class="minute-select">
-                  <option value="">분</option>
-                  <option value="0분">0분</option>
-                  <option value="15분">15분</option>
-                  <option value="30분">30분</option>
-                  <option value="45분">45분</option>
-                </select>
-              </label>
-              <label>
-                <select name="endPeriod" class="period-select">
-                  <option>AM</option>
-                  <option>PM</option>
-                </select>
-              </label>
-            </div>
-            <label>
-              <select name="weekday" class="weekday-select">
+        <!-- ──────────────────────────────────────────────────────────── -->
+        <!-- (A) 영업시간 섹션 -->
+        <div class="mb-3 position-relative">
+          <label class="form-label">영업시간</label>
+
+          <!-- (B) "영업시간 추가" 버튼 -->
+          <button
+                  type="button"
+                  id="add-business-hours-btn"
+                  class="btn btn-sm btn-primary position-absolute top-0 end-0"
+                  style="transform: translate(0, -50%);">
+            영업시간 추가
+          </button>
+
+          <!-- (C) 그룹 컨테이너 -->
+          <div id="business-hours-container" class="d-flex flex-column gap-2 mt-3">
+            <!-- JS가 여기에 첫 그룹을 자동으로 추가합니다. -->
+          </div>
+        </div>
+
+        <!-- (D) 템플릿: 각 select에는 placeholder만 남김 -->
+        <template id="tpl-business-hours">
+          <div class="business-hours-group d-flex align-items-center">
+            <!-- 요일 -->
+            <label class="me-2">
+              <select class="weekday-select form-select" required>
                 <option value="">요일</option>
                 <option value="월">월</option>
                 <option value="화">화</option>
@@ -148,21 +108,64 @@
                 <option value="금">금</option>
                 <option value="토">토</option>
                 <option value="일">일</option>
-
               </select>
             </label>
-            <button type="button" class="btn-remove-hours">삭제</button>
+
+            <!-- 시작 시간: 시 -->
+            <label class="me-1">
+              <select class="hour-select form-select" required>
+                <option value="">시</option>
+                <!-- 옵션은 JS에서 채웁니다. -->
+              </select>
+            </label>
+            <!-- 시작 시간: 분 -->
+            <label class="me-2">
+              <select class="minute-select form-select" required>
+                <option value="">분</option>
+                <!-- 옵션은 JS에서 채웁니다. -->
+              </select>
+            </label>
+            <!-- 시작 시간: AM/PM -->
+            <label class="me-2">
+              <select class="period-select form-select" required>
+                <option value="">AM/PM</option>
+                <!-- 옵션은 JS에서 채웁니다. -->
+              </select>
+            </label>
+
+            <!-- 구분자 (~) -->
+            <span class="time-separator me-2">~</span>
+
+            <!-- 종료 시간: 시 -->
+            <label class="me-1">
+              <select class="hour-select form-select" required>
+                <option value="">시</option>
+                <!-- JS에서 채움 -->
+              </select>
+            </label>
+            <!-- 종료 시간: 분 -->
+            <label class="me-2">
+              <select class="minute-select form-select" required>
+                <option value="">분</option>
+                <!-- JS에서 채움 -->
+              </select>
+            </label>
+            <!-- 종료 시간: AM/PM -->
+            <label class="me-2">
+              <select class="period-select form-select" required>
+                <option value="">AM/PM</option>
+                <!-- JS에서 채움 -->
+              </select>
+            </label>
+
+            <!-- 삭제 버튼 -->
+            <button type="button"
+                    class="btn btn-sm btn-outline-danger btn-remove-hours">
+              삭제
+            </button>
           </div>
         </template>
-
-        <!-- ②: 복제된 그룹이 들어갈 컨테이너 + 추가 버튼 -->
-        <div class="form-group">
-          <label>영업시간</label>
-          <div id="business-hours-container"></div>
-          <button type="button" id="add-business-hours-btn" class="btn-add-hours">추가</button>
-        </div>
-
-
+        <!-- 8) 이미지 업로드 및 미리보기 -->
         <div class="form-group">
           <div class="image-upload" id="imageUpload">
             <div class="upload-content">
@@ -175,14 +178,17 @@
           <div id="imagePreview" class="image-preview"></div>
         </div>
 
+        <!-- 9) 폼 하단: 취소/등록 버튼 -->
         <div class="form-actions">
           <button type="button" class="btn btn-cancel" id="cancelBtn">취소</button>
-          <button type="submit" class="btn btn-submit">등록</button>
+          <button type="submit" class="btn btn-submit" id="submitJsonBtn">등록</button>
         </div>
+
       </form>
     </div>
   </div>
 </div>
+
 <th:block layout:fragment="scripts">
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script th:src="@{/js/cafe/cafe-registration.js}"></script>
