@@ -54,13 +54,13 @@
             </div>
 
             <!-- 비밀번호 -->
-            <div class="form-row">
+            <div th:if="${!isOAuth2User}" class="form-row">
               <label for="password" class="form-label">비밀 번호</label>
               <input type="password" class="form-control" id="password" name="password" placeholder="새 비밀번호를 입력하세요" minlength="8" maxlength="20">
             </div>
 
             <!-- 비밀번호 확인 -->
-            <div class="form-row">
+            <div th:if="${!isOAuth2User}" class="form-row">
               <label for="passwordConfirm" class="form-label">비밀 번호 확인</label>
               <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호를 다시 입력하세요">
             </div>

@@ -12,6 +12,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .navbar-custom .container-fluid {
@@ -85,3 +87,8 @@
   margin-top: 10px;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+}

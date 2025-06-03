@@ -1,19 +1,19 @@
 package com.oopsw.seongsubean.board.service;
 
+import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
 import com.oopsw.seongsubean.board.dto.ReportBoardDTO;
 import com.oopsw.seongsubean.board.repository.ReportBoardRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 public class ReportBoardService {
   private final ReportBoardRepository reportBoardRepository;
-  public ReportBoardService(ReportBoardRepository reportBoardRepository) {
-    this.reportBoardRepository = reportBoardRepository;
-  }
   @Transactional
   public boolean addReportBoard(ReportBoardDTO dto, List<String> imagePaths) {
     boolean result = reportBoardRepository.addReportBoard(dto);
@@ -39,17 +39,29 @@ public class ReportBoardService {
     return result;
   }
   @Transactional
-  public boolean deleteReportBoard(Integer ReportBoardId) {
-    reportBoardRepository.removeReportBoardImages(ReportBoardId);
-    return reportBoardRepository.removeReportBoard(ReportBoardId);
+  public boolean removeReportBoard(Integer reportBoardId) {
+    reportBoardRepository.removeReportBoardImages(reportBoardId);
+    int deletedCount = reportBoardRepository.removeReportBoard(reportBoardId);
+    return deletedCount > 0;
   }
   public List<ReportBoardDTO> getReportBoardList() {
     return reportBoardRepository.getReportBoardList();
   }
-  public ReportBoardDTO getReportBoardDetail(Integer ReportBoardId) {
-    ReportBoardDTO dto = reportBoardRepository.getReportBoardDetail(ReportBoardId);
+  public List<ReportBoardDTO> getReportBoardList(int size, int offset) {
+    return reportBoardRepository.getReportBoardList(size, offset);
+  }
+  public ReportBoardDTO getReportBoardDetail(Integer reportBoardId) {
+    ReportBoardDTO dto = reportBoardRepository.getReportBoardDetail(reportBoardId);
     if (dto == null) return null; //nullpointexception
-    dto.setImages(reportBoardRepository.getReportBoardDetailImages(ReportBoardId));
+    List<String> images = reportBoardRepository.getReportBoardDetailImages(reportBoardId);
+    dto.setImages(images.stream().distinct().toList());
     return dto;
+  }
+
+  public String getReportBoardOwnerEmail(Integer reportBoardId) {
+    return reportBoardRepository.getReportBoardOwnerEmail(reportBoardId);
+  }
+  public int getTotalReportBoardCount() {
+    return reportBoardRepository.getTotalReportBoardCount();
   }
 }

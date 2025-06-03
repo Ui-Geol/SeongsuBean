@@ -20,4 +20,6 @@ public class ReportBoardDTO {
   private LocalDateTime createdDate;
   private String email;
   private List<String> images;
+  private String thumbnailImage;
+  private String nickName;
 }

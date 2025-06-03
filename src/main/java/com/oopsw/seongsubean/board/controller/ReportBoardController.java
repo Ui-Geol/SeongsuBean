@@ -15,13 +15,13 @@ public class ReportBoardController {
   public ReportBoardController(ReportBoardService reportBoardService) {
     this.reportBoardService = reportBoardService;
   }
-
+  //select
   @GetMapping("/list")
   public String reportList(Model model) {
     model.addAttribute("reportList", reportBoardService.getReportBoardList());
     return "board/report-list";
   }
-
+  //select
   @GetMapping("/detail/{id}")
   public String reportDetail(@PathVariable("id") String id, Model model) {
     try {
@@ -32,7 +32,7 @@ public class ReportBoardController {
       return "redirect:/board/report-list";
     }
   }
-
+  //add
   @GetMapping("/post")
   public String reportPost() {
     return "board/report-post";
@@ -40,7 +40,7 @@ public class ReportBoardController {
 
   //update
   @GetMapping("/set/{id}")
-  public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+  public String reportSet(@PathVariable("id") Integer id, Model model) {
     ReportBoardDTO dto = reportBoardService.getReportBoardDetail(id);
     model.addAttribute("mode", "update");
     return "board/report-post";

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
@@ -23,8 +24,8 @@
           </button>
         </div>
       </div>
-      <div class="col-md-3 text-end">
-        <button class="btn search-btn" onclick="location.href='/free-post'">새 글쓰기</button>
+      <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
+        <button  class="btn search-btn" onclick="location.href='/free-post'">새 글쓰기</button>
       </div>
     </div>
   </div>
@@ -37,21 +38,7 @@
     <div class="row mt-4">
       <div class="col-12">
         <nav aria-label="Page navigation">
-          <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
+          <ul class="pagination justify-content-center"></ul>
         </nav>
       </div>
     </div>

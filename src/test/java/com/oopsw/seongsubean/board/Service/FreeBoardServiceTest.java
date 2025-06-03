@@ -157,7 +157,7 @@ public class FreeBoardServiceTest {
         .build();
     freeBoardService.addFreeBoardComment(comment);
 
-    boolean result = freeBoardService.removeFreeBoardComments(board.getFreeBoardId());
+    boolean result = freeBoardService.removeFreeBoardComment(board.getFreeBoardId());
     assertTrue(result);
 
     FreeBoardDTO resultBoard = freeBoardService.getFreeBoardDetail(board.getFreeBoardId());

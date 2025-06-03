@@ -23,10 +23,9 @@ public class AccountOauth2UserService extends DefaultOAuth2UserService {
     OAuth2User oAuth2User = super.loadUser(userRequest);
 
     String registrationId = userRequest.getClientRegistration().getRegistrationId();
-
     String email = null;
-    String fakePassword = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
     String nickname = null;
+    String fakePassword = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
     if ("google".equals(registrationId)) {
       email = oAuth2User.getAttribute("email");
       nickname = oAuth2User.getAttribute("name");
@@ -47,16 +46,22 @@ public class AccountOauth2UserService extends DefaultOAuth2UserService {
     UserDTO user = accountRepository.findByEmail(email);
 
     if(user == null) {
-      accountRepository.addUser(UserDTO.builder()
+      user = UserDTO.builder()
           .email(email)
           .password(fakePassword)
           .nickName(nickname)
-          .birthDate(LocalDate.of(1999,2,20)) // 고정 생년월일;;  ㅠ
-          .phoneNumber("010-2323-2323") //고정 전화번호 ㅠ
-          .build());
+          .birthDate(LocalDate.of(1999,2,20))
+          .phoneNumber("010-2323-2323")
+          .oauth(true)
+          .build();
+      accountRepository.addUser(user);
+    }else {
+      // 기존 유저의 oauth 플래그 확인 후 없으면 갱신
+      if (!user.isOauth()) {
+        user.setOauth(true);
+      }
     }
-
-    return oAuth2User;
+    return new AccountDetails(user, oAuth2User.getAttributes());
   }
 
 }
