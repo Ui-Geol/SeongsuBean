@@ -10,9 +10,9 @@ public interface ReportBoardRepository {
   public boolean addReportBoard(ReportBoardDTO dto);
   public boolean addReportBoardImages(Map<String, Object> map);
   public List<ReportBoardDTO> getReportBoardList(); //게시판 조회
-  public ReportBoardDTO getReportBoardDetail(int reportBoardId); //게시글 조회
-  public List<String> getReportBoardDetailImages(int reportBoardId);
+  public ReportBoardDTO getReportBoardDetail(Integer reportBoardId); //게시글 조회
+  public List<String> getReportBoardDetailImages(Integer reportBoardId);
   public boolean setReportBoardDetail(ReportBoardDTO dto);
-  public boolean removeReportBoard(int reportBoardId);
-  public boolean removeReportBoardImages(int reportBoardId);
+  public Integer removeReportBoard(Integer reportBoardId);
+  public boolean removeReportBoardImages(Integer reportBoardId);
 }

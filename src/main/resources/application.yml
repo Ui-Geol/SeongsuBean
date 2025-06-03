@@ -38,6 +38,10 @@ spring:
     suffix: .html
     cache: false
     check-template-location: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}?characterEncoding=UTF-8

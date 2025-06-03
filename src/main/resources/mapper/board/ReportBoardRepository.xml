@@ -11,20 +11,29 @@
   </insert>
   <select id="getReportBoardList" resultType="com.oopsw.seongsubean.board.dto.ReportBoardDTO">
     SELECT
-      r.REPORT_BOARD_ID,
-      r.TITLE,
-      r.CONTENT,
-      r.CREATED_DATE,
-      (SELECT i.IMAGE
-       FROM REPORT_BOARD_IMAGE i
-       WHERE i.REPORT_BOARD_ID = r.REPORT_BOARD_ID
-       ORDER BY i.REPORT_BOARD_IMAGE_ID ASC
-        LIMIT 1) AS image
+      r.REPORT_BOARD_ID AS reportBoardId,
+      r.TITLE AS title,
+      r.CONTENT AS content,
+      r.CREATED_DATE AS createdDate,
+      r.EMAIL AS email,
+      u.NICKNAME AS nickname,
+      (
+        SELECT i.IMAGE
+        FROM REPORT_BOARD_IMAGE i
+        WHERE i.REPORT_BOARD_ID = r.REPORT_BOARD_ID
+        ORDER BY i.REPORT_BOARD_IMAGE_ID ASC
+                           LIMIT 1
+      ) AS thumbnail
     FROM REPORT_BOARD r
+      JOIN USER_INFO u ON r.EMAIL = u.EMAIL
     ORDER BY r.CREATED_DATE DESC
   </select>
   <select id="getReportBoardDetail" parameterType="int" resultType="com.oopsw.seongsubean.board.dto.ReportBoardDTO">
-    SELECT REPORT_BOARD_ID, TITLE, CONTENT, CREATED_DATE, EMAIL
+    SELECT REPORT_BOARD_ID AS reportBoardId,
+           TITLE AS title,
+           CONTENT AS content,
+           CREATED_DATE AS createdDate,
+           EMAIL AS email
     FROM REPORT_BOARD
     WHERE REPORT_BOARD_ID = #{reportBoardId}
   </select>

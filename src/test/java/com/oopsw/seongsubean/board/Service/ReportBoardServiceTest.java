@@ -97,7 +97,7 @@ public class ReportBoardServiceTest {
     List<String> images = List.of("del1.png");
     reportBoardService.addReportBoard(dto, images);
 
-    boolean deleted = reportBoardService.deleteReportBoard(dto.getReportBoardId());
+    boolean deleted = reportBoardService.removeReportBoard(dto.getReportBoardId());
     assertTrue(deleted);
 
     ReportBoardDTO check = reportBoardService.getReportBoardDetail(dto.getReportBoardId());
@@ -106,7 +106,7 @@ public class ReportBoardServiceTest {
   @Test
   public void failDeleteReportBoardTest() {
     int nonExistentId = 999999;
-    boolean result = reportBoardService.deleteReportBoard(nonExistentId);
+    boolean result = reportBoardService.removeReportBoard(nonExistentId);
     assertFalse(result);
   }
   @Test

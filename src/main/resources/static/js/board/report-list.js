@@ -3,23 +3,49 @@ const pageSize = 7;
 let totalPages = 1;
 let fullReportList = [];
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('/api/report/list')
-  .then(response => {
-    if (!response.ok) throw new Error(`서버 오류: ${response.status}`);
-    return response.json();
-  })
-  .then(reportList => {
-    fullReportList = reportList;
-    totalPages = Math.ceil(reportList.length / pageSize);
-    renderReportList();
-    renderPagination();
-  })
-  .catch(error => {
-    console.error('게시글 목록 불러오기 실패:', error);
-    alert('제보글을 불러오는 중 문제가 발생했습니다.');
+function escapeHtml(text) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text ? text.replace(/[&<>"']/g, function(m) { return map[m]; }) : '';
+}
+
+function formatDate(isoString) {
+  if (!isoString) return '';
+  const date = new Date(isoString);
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
   });
-});
+}
+
+// ✅ fetch + 렌더링 분리
+function fetchAndRenderList() {
+  // 캐시 방지를 위한 timestamp 파라미터 추가
+  fetch('/api/report/list?ts=' + Date.now(), { cache: 'no-store' })
+      .then(response => {
+        if (!response.ok) throw new Error(`서버 오류: ${response.status}`);
+        return response.json();
+      })
+      .then(reportList => {
+        fullReportList = reportList;
+        totalPages = Math.ceil(reportList.length / pageSize);
+        renderReportList();
+        renderPagination();
+      })
+      .catch(error => {
+        console.error('게시글 목록 불러오기 실패:', error);
+        alert('제보글을 불러오는 중 문제가 발생했습니다.');
+      });
+}
+
+// ✅ 페이지 처음 로딩 시 호출
+document.addEventListener('DOMContentLoaded', fetchAndRenderList);
 
 function renderReportList() {
   const container = document.querySelector('.article-list');
@@ -42,21 +68,25 @@ function renderReportList() {
       window.location.href = `/report/detail/${item.reportBoardId}`;
     };
 
+    const imageUrl = item.thumbnail && item.thumbnail.trim() !== ""
+        ? `/images/board/report/${item.reportBoardId}/${item.thumbnail}`
+        : '/images/board/default.png';
+
     article.innerHTML = `
-      <div class="article-thumbnail">
-        <img src="${item.thumbnail || `/images/board/Cafe${(index % 7) + 1}.png`}" alt="카페 이미지">
-      </div>
-      <div class="article-content">
-        <h2 class="article-title">${escapeHtml(item.title)}</h2>
-        <p class="article-description">
-          ${escapeHtml(item.content).substring(0, 100)}...
-        </p>
-      </div>
-      <div class="article-meta">
-        <span class="article-author">${item.nickname || '익명제보자'}</span>
-        <span class="article-date">${formatDate(item.createdDate)}</span>
-      </div>
-    `;
+    <div class="article-thumbnail">
+      <img src="${imageUrl}" alt="카페 이미지">
+    </div>
+    <div class="article-content">
+      <h2 class="article-title">${escapeHtml(item.title)}</h2>
+      <p class="article-description">
+        ${escapeHtml(item.content).substring(0, 100)}...
+      </p>
+    </div>
+    <div class="article-meta">
+      <span class="article-author">${item.nickname || '익명제보자'}</span>
+      <span class="article-date">${formatDate(item.createdDate)}</span>
+    </div>
+  `;
     container.appendChild(article);
   });
 }
@@ -65,17 +95,14 @@ function renderPagination() {
   const pagination = document.querySelector('.pagination');
   pagination.innerHTML = '';
 
-  // 이전 버튼
   pagination.appendChild(createPageLink('«', 1, currentPage === 1));
   pagination.appendChild(createPageLink('‹', currentPage - 1, currentPage === 1));
 
-  // 번호
   for (let i = 1; i <= totalPages; i++) {
     const pageLink = createPageLink(i, i, i === currentPage);
     pagination.appendChild(pageLink);
   }
 
-  // 다음 버튼
   pagination.appendChild(createPageLink('›', currentPage + 1, currentPage === totalPages));
   pagination.appendChild(createPageLink('»', totalPages, currentPage === totalPages));
 }
@@ -102,15 +129,4 @@ function createPageLink(text, page, disabled) {
   });
 
   return link;
-}
-
-// 날짜 포맷
-function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  return date.toISOString().split('T')[0];
-}
-
-// XSS 방지
-function escapeHtml(str) {
-  return str?.replace(/</g, "&lt;").replace(/>/g, "&gt;") || '';
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
@@ -8,72 +9,50 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="main-container">
-        <div class="breadcrumb">
-            <select>
-                <option>자유</option>
-                <option>리뷰</option>
-                <option>정보</option>
+    <div class="container">
+        <div class="headword-container">
+            <select id="headword-select" disabled>
+                <option value="자유::리뷰">자유::리뷰</option>
+                <option value="자유::정보">자유::정보</option>
             </select>
         </div>
 
         <!-- Post Container -->
         <article class="post-container">
             <div class="post-header">
-                <h1 class="post-title">성수 수플레 맛집 브런치 카페 "Daylight" 리뷰</h1>
+                <h1 class="post-title" id="post-title"></h1>
                 <div class="post-meta">
                     <div class="author-info">
-                        <div class="author-avatar">👤</div>
+                        <div class="author-avatar" id="author-avatar"></div>
                         <div class="author-details">
-                            <span class="author-name">수입푸들</span>
-                            <span class="post-date">2022-05-18</span>
+                            <span class="author-name" id="author-name"></span>
+                            <span class="post-date" id="post-date"></span>
                         </div>
                     </div>
-                    <div class="post-actions">
-                        <button class="action-btn delete-btn" onclick="location.href='/free-list'">삭제하기</button>
-                        <button class="action-btn edit-btn" onclick="location.href='/free-post'">수정하기</button>
+                    <div class="post-actions" sec:authorize="isAuthenticated()">
+                        <button class="action-btn delete-btn" onclick="location.href='/free-list'" id="delete-btn">삭제하기</button>
+                        <button class="action-btn edit-btn" id="edit-btn">수정하기</button>
                     </div>
                 </div>
             </div>
 
             <div class="post-content">
-                <img src="/images/board/dessert2.png" alt="Daylight 카페의 다양한 색깔의 소프트 아이스크림이 올려진 수플레 팬케이크들" class="post-image">
-
-                <div class="post-text">여기 크로플 먹고 아예 다른 곳 못먹게됨...
-                    젓떡새삼을 동치고 이 도시를 잡아먹 내 말가는 대로 가족절의 가족별 날짜에
-                    그곳이 어디든 날개를 펼치고 I'm flying
-                    저렇지지는</div>
+                <div id="image-container"  class="image-wrapper"></div>
+                <div id="post-content" class="post-text"></div>
             </div>
         </article>
 
         <!-- Comment Section -->
         <section class="comment-section">
             <div class="comment-form">
-                <div class="comment-avatar">👤</div>
-                <div class="comment-input-container">
+                <div class="comment-avatar"></div>
+                <div class="comment-input-container" sec:authorize="isAuthenticated()">
                     <textarea class="comment-input" placeholder="댓글을 작성하세요"></textarea>
                     <button class="comment-submit">등록</button>
                 </div>
             </div>
 
-            <div class="comment-list">
-                <div class="comment-item">
-                    <div class="comment-avatar">👤</div>
-                    <div class="comment-content">
-                        <div class="comment-header">
-                            <span class="comment-author">테일러내한해</span>
-                            <span class="comment-date">2022-05-18</span>
-                        </div>
-                        <div class="comment-text">여기 크로플 먹고 아예 다른 곳 못먹게됨...
-                            젓떡새삼을 동치고 이 도시를 잡아먹 내 말가는 대로 가족절의 가족별 날짜에
-                            그곳이 어디든 날개를 펼치고 I'm flying
-                            저렇지지는</div>
-                        <div class="comment-actions">
-                            <button class="comment-submit">삭제하기</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="comment-list"></div>
         </section>
     </div>
 </div>
