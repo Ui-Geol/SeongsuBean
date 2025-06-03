@@ -100,107 +100,70 @@
       </div>
 
       <div id="menu" class="tab-content">
-        <div class="menu-item">
+        <div class="menu-item" th:each="menu : ${menuInfoList}">
           <div class="menu-info">
             <div class="menu-header">
-              <div class="menu-name">Single Origin Tea</div>
+              <div class="menu-name" th:text="${menu.getMenuName()}">메뉴명</div>
               <div class="menu-actions">
-                <a class="edit-btn" href="/add-menu" th:alt="메뉴수정">
+                <a class="edit-btn" th:href="@{/add-menu(menuId=${menu.getMenuId()})}"
+                   th:alt="메뉴수정">
                   <button class="edit-btn">✏️</button>
                 </a>
-                <a class="delete-btn" href="/cafe-detail" th:alt="메뉴삭제">
+                <a class="delete-btn" th:href="@{/cafe-detail(deleteMenuId=${menu.getMenuId()})}"
+                   th:alt="메뉴삭제">
                   <button class="delete-btn">🗑️</button>
                 </a>
               </div>
             </div>
-            <div class="menu-price">8,000원</div>
-          </div>
-          <img class="menu-image" src="/images/dessert1.png" alt="Single Origin Tea">
-        </div>
-
-        <div class="menu-item">
-          <div class="menu-info">
-            <div class="menu-header">
-              <div class="menu-name">바스크 치즈 케이크</div>
-              <div class="menu-actions">
-                <a class="edit-btn" href="/add-menu" th:alt="메뉴수정">
-                  <button class="edit-btn">✏️</button>
-                </a>
-                <a class="delete-btn" href="/cafe-detail" th:alt="메뉴삭제">
-                  <button class="delete-btn">🗑️</button>
-                </a>
-              </div>
+            <div class="menu-description"
+                 th:if="${menu.description != null and menu.description != ''}"
+                 th:text="${menu.description}">메뉴 설명
             </div>
-            <div class="menu-description">고소한 치즈의 향미가 가득한 바스크 케이크</div>
-            <div class="menu-price">5,300 원</div>
-          </div>
-          <img class="menu-image" src="/images/dessert2.png" alt="바스크 치즈 케이크">
-        </div>
-
-        <div class="menu-item">
-          <div class="menu-info">
-            <div class="menu-header">
-              <div class="menu-name">단호박 파운드 케이크</div>
-              <div class="menu-actions">
-                <a class="edit-btn" href="/add-menu" th:alt="메뉴수정">
-                  <button class="edit-btn">✏️</button>
-                </a>
-                <a class="delete-btn" href="/cafe-detail" th:alt="메뉴삭제">
-                  <button class="delete-btn">🗑️</button>
-                </a>
-              </div>
+            <div class="menu-price"
+                 th:text="${#numbers.formatInteger(menu.price, 0, 'COMMA')} + '원'">가격
             </div>
-            <div class="menu-description">부드럽게 씹히는 단호박이 일품인 케이크</div>
-            <div class="menu-price">7,000 원</div>
           </div>
-          <img class="menu-image" src="/images/dessert3.png" alt="단호박 파운드 케이크">
+          <img class="menu-image"
+               th:src="${menu.getImage() != null ? menu.getImage() : '/images/common/default.png'}"
+               th:alt="${menu.getMenuName()}">
         </div>
       </div>
 
       <div id="reviews" class="tab-content">
         <div class="review-write-wrapper">
-          <a href="/review-form" class="review-write-btn">리뷰 작성하기</a>
-        </div>
-        <div class="review-item">
-          <a class="review-delete-btn" href="/cafe-detail" th:alt="리뷰삭제">🗑️</a>
-          <div class="review-header">
-            <img class="reviewer-avatar" src="/images/common/SampleProfile.png" alt="독산동남자">
-            <div class="reviewer-info">
-              <div class="reviewer-name">독산동남자</div>
-              <div class="review-rating">
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star empty">★</span>
-              </div>
-            </div>
-            <div class="review-date">2025-05-18</div>
-          </div>
-          <div class="review-text">파운드 케이크 맛있어요!</div>
-          <div class="review-images">
-            <img class="review-image" src="/images/dessert5.png" alt="리뷰 이미지">
-            <img class="review-image" src="/images/dessert6.png" alt="리뷰 이미지">
-          </div>
+          <a th:href="@{/review-form(cafeId=${cafeId})}" class="review-write-btn">리뷰 작성하기</a>
         </div>
 
-        <div class="review-item">
-          <a class="review-delete-btn" href="/cafe-detail" th:alt="리뷰삭제">🗑️</a>
+        <div class="review-item" th:each="review : ${totalReviewDTOList}">
+          <a class="review-delete-btn"
+             th:href="@{/cafe-detail(deleteReviewId=${review.getReviewDTO().getReviewId()})}"
+             th:alt="리뷰삭제">🗑️</a>
           <div class="review-header">
-            <img class="reviewer-avatar" src="/images/common/SampleProfile.png" alt="독산동남자">
+            <img class="reviewer-avatar"
+                 th:src="${review.getUserImage() != null ? review.getUserImage() : '/images/common/SampleProfile.png'}"
+                 th:alt="${review.getUserNickname()}">
             <div class="reviewer-info">
-              <div class="reviewer-name">독산동남자</div>
+              <div class="reviewer-name" th:text="${review.userNickname}">사용자명</div>
               <div class="review-rating">
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star empty">★</span>
+                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                  <span class="star"
+                        th:class="${i <= review.getReviewDTO().getStarScore() ? 'star' : 'star empty'}">★</span>
+                </th:block>
               </div>
             </div>
-            <div class="review-date">2025-05-18</div>
+            <div class="review-date"
+                 th:text="${#temporals.format(review.getReviewDTO().getReviewDate(), 'yyyy-MM-dd')}">
+              작성일
+            </div>
           </div>
-          <div class="review-text">여기 빵이 맛있네요</div>
+          <div class="review-text" th:text="${review.getReviewDTO().getReviewContents()}">리뷰 내용
+          </div>
+          <div class="review-images"
+               th:if="${review.getReviewImage() != null and !#lists.isEmpty(review.getReviewImage())}">
+            <img class="review-image"
+                 th:each="image : ${review.getReviewImage()}"
+                 th:src="${image.getImage()}" th:alt="${image.getReviewImageId()}">
+          </div>
         </div>
 
         <button class="more-button">더보기</button>
