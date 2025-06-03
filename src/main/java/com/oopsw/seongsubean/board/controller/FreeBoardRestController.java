@@ -46,7 +46,6 @@ public class FreeBoardRestController {
     if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
     }
-
     String email = user.getEmail(); // 로그인된 유저의 이메일
     FreeBoardDTO dto = FreeBoardDTO.builder()
         .title(title)
@@ -75,7 +74,6 @@ public class FreeBoardRestController {
     }
       boolean success = freeBoardService.addFreeBoard(dto, imagePaths);
       return ResponseEntity.ok(Map.of("success", success, "id", dto.getFreeBoardId()));
-      //return null;
   }
 
   @GetMapping("/list")
@@ -93,6 +91,7 @@ public class FreeBoardRestController {
     );
     return ResponseEntity.ok(result);
   }
+
   @GetMapping("/{id}")
   public ResponseEntity<?> getFreeBoardDetail(@PathVariable("id") Integer id) {
     FreeBoardDTO dto = freeBoardService.getFreeBoardDetail(id);
@@ -104,18 +103,40 @@ public class FreeBoardRestController {
   }
 
   @PutMapping("/post/{id}")
-  public Map<String, Object> setFreeBoard(@PathVariable("id") Integer id,
+  public ResponseEntity<Map<String, Object>> setFreeBoard(@AuthenticationPrincipal AccountDetails accountDetails,
+                                          @PathVariable("id") Integer id,
                                           @RequestBody FreeBoardDTO dto) {
+    if (accountDetails == null || accountDetails.getUser() == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(Map.of("updated", false, "message", "로그인이 필요합니다."));
+    }
+    String loginEmail = accountDetails.getUser().getEmail();
+    String postOwnerEmail = freeBoardService.getFreeBoardOwnerEmail(id);
+    if (!loginEmail.equals(postOwnerEmail)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+              .body(Map.of("updated", false, "message", "본인의 게시글만 수정할 수 있습니다."));
+    }
     dto.setFreeBoardId(id);
     boolean result = freeBoardService.setFreeBoard(dto, List.of());
-    return Map.of("updated", result);
+    return ResponseEntity.ok(Map.of("updated", result));
   }
+
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteFreeBoard(@PathVariable("id") Integer id) {
+  public ResponseEntity<?> deleteFreeBoard(@AuthenticationPrincipal AccountDetails accountDetails,
+                                           @PathVariable("id") Integer id) {
+    if (accountDetails == null || accountDetails.getUser() == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+              .body(Map.of("deleted", false, "message", "로그인이 필요합니다."));
+    }
+    String loginEmail = accountDetails.getUser().getEmail();
+    String postOwnerEmail = freeBoardService.getFreeBoardOwnerEmail(id);
+    if (!loginEmail.equals(postOwnerEmail)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+              .body(Map.of("deleted", false, "message", "본인의 게시글만 삭제할 수 있습니다."));
+    }
     boolean result = freeBoardService.removeFreeBoard(id);
     return ResponseEntity.ok(Map.of("deleted", result));
   }
-
 
   /* comment */
   @PostMapping("/comment")
@@ -134,11 +155,13 @@ public class FreeBoardRestController {
     boolean result = freeBoardService.addFreeBoardComment(dto);
     return ResponseEntity.ok(Map.of("success", result));
   }
+
   @GetMapping("/comment/{id}")
   public ResponseEntity<List<FreeBoardCommentDTO>> getComments(@PathVariable("id") Integer boardId) {
     List<FreeBoardCommentDTO> comments = freeBoardService.getFreeBoardComments(boardId);
     return ResponseEntity.ok(comments);
   }
+
   @GetMapping("/auth/email")
   public ResponseEntity<?> getCurrentUserEmail(@AuthenticationPrincipal AccountDetails accountDetails) {
     if (accountDetails == null) {
@@ -163,14 +186,13 @@ public class FreeBoardRestController {
     }
     String loginEmail = accountDetails.getUser().getEmail();
     String commentOwnerEmail = freeBoardService.getCommentOwnerEmail(freeBoardCommentId);
-    //System.out.println("로그인 사용자 email: " + loginEmail);
-    //System.out.println("댓글 작성자 email: " + commentOwnerEmail);
     if (!loginEmail.equals(commentOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("success", false, "message", "본인의 댓글만 삭제할 수 있습니다."));
     }
     boolean result = freeBoardService.removeFreeBoardComment(freeBoardCommentId);
-    //System.out.println("댓글 삭제 결과: " + result);
     return ResponseEntity.ok(Map.of("success", result));
   }
+
+  /* search */
 
 }
