@@ -48,7 +48,8 @@ public class CafeController {
 
     //카페 리뷰
     pageable = PageRequest.of(0, 2);
-    List<TotalReviewDTO> totalReviewDTOList = reviewService.getReviews(pageable);
+    List<TotalReviewDTO> totalReviewDTOList = reviewService.getReviews(id, pageable);
+    System.out.println(totalReviewDTOList);
     model.addAttribute("totalReviewDTOList", totalReviewDTOList);
 
     return "cafe/cafe-detail";

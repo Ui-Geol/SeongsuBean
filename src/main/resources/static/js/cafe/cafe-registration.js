@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   // 취소 버튼 이벤트
   if (cancelBtn) {
     cancelBtn.addEventListener('click', () => {
-      window.location.href = '/cafe/list';
+      window.location.href = '/map';
     });
   }
 
@@ -263,6 +263,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const callNumber = callNumberInput.value.trim();
     const introduction = introductionInput.value.trim();
     const businessHours = collectBusinessHours();
+    const image = imageInput.files[0];
 
     // 디버깅: 수집된 데이터 확인
     console.log('=== 폼 데이터 확인 ===');
@@ -301,8 +302,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     const files = imageInput.files;
-    if (files.length > 1) {
-      alert('이미지는 최대 1개까지만 업로드할 수 있습니다.');
+    if (files.length != 1) {
+      alert('이미지는 1개만 넣는것이 필수 입니다');
       return;
     }
 
@@ -334,6 +335,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           address,
           zipCode,
           detailAddress,
+          image,
           callNumber,
           introduction,
           businessHours: JSON.stringify(businessHours)
@@ -375,10 +377,10 @@ document.addEventListener('DOMContentLoaded', async function () {
       // 성공 처리
       if (cafeId && result.updated) {
         alert('카페 정보가 수정되었습니다!');
-        location.href = `/cafe/detail/${cafeId}`;
+        location.href = `/cafe/${cafeId}`;
       } else if (!cafeId && result.success) {
         alert('카페가 등록되었습니다!');
-        location.href = `/cafe/detail/${result.id}`;
+        location.href = `/cafe/${result.id}`;
       } else {
         console.warn('예상치 못한 응답:', result);
         alert('처리에 실패했습니다: ' + (result.message || '알 수 없는 오류'));

@@ -29,6 +29,7 @@
            cafe_id         as cafeId,
            email           as email
     FROM review
+    WHERE CAFE_ID = #{cafeId}
     ORDER BY REVIEW_DATE
       LIMIT #{pageable.pageSize}
     OFFSET #{pageable.offset}

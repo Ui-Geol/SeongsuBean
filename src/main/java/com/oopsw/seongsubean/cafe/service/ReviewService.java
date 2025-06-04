@@ -37,8 +37,9 @@ public class ReviewService {
   }
 
   //리뷰 조회
-  public List<TotalReviewDTO> getReviews(Pageable pageable) {
-    List<ReviewDTO> reviewDTOList = reviewRepository.getTwoReviews(pageable);
+  public List<TotalReviewDTO> getReviews(Integer cafeId, Pageable pageable) {
+    System.out.println(cafeId);
+    List<ReviewDTO> reviewDTOList = reviewRepository.getTwoReviews(cafeId, pageable);
     List<TotalReviewDTO> totalReviewDTOList = new ArrayList<>();
     for (ReviewDTO reviewDTO : reviewDTOList) {
       UserDTO userDTO = accountRepository.findByEmail(reviewDTO.getEmail());
