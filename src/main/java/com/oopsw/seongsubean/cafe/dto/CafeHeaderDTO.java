@@ -18,4 +18,20 @@ public class CafeHeaderDTO {
   private Integer totalCount;
   private String mainImage;
 
+  public float getAvgRating() {
+    return avgRating != null ? avgRating : 0f;
+  }
+
+  public int getTotalCount() {
+    return totalCount != null ? totalCount : 0;
+  }
+
+  public int getRoundedRating() {
+    return Math.round(getAvgRating());
+  }
+
+  public boolean isStarFilled(int starNumber) {
+    return starNumber <= getRoundedRating();
+  }
+
 }

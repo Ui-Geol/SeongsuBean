@@ -55,7 +55,7 @@ public class ReviewRepositoryTest {
 
   @Test
   public void getTwoReviewsTest() {
-    List<ReviewDTO> reviewDTOList = reviewRepository.getTwoReviews(PageRequest.of(0, 2));
+    List<ReviewDTO> reviewDTOList = reviewRepository.getTwoReviews(3, PageRequest.of(0, 2));
 
     assertThat(reviewDTOList.size()).isEqualTo(2);
   }

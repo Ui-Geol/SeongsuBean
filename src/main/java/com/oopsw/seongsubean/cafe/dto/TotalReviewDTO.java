@@ -15,6 +15,8 @@ import lombok.ToString;
 @ToString
 public class TotalReviewDTO {
 
+  private String userNickname;
+  private String userImage;
   private ReviewDTO reviewDTO;
   private List<ReviewImage> reviewImage;
 }

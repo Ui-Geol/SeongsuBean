@@ -1,5 +1,7 @@
 package com.oopsw.seongsubean.cafe.service;
 
+import com.oopsw.seongsubean.account.dto.UserDTO;
+import com.oopsw.seongsubean.account.repository.AccountRepository;
 import com.oopsw.seongsubean.cafe.domain.ReviewImage;
 import com.oopsw.seongsubean.cafe.dto.ReviewDTO;
 import com.oopsw.seongsubean.cafe.dto.TotalReviewDTO;
@@ -17,6 +19,7 @@ public class ReviewService {
 
   private final ReviewRepository reviewRepository;
   private final ReviewImageRepository reviewImageRepository;
+  private final AccountRepository accountRepository;
 
   //리뷰 생성
   public boolean addReview(ReviewDTO reviewDTO, List<ReviewImage> reviewImageList) {
@@ -34,11 +37,14 @@ public class ReviewService {
   }
 
   //리뷰 조회
-  public List<TotalReviewDTO> getReviews(Pageable pageable) {
-    List<ReviewDTO> reviewDTOList = reviewRepository.getTwoReviews(pageable);
+  public List<TotalReviewDTO> getReviews(Integer cafeId, Pageable pageable) {
+    System.out.println(cafeId);
+    List<ReviewDTO> reviewDTOList = reviewRepository.getTwoReviews(cafeId, pageable);
     List<TotalReviewDTO> totalReviewDTOList = new ArrayList<>();
     for (ReviewDTO reviewDTO : reviewDTOList) {
-      totalReviewDTOList.add(TotalReviewDTO.builder().reviewDTO(reviewDTO)
+      UserDTO userDTO = accountRepository.findByEmail(reviewDTO.getEmail());
+      totalReviewDTOList.add(TotalReviewDTO.builder().userNickname(userDTO.getNickName()).userImage(
+              userDTO.getImage()).reviewDTO(reviewDTO)
           .reviewImage(reviewImageRepository.findReviewImageByReviewId(
               reviewDTO.getReviewId())).build());
 

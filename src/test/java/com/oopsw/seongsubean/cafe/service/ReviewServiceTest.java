@@ -58,7 +58,7 @@ public class ReviewServiceTest {
   @Test
   public void getReviewTest() {
     Pageable pageable = PageRequest.of(0, 2);
-    List<TotalReviewDTO> totalReviewDTOList = reviewService.getReviews(pageable);
+    List<TotalReviewDTO> totalReviewDTOList = reviewService.getReviews(3, pageable);
 
     assertThat(totalReviewDTOList.size()).isEqualTo(2);
   }

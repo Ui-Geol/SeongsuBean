@@ -1,11 +1,13 @@
 package com.oopsw.seongsubean.cafe.service;
 
 import com.oopsw.seongsubean.cafe.domain.MenuInfo;
+import com.oopsw.seongsubean.cafe.dto.MenuDTO;
 import com.oopsw.seongsubean.cafe.repository.jparepository.MenuInfoRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +27,24 @@ public class MenuService {
   }
 
   //메뉴 조회
-  public Page<MenuInfo> getMenuList(Integer cafeId, Pageable pageable) {
-    return menuInfoRepository.findByCafeId(cafeId, pageable);
+  public List<MenuDTO> getMenuList(Integer cafeId, Pageable pageable) {
+    List<MenuInfo> menuInfoList = menuInfoRepository.findByCafeId(cafeId, pageable).getContent();
+    return menuInfoList.stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+  }
+
+  // MenuInfo를 MenuDTO로 변환하는 메서드
+  private MenuDTO convertToDTO(MenuInfo menuInfo) {
+    return MenuDTO.builder()
+        .menuId(menuInfo.getMenuId())
+        .menuCategory(menuInfo.getMenuCategory())
+        .menuName(menuInfo.getMenuName())
+        .price(menuInfo.getPrice())
+        .description(menuInfo.getDescription())
+        .image(menuInfo.getImage())
+        .cafeId(menuInfo.getCafeId())
+        .build();
   }
 
   //메뉴 수정

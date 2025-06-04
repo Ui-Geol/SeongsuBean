@@ -1,5 +1,6 @@
 package com.oopsw.seongsubean.cafe.dto;
 
+import java.util.List;
 import com.oopsw.seongsubean.cafe.domain.OperationTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,5 @@ public class CafeDTO {
    * (LocalTime 역직렬화를 위해 OperationTimeDTO에 @JsonFormat 사용)
    */
   private List<OperationTimeDTO> operationTimes;
-
 
 }

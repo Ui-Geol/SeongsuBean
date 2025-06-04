@@ -5,7 +5,7 @@
       layout:decorate="~{common/common}">
 <head>
   <title layout:fragment="title">카페 등록</title>
-  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/cafe-registration.css" />
+  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/cafe-registration.css"/>
 </head>
 <body>
 <div layout:fragment="content">
@@ -72,7 +72,7 @@
         </div>
 
         <!-- 5) 숨겨진 input: JS가 JSON을 채워넣습니다 -->
-        <input type="hidden" id="businessHoursJson" name="businessHours" th:value="''" />
+        <input type="hidden" id="businessHoursJson" name="businessHours" th:value="''"/>
 
         <!-- ──────────────────────────────────────────────────────────── -->
         <!-- (A) 영업시간 섹션 -->
@@ -81,10 +81,10 @@
 
           <!-- (B) "영업시간 추가" 버튼 -->
           <button
-                  type="button"
-                  id="add-business-hours-btn"
-                  class="btn btn-sm btn-primary position-absolute top-0 end-0"
-                  style="transform: translate(0, -50%);">
+              type="button"
+              id="add-business-hours-btn"
+              class="btn btn-sm btn-primary position-absolute top-0 end-0"
+              style="transform: translate(0, -50%);">
             영업시간 추가
           </button>
 
@@ -101,13 +101,13 @@
             <label class="me-2">
               <select class="weekday-select form-select" required>
                 <option value="">요일</option>
-                <option value="월">월</option>
-                <option value="화">화</option>
-                <option value="수">수</option>
-                <option value="목">목</option>
-                <option value="금">금</option>
-                <option value="토">토</option>
-                <option value="일">일</option>
+                <option value="월요일">월요일</option>
+                <option value="화요일">화요일</option>
+                <option value="수요일">수요일</option>
+                <option value="목요일">목요일</option>
+                <option value="금요일">금요일</option>
+                <option value="토요일">토요일</option>
+                <option value="일요일">일요일</option>
               </select>
             </label>
 
@@ -172,7 +172,7 @@
               <div class="upload-icon">📷</div>
               <span class="upload-text">사진 추가</span>
             </div>
-            <input type="file" id="imageInput" name="images" accept="image/*" multiple
+            <input type="file" id="imageInput" name="image" accept="image/*" multiple
                    style="display: none;">
           </div>
           <div id="imagePreview" class="image-preview"></div>
