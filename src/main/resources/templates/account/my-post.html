@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="<http://www.thymeleaf.org>"
-      xmlns:layout="<http://www.ultraq.net.nz/thymeleaf/layout>"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title layout:fragment="title">Seongsu Bean - 내가 쓴 글</title>
-  <link layout:fragment="styles" rel="stylesheet" th:href="@{/account/my-post.css}"/>
+  <link layout:fragment="styles" rel="stylesheet" th:href="@{/css/account/my-post.css}"/>
 </head>
 <body>
 <!-- 메인 콘텐츠 -->
@@ -16,8 +16,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <h1 class="page-title">내가 쓴 글 총 4개</h1>
-
+          <h1 class="page-title" th:text="|내가 쓴 글 총 ${totalCount}개|"></h1>
           <div class="posts-table">
             <div class="table-responsive">
               <table class="table">
@@ -29,58 +28,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Thymeleaf 반복문으로 게시글 목록 표시 -->
-                <tr>
+                <tr th:each="post : ${posts}">
+                  <td th:text="${post.boardType}">종류</td>
                   <td>
-                      <span class="post-type">
-                        카페
-                      </span>
+                    <span th:switch="${post.boardType}">
+                    <a th:case="'자유'" th:href="@{'/free/detail/' + ${post.boardId}}" th:text="${post.title}"></a>
+                    <a th:case="'제보'" th:href="@{'/report/detail/' + ${post.boardId}}" th:text="${post.title}"></a>
+                    </span>
                   </td>
-                  <td>
-                    <a href="#">
-                      성수동 맛집 카페 추천합니다
-                    </a>
-                  </td>
-                  <td>
-                      <span class="post-date">
-                        2024-01-15
-                      </span>
-                  </td>
-                </tr>
-
-                <!-- 샘플 데이터 (posts가 없을 때) -->
-                <tr >
-                  <td>
-                    <span class="post-type type-cafe">카페</span>
-                  </td>
-                  <td>
-                    <a href="#" class="post-title">성수동 맛집 카페 추천합니다</a>
-                  </td>
-                  <td>
-                    <span class="post-date">2024-01-15</span>
-                  </td>
-                </tr>
-                <tr >
-                  <td>
-                    <span class="post-type type-free">자유</span>
-                  </td>
-                  <td>
-                    <a href="#" class="post-title">오늘 날씨가 정말 좋네요</a>
-                  </td>
-                  <td>
-                    <span class="post-date">2024-01-14</span>
-                  </td>
-                </tr>
-                <tr >
-                  <td>
-                    <span class="post-type type-report">제보</span>
-                  </td>
-                  <td>
-                    <a href="#" class="post-title">새로운 카페 오픈 소식</a>
-                  </td>
-                  <td>
-                    <span class="post-date">2024-01-13</span>
-                  </td>
+                  <td th:text="${#dates.format(post.created_date, 'yyyy-MM-dd')}"></td>
                 </tr>
                 </tbody>
               </table>
@@ -90,18 +46,17 @@
           <div class="pagination-container text-center">
             <nav aria-label="Page navigation">
               <ul class="pagination justify-content-center">
-                <li class="page-item">
-                  <a class="page-link" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                  <a class="page-link" th:href="@{/account/myPost(page=${currentPage - 1})}">&laquo;</a>
                 </li>
-                <li class="page-item">
-                  <a class="page-link">1</a>
+
+                <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                  <a class="page-link" th:href="@{/account/myPost(page=${i})}" th:text="${i}"></a>
                 </li>
-                <li class="page-item">
-                  <a class="page-link" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
+
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                  <a class="page-link" th:href="@{/account/myPost(page=${currentPage + 1})}">&raquo;</a>
                 </li>
               </ul>
             </nav>
@@ -111,12 +66,5 @@
     </div>
   </main>
 </div>
-
-<!-- Bootstrap 5.3.2 JS -->
-<th:block layout:fragment="scripts">
-<!--  // 테이블 행 클릭 시 상세 페이지로 이동-->
-<!--  // 반응형 테이블 스크롤 알림-->
-  <script th:src="@{/account/my-report-post.js}"></script>
-</th:block>
 </body>
 </html>

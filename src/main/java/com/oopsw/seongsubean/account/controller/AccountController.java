@@ -3,7 +3,11 @@ package com.oopsw.seongsubean.account.controller;
 import com.oopsw.seongsubean.account.dto.UserDTO;
 import com.oopsw.seongsubean.account.service.AccountService;
 import com.oopsw.seongsubean.auth.AccountDetails;
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -86,18 +91,83 @@ public class AccountController {
   }
 
   @GetMapping("/myPost")
-  public String myPost() {
+  public String getMyPosts(
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size,
+      Principal principal,
+      Model model) {
+
+    String email = principal.getName();
+    int offset = (page - 1) * size;
+
+    // 페이징용 RowBounds 객체 사용
+    RowBounds rowBounds = new RowBounds(offset, size);
+    List<Map<String, Object>> posts = accountService.getMyBoards(email, rowBounds);
+
+    // 총 게시글 수
+    int totalCount = accountService.countMyBoards(email);
+    int totalPages = (int) Math.ceil((double) totalCount / size);
+
+    model.addAttribute("posts", posts);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalCount", totalCount);
     return "account/my-post";
   }
 
   @GetMapping("/myReview")
-  public String myReview() {
+  public String myReview(
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size,
+      Principal principal,
+      Model model) {
+
+    String email = principal.getName();
+    int offset = (page - 1) * size;
+
+    // 페이징용 RowBounds 객체 사용
+    RowBounds rowBounds = new RowBounds(offset, size);
+    List<Map<String, Object>> reviews = accountService.getMyReviews(email, rowBounds);
+
+    // 총 리뷰 수
+    int totalCount = accountService.countMyReviews(email);
+    int totalPages = (int) Math.ceil((double) totalCount / size);
+    if (totalPages < 1) {
+      totalPages = 1;
+    }
+
+    model.addAttribute("reviews", reviews);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalCount", totalCount);
     return "account/my-review";
   }
 
   @GetMapping("/myCafe")
-  public String myCafe() {
+  public String myCafe(
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "6") int size,
+      Principal principal,
+      Model model) {
+
+    String email = principal.getName();
+    int offset = (page - 1) * size;
+
+    // 페이징용 RowBounds 객체 사용
+    RowBounds rowBounds = new RowBounds(offset, size);
+    List<Map<String, Object>> cafes = accountService.getMyCafes(email, rowBounds);
+
+    // 총 리뷰 수
+    int totalCount = accountService.countMyCafes(email);
+    int totalPages = (int) Math.ceil((double) totalCount / size);
+    if (totalPages < 1) {
+      totalPages = 1;
+    }
+
+    model.addAttribute("cafes", cafes);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalCount", totalCount);
     return "account/my-cafe";
   }
-
 }

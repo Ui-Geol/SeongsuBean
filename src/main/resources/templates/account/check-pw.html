@@ -24,14 +24,11 @@
       <div class="main-card position-relative">
         <!-- 프로필 섹션 -->
         <div class="profile-section text-center">
-          <input type="file" id="profile-upload" accept="image/*" style="display: none;">
-          <label for="profile-upload">
             <img id="profile-img"
                  th:src="@{/images/account/{img}(img=${
                  user.image != null && !#strings.isEmpty(user.image) ? user.image : 'default.png'})}"
                  class="rounded-circle profile-img"
-                 style="width: 100px; height: 100px; object-fit: cover; cursor: pointer;">
-          </label>
+                 style="width: 100px; height: 100px; object-fit: cover;">
           <div class="username" th:text="${user.nickName}"></div>
         </div>
 
