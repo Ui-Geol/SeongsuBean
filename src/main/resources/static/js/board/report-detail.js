@@ -128,7 +128,7 @@ async function deleteHandler() {
     console.warn('❌ 삭제 중 예외 발생:', err.message, err);
     //alert('삭제 중 오류가 발생했습니다.');
     setTimeout(() => {
-      window.location.herf = '/report/list?ts=' + Date.now();
+      window.location.href = '/report/list?ts=' + Date.now();
     }, 500); // 0.5초 정도 딜레이 후 리다이렉트
     return;
   }
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelBtn = document.getElementById('cancel-btn');
   if (cancelBtn) {
     cancelBtn.addEventListener('click', () => {
-      window.location.href = '/report/list';
+      window.location.href = '/report/list?page=1';
     });
   }
 });

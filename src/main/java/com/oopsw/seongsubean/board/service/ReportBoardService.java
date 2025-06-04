@@ -1,6 +1,5 @@
 package com.oopsw.seongsubean.board.service;
 
-import com.oopsw.seongsubean.board.dto.FreeBoardDTO;
 import com.oopsw.seongsubean.board.dto.ReportBoardDTO;
 import com.oopsw.seongsubean.board.repository.ReportBoardRepository;
 import java.util.HashMap;

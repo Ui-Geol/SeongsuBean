@@ -24,4 +24,5 @@ public interface FreeBoardRepository {
   public String getCommentOwnerEmail(Integer freeBoardCommentId);
   public String getFreeBoardOwnerEmail(Integer freeBoardCommentId);
   public int getTotalFreeBoardCount();
+  public List<FreeBoardDTO> searchFreeBoard(@Param("type") String type, @Param("keyword") String keyword);
 }

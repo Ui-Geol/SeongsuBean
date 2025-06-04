@@ -1,26 +1,75 @@
 let currentPage = 1;
 const pageSize = 12;
+let searchKeyword = null;
+let searchType = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+    const searchBtn = document.querySelector("#searchButton");
+    const dropdownBtn = document.querySelector(".dropdown-toggle");
+    const searchInput = document.querySelector("#searchInput");
+    document.querySelector(".dropdown-menu").addEventListener("click", (e) => {
+        if (e.target.classList.contains("dropdown-item")) {
+            const selected = e.target.textContent.trim();
+            dropdownBtn.textContent = selected;
+            switch (selected) {
+                case "제목":
+                    searchType = "title";
+                    break;
+                case "본문":
+                    searchType = "content";
+                    break;
+                case "작성자":
+                    searchType = "writer";
+                    break;
+                case "제목 + 본문":
+                    searchType = "title_content";
+                    break;
+                default:
+                    searchType = "title_content";
+            }
+        }
+    });
+    searchBtn.addEventListener("click", () => {
+        const keyword = searchInput.value.trim();
+        if (!keyword) {
+            alert("검색어를 입력해주세요.");
+            return;
+        }
+        searchKeyword = keyword;
+        currentPage = 1;
+        fetchPosts(currentPage);
+    });
+    searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            searchBtn.click();
+        }
+    });
+    fetchPosts(currentPage);
+});
 
 function fetchPosts(page) {
-    fetch(`/api/free/list?page=${page}&size=${pageSize}`)
+    let url = `/api/free/list?page=${page}&size=${pageSize}`;
+    if (searchKeyword && searchType) {
+        url = `/api/free/search?page=${page}&size=${pageSize}&type=${searchType}&keyword=${encodeURIComponent(searchKeyword)}`;
+    }
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             const row = document.getElementById("card-row");
             row.innerHTML = "";
-
-            if (!data.content || data.content.length === 0) {
-                row.innerHTML = "<p>등록된 게시글이 없습니다.</p>";
+            const posts = data.content || data;
+            if (!posts || posts.length === 0) {
+                row.innerHTML = `<div class="col-12 text-center mt-4"><p class="text-muted">검색 결과가 없습니다.</p></div>`;
+                document.querySelector(".pagination").innerHTML = "";
                 return;
             }
-
-            data.content.forEach(item => {
+            posts.forEach(item => {
                 const card = document.createElement("div");
                 card.className = "col-md-4";
                 const imagePath = item.thumbnailImage
                     ? (item.thumbnailImage.startsWith("/") ? item.thumbnailImage : `/images/board/${item.thumbnailImage}`)
                     : '/images/board/default.png';
                 const authorName = item.nickName || '익명';
-
                 card.innerHTML = `
           <div class="card" style="cursor: pointer;" onclick="location.href='/free/detail/${item.freeBoardId}'">
             <img src="${imagePath}" class="card-img-top" alt="게시글 이미지">
@@ -36,18 +85,18 @@ function fetchPosts(page) {
                 row.appendChild(card);
             });
 
-            renderPagination(data.totalPages, data.currentPage);
+            const totalPages = data.totalPages || 1;
+            renderPagination(totalPages, page);
         })
         .catch(err => {
-            console.error("게시글 불러오기 실패", err);
-            alert("게시글을 불러오지 못했습니다.");
+            console.error("불러오기 실패", err);
+            alert("데이터를 불러오지 못했습니다.");
         });
 }
 
-function renderPagination(totalPages, currentPage) {
+function renderPagination(totalPages, currentPageLocal) {
     const pagination = document.querySelector(".pagination");
     pagination.innerHTML = '';
-
     const createPageItem = (page, label, disabled = false, active = false) => {
         const li = document.createElement("li");
         li.className = `page-item ${disabled ? 'disabled' : ''} ${active ? 'active' : ''}`;
@@ -57,28 +106,21 @@ function renderPagination(totalPages, currentPage) {
         a.textContent = label;
         a.addEventListener("click", (e) => {
             e.preventDefault();
-            if (!disabled && page !== currentPage) {
-                fetchPosts(page);
+            if (!disabled && page !== currentPageLocal) {
+                currentPage = page;
+                fetchPosts(currentPage);
             }
         });
         li.appendChild(a);
         return li;
     };
-
-    pagination.appendChild(createPageItem(currentPage - 1, '«', currentPage === 1));
-
+    pagination.appendChild(createPageItem(currentPageLocal - 1, '«', currentPageLocal === 1));
     for (let i = 1; i <= totalPages; i++) {
-        pagination.appendChild(createPageItem(i, i, false, i === currentPage));
+        pagination.appendChild(createPageItem(i, i, false, i === currentPageLocal));
     }
-
-    pagination.appendChild(createPageItem(currentPage + 1, '»', currentPage === totalPages));
+    pagination.appendChild(createPageItem(currentPageLocal + 1, '»', currentPageLocal === totalPages));
 }
-
 function formatDate(dateStr) {
     const date = new Date(dateStr);
     return date.toISOString().split("T")[0];
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    fetchPosts(currentPage);
-});
