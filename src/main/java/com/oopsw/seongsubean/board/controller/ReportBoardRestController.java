@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.UUID;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,17 +59,19 @@ public class ReportBoardRestController {
             .build();
     List<String> fileNames = new ArrayList<>();
     if (images != null) {
+      String uploadDir = new File("src/main/resources/static/images/upload/report/" + email).getAbsolutePath();
+      Path uploadPath = Paths.get(uploadDir);
+      if (!Files.exists(uploadPath)) {
+        Files.createDirectories(uploadPath);
+      }
       for (MultipartFile file : images) {
         if (!file.isEmpty()) {
           String originalFilename = file.getOriginalFilename();
-          String uploadDir = "/path/to/static/images/upload/report/" + email; // 임시 경로 (ID 아직 없음)
-          File dir = new File(uploadDir);
-          if (!dir.exists())
-            dir.mkdirs();
-          Path filePath = Paths.get(uploadDir, originalFilename);
+          String newFilename = UUID.randomUUID() + "_" + originalFilename;
+          Path filePath = uploadPath.resolve(newFilename);
           try {
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            fileNames.add(originalFilename);
+            file.transferTo(filePath.toFile());
+            fileNames.add("/images/upload/report/" + email + "/" + newFilename);
           } catch (IOException e) {
             e.printStackTrace();
           }

@@ -65,7 +65,7 @@ function renderReportList() {
     };
 
     const imageUrl = item.thumbnailImage && item.thumbnailImage.trim() !== ""
-        ? `/images/board/${item.thumbnailImage}`
+        ? item.thumbnailImage
         : '/images/board/default.png';
 
     article.innerHTML = `

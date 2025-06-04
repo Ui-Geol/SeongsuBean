@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import java.util.UUID;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,8 +42,6 @@ public class FreeBoardRestController {
           @RequestParam String headWord,
           @RequestParam(required = false) List<MultipartFile> images) throws IOException {
     UserDTO user = accountDetails.getUser();
-    System.out.println(accountDetails);
-    System.out.println("login" + user.getEmail());
     if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
     }
@@ -55,25 +54,27 @@ public class FreeBoardRestController {
         .build();
     List<String> imagePaths = new ArrayList<>();
     if (images != null) {
+      String uploadDir = new File("src/main/resources/static/images/upload/free/" + email).getAbsolutePath();
+      Path uploadPath = Paths.get(uploadDir);
+      if (!Files.exists(uploadPath)) {
+        Files.createDirectories(uploadPath);
+      }
       for (MultipartFile file : images) {
         if (!file.isEmpty()) {
           String originalFilename = file.getOriginalFilename();
-          String uploadDir = "/path/to/static/images/upload/free/" + email; // 임시 경로 (ID 아직 없음)
-          File dir = new File(uploadDir);
-          if (!dir.exists())
-            dir.mkdirs();
-          Path filePath = Paths.get(uploadDir, originalFilename);
+          String newFilename = UUID.randomUUID() + "_" + originalFilename;
+          Path filePath = uploadPath.resolve(newFilename);
           try {
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            imagePaths.add(originalFilename);
+            file.transferTo(filePath.toFile());
+            imagePaths.add("/images/upload/free/" + email + "/" + newFilename);
           } catch (IOException e) {
             e.printStackTrace();
           }
         }
       }
     }
-      boolean success = freeBoardService.addFreeBoard(dto, imagePaths);
-      return ResponseEntity.ok(Map.of("success", success, "id", dto.getFreeBoardId()));
+    boolean success = freeBoardService.addFreeBoard(dto, imagePaths);
+    return ResponseEntity.ok(Map.of("success", success, "id", dto.getFreeBoardId()));
   }
 
   @GetMapping("/list")
