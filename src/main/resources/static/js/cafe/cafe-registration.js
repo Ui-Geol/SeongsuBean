@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   // 취소 버튼 이벤트
   if (cancelBtn) {
     cancelBtn.addEventListener('click', () => {
-      window.location.href = '/map';
+      window.location.href = '/';
     });
   }
 
