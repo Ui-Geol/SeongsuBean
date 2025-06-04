@@ -20,10 +20,10 @@ public class MenuService {
   private final MenuInfoRepository menuInfoRepository;
 
   //메뉴 생성
-  public boolean addMenu(MenuInfo menuInfo) {
-    MenuInfo newMenuInfo = menuInfoRepository.save(menuInfo);
+  public boolean addMenu(MenuDTO menuDTO) {
+    MenuInfo newMenuInfo = menuInfoRepository.save(convertFromDTO(menuDTO));
 
-    return newMenuInfo == menuInfo;
+    return newMenuInfo.getMenuId() != null;
   }
 
   //메뉴 조회
@@ -44,6 +44,17 @@ public class MenuService {
         .description(menuInfo.getDescription())
         .image(menuInfo.getImage())
         .cafeId(menuInfo.getCafeId())
+        .build();
+  }
+
+  private MenuInfo convertFromDTO(MenuDTO menuDTO) {
+    return MenuInfo.builder()
+        .menuCategory(menuDTO.getMenuCategory())
+        .menuName(menuDTO.getMenuName())
+        .price(menuDTO.getPrice())
+        .description(menuDTO.getDescription())
+        .image(menuDTO.getImage())
+        .cafeId(menuDTO.getCafeId())
         .build();
   }
 

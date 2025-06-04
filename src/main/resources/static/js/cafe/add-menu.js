@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const imagePreview = document.getElementById('imagePreview');
   const cancelBtn = document.getElementById('cancelBtn');
   const priceInput = document.getElementById('price');
-  const cafeInput = document.getElementById('cafeId')
+  const cafeIdInput = document.getElementById('cafeId')
 
   // 글자 수 카운터
   menuDescriptionTextarea.addEventListener('input', function () {
@@ -125,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return isValid;
   }
 
-  // 폼 제출 이벤트 (현재는 화면 테스트용)
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -145,6 +144,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('menuDescription').value);
     serverFormData.append('price', document.getElementById('price').value);
     serverFormData.append('cafeId', document.getElementById('cafeId').value);
+    const selectedFile = document.getElementById('imageInput').files[0];
+    if (!selectedFile) {
+      alert('이미지를 선택해주세요.');
+      return;
+    }
+
+    serverFormData.append('image', selectedFile);
 
     // 서버로 전송
     fetch('/api/cafe/menu', {
@@ -154,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(response => response.json())
     .then(data => {
       alert('메뉴가 성공적으로 등록되었습니다!');
-      window.location.href = '/cafe/1'
+      window.location.href = '/cafe/' + data.id;
     })
     .catch(error => {
       console.error('Error:', error);
@@ -168,12 +174,13 @@ document.addEventListener('DOMContentLoaded', function () {
       form.reset();
       charCount.textContent = '0';
       imagePreview.innerHTML = '';
-
       // 에러 스타일 제거
       const errorElements = form.querySelectorAll('.error');
       errorElements.forEach(element => {
         element.classList.remove('error');
       });
+
+      window.location.href = '/cafe/' + cafeIdInput.value;
     }
   });
 

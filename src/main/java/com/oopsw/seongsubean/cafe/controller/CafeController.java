@@ -42,14 +42,14 @@ public class CafeController {
     model.addAttribute("operationTimes", operationTimes);
 
     //카페 메뉴
-    Pageable pageable = PageRequest.of(0, 3);
+    Pageable pageable = PageRequest.of(0, 100);
     List<MenuDTO> menuInfoList = menuService.getMenuList(id, pageable);
     model.addAttribute("menuInfoList", menuInfoList);
+    System.out.println(menuInfoList);
 
     //카페 리뷰
-    pageable = PageRequest.of(0, 2);
+    pageable = PageRequest.of(0, 100);
     List<TotalReviewDTO> totalReviewDTOList = reviewService.getReviews(id, pageable);
-    System.out.println("총 리뷰 DTO 리스트: " + totalReviewDTOList);
     model.addAttribute("totalReviewDTOList", totalReviewDTOList);
 
     return "cafe/cafe-detail";
