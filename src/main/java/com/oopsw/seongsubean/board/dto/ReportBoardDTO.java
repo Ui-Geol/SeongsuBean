@@ -16,10 +16,10 @@ public class ReportBoardDTO {
   private Integer reportBoardId;
   private String title;
   private String content;
-  private String nickName;
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
   private LocalDateTime createdDate;
   private String email;
   private List<String> images;
-  private String thumbnail;
+  private String thumbnailImage;
+  private String nickName;
 }

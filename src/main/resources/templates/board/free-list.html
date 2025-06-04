@@ -4,8 +4,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
-  <title layout:fragment="title">자유 게시판</title>
+  <title layout:fragment="title">자유 게시판 - SeongsuBean</title>
   <link layout:fragment="styles" rel="stylesheet" th:href="@{/css/board/free.css}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
 
@@ -15,11 +16,19 @@
     <div class="row">
       <div class="col-md-6 offset-md-3">
         <div class="input-group">
-          <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-            카페
-          </button>
-          <input type="text" class="form-control" placeholder="분위기있는">
-          <button class="btn search-btn" type="button">
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="searchDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              검색필터
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="searchDropdown">
+              <li><button class="dropdown-item">제목</button></li>
+              <li><button class="dropdown-item">본문</button></li>
+              <li><button class="dropdown-item">작성자</button></li>
+              <li><button class="dropdown-item">제목 + 본문</button></li>
+            </ul>
+          </div>
+          <input type="text" class="form-control" id="searchInput" placeholder="아메리카노">
+          <button id="searchButton" class="btn btn-outline-secondary search-btn" type="button">
             <i class="fas fa-search"></i>
           </button>
         </div>
@@ -38,21 +47,7 @@
     <div class="row mt-4">
       <div class="col-12">
         <nav aria-label="Page navigation">
-          <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
+          <ul class="pagination justify-content-center"></ul>
         </nav>
       </div>
     </div>

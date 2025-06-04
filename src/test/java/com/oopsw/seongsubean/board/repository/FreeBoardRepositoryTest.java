@@ -173,7 +173,7 @@ public class FreeBoardRepositoryTest {
 
   @Test
   public void successRemoveFreeBoardComments(){
-    int result = freeBoardRepository.removeFreeBoardComments(1);
+    int result = freeBoardRepository.removeFreeBoardComment(1);
     System.out.println("🗑️ 댓글 삭제 결과: " + result);
   }
 }

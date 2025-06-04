@@ -1,4 +1,17 @@
 let reportId = null;
+let loginUserEmail = '';
+
+async function fetchLoginEmail() {
+  try {
+    const res = await fetch('/api/report/auth/email');
+    const data = await res.json();
+    if (data.success) {
+      loginUserEmail = data.email;
+    }
+  } catch (err) {
+    console.warn("로그인 이메일 조회 실패:", err);
+  }
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   const pathParts = window.location.pathname.split('/');
@@ -31,8 +44,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const data = await response.json();
 
+    await fetchLoginEmail();
+    const isMyPost = loginUserEmail && loginUserEmail === data.email;
+    if (isMyPost) {
+      document.getElementById('edit-btn').style.display = 'inline-block';
+      document.getElementById('delete-btn').style.display = 'inline-block';
+    }
+
+
     document.getElementById('post-title').textContent = data.title;
-    document.getElementById('author-name').textContent = data.email;
+    document.getElementById('author-name').textContent = data.nickName;
     document.getElementById('post-date').textContent = formatDate(data.createdDate);
     document.getElementById('post-content').innerHTML = data.content;
 
@@ -107,7 +128,7 @@ async function deleteHandler() {
     console.warn('❌ 삭제 중 예외 발생:', err.message, err);
     //alert('삭제 중 오류가 발생했습니다.');
     setTimeout(() => {
-      window.location.herf = '/report/list?ts=' + Date.now();
+      window.location.href = '/report/list?ts=' + Date.now();
     }, 500); // 0.5초 정도 딜레이 후 리다이렉트
     return;
   }
@@ -127,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelBtn = document.getElementById('cancel-btn');
   if (cancelBtn) {
     cancelBtn.addEventListener('click', () => {
-      window.location.href = '/report/list';
+      window.location.href = '/report/list?page=1';
     });
   }
 });

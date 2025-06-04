@@ -133,20 +133,23 @@ body {
 .time-group {
   display: flex;
   gap: 4px;
+  align-items: center;
 }
 
-.hour-select,
-.minute-select,
-.period-select,
-.weekday-select {
-  padding: 6px 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* select 최소 너비 지정 */
+.business-hours-group select {
+  min-width: 60px;
+  /* 기존 padding: 6px 8px; 대신 아래처럼 오른쪽 여백을 충분히 줍니다. */
+  padding: 6px 24px 6px 8px;
   font-size: 0.9rem;
+  /* 만약 브라우저 기본 화살표 위치가 텍스트에 가까우면, background-position으로도 조정 가능 */
+  background-position: right 8px center;
+  background-repeat: no-repeat;
 }
 
 .time-separator {
-  font-weight: bold;
+  font-weight: 500;
+  color: #666;
 }
 
 .btn-add-hours,

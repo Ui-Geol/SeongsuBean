@@ -21,7 +21,7 @@ public class MainRepositoryTest {
 
   @Test
   public void getSearchCafeMenuTest() {
-    List<String> cafe = mainRepository.getSearchCafeMenu("빵");
+    List<String> cafe = mainRepository.getSearchCafeMenu("커피");
     System.out.println(cafe);
   }
 

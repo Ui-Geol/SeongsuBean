@@ -2,6 +2,7 @@ package com.oopsw.seongsubean.home.service;
 
 import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.cafe.dto.RankingDTO;
+import com.oopsw.seongsubean.home.dto.CafeInfoDTO;
 import com.oopsw.seongsubean.home.repository.MainRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,5 +51,8 @@ public class MainService {
   public List<String> getEachMenu(String menuName) {
     return mainRepository.getEachMenu(menuName);
   }
+
+
+
 
 }

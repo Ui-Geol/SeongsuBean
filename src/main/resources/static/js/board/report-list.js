@@ -1,7 +1,8 @@
 let currentPage = 1;
 const pageSize = 7;
 let totalPages = 1;
-let fullReportList = [];
+let currentPageItems = []; // 현재 페이지에 표시할 게시글들
+
 
 function escapeHtml(text) {
   const map = {
@@ -24,24 +25,24 @@ function formatDate(isoString) {
   });
 }
 
-// ✅ fetch + 렌더링 분리
-function fetchAndRenderList() {
-  // 캐시 방지를 위한 timestamp 파라미터 추가
-  fetch('/api/report/list?ts=' + Date.now(), { cache: 'no-store' })
-      .then(response => {
-        if (!response.ok) throw new Error(`서버 오류: ${response.status}`);
-        return response.json();
-      })
-      .then(reportList => {
-        fullReportList = reportList;
-        totalPages = Math.ceil(reportList.length / pageSize);
-        renderReportList();
-        renderPagination();
-      })
-      .catch(error => {
-        console.error('게시글 목록 불러오기 실패:', error);
-        alert('제보글을 불러오는 중 문제가 발생했습니다.');
-      });
+async function fetchAndRenderList() {
+  try {
+    const res = await fetch(`/api/report/list?page=${currentPage}&size=${pageSize}&ts=${Date.now()}`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) throw new Error(`서버 오류: ${res.status}`);
+    const data = await res.json();
+
+    currentPageItems = data.content;
+    totalPages = data.totalPages;
+    currentPage = data.currentPages;
+
+    renderReportList();
+    renderPagination();
+  } catch (error) {
+    console.error('게시글 목록 불러오기 실패:', error);
+    alert('제보글을 불러오는 중 문제가 발생했습니다.');
+  }
 }
 
 // ✅ 페이지 처음 로딩 시 호출
@@ -51,16 +52,11 @@ function renderReportList() {
   const container = document.querySelector('.article-list');
   container.innerHTML = '';
 
-  const start = (currentPage - 1) * pageSize;
-  const end = start + pageSize;
-  const pageItems = fullReportList.slice(start, end);
-
-  if (pageItems.length === 0) {
+  if (!currentPageItems || currentPageItems.length === 0) {
     container.innerHTML = '<p>등록된 제보가 없습니다.</p>';
     return;
   }
-
-  pageItems.forEach((item, index) => {
+  currentPageItems.forEach((item) => {
     const article = document.createElement('article');
     article.className = 'article-item';
     article.style.cursor = 'pointer';
@@ -68,8 +64,8 @@ function renderReportList() {
       window.location.href = `/report/detail/${item.reportBoardId}`;
     };
 
-    const imageUrl = item.thumbnail && item.thumbnail.trim() !== ""
-        ? `/images/board/report/${item.reportBoardId}/${item.thumbnail}`
+    const imageUrl = item.thumbnailImage && item.thumbnailImage.trim() !== ""
+        ? `/images/board/${item.thumbnailImage}`
         : '/images/board/default.png';
 
     article.innerHTML = `
@@ -83,7 +79,7 @@ function renderReportList() {
       </p>
     </div>
     <div class="article-meta">
-      <span class="article-author">${item.nickname || '익명제보자'}</span>
+      <span class="article-author">${item.nickName || '익명제보자'}</span>
       <span class="article-date">${formatDate(item.createdDate)}</span>
     </div>
   `;
@@ -123,8 +119,7 @@ function createPageLink(text, page, disabled) {
     e.preventDefault();
     if (page !== currentPage && !disabled) {
       currentPage = page;
-      renderReportList();
-      renderPagination();
+      fetchAndRenderList(); // 전체 재호출
     }
   });
 

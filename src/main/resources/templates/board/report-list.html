@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
-  <title layout:fragment="title">제보게시판</title>
+  <title layout:fragment="title">제보 게시판 - SeongsuBean</title>
   <link layout:fragment="styles" rel="stylesheet" th:href="@{/css/board/report.css}" />
 </head>
 <body>
@@ -18,15 +18,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="pagination">
-      <a href="#">«</a>
-      <a href="#">‹</a>
-      <a href="#" class="current">1</a>
-      <a href="#">2</a>
-      <a href="#">3</a>
-      <a href="#">›</a>
-      <a href="#">»</a>
-    </div>
+    <div class="pagination"></div>
   </div>
 </div>
 <th:block layout:fragment="scripts">

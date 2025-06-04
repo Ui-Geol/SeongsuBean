@@ -79,8 +79,53 @@
     WHERE c.FREE_BOARD_ID = #{freeBoardId}
     ORDER BY c.COMMENT_DATE ASC
   </select>
-  <delete id="removeFreeBoardComments" parameterType="int">
+  <delete id="removeFreeBoardComment" parameterType="int">
     DELETE FROM FREE_BOARD_COMMENT
-    WHERE FREE_BOARD_ID = #{freeBoardId}
+    WHERE FREE_BOARD_COMMENT_ID = #{freeBoardCommentId}
   </delete>
+  <select id="getCommentOwnerEmail" resultType="string" parameterType="int">
+    SELECT EMAIL
+    FROM FREE_BOARD_COMMENT
+    WHERE FREE_BOARD_COMMENT_ID = #{freeBoardCommentId}
+  </select>
+  <select id="getFreeBoardOwnerEmail" resultType="string" parameterType="int">
+    SELECT EMAIL
+    FROM FREE_BOARD
+    WHERE FREE_BOARD_ID = #{freeBoardId}
+  </select>
+  <select id="getTotalFreeBoardCount" resultType="int">
+    SELECT COUNT(*) FROM FREE_BOARD
+  </select>
+  <select id="searchFreeBoard" resultType="com.oopsw.seongsubean.board.dto.FreeBoardDTO">
+    SELECT f.FREE_BOARD_ID AS freeBoardId,
+    f.TITLE AS title,
+    f.HEAD_WORD AS headWord,
+    f.CONTENT AS content,
+    f.CREATED_DATE AS createdDate,
+    f.EMAIL AS email,
+    u.IMAGE AS profileImage,
+    u.NICKNAME AS nickName
+    FROM FREE_BOARD f
+    LEFT JOIN USER_INFO u ON f.EMAIL = u.EMAIL
+    <where>
+      <choose>
+        <when test='"title".equals(type)'>
+          f.TITLE LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test='"content".equals(type)'>
+          f.CONTENT LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test='"writer".equals(type)'>
+          u.NICKNAME LIKE CONCAT('%', #{keyword}, '%')
+        </when>
+        <when test='"title_content".equals(type)'>
+          (f.TITLE LIKE CONCAT('%', #{keyword}, '%') OR f.CONTENT LIKE CONCAT('%', #{keyword}, '%'))
+        </when>
+        <otherwise>
+          1=0
+        </otherwise>
+      </choose>
+    </where>
+    ORDER BY f.CREATED_DATE DESC
+  </select>
 </mapper>

@@ -4,7 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
-    <title layout:fragment="title">자유게시글 상세</title>
+    <title layout:fragment="title">자유게시글 상세 - SeongsuBean</title>
     <link layout:fragment="styles" rel="stylesheet" th:href="@{/css/board/detail.css}" />
 </head>
 <body>
@@ -46,7 +46,7 @@
         <section class="comment-section">
             <div class="comment-form">
                 <div class="comment-avatar"></div>
-                <div class="comment-input-container" sec:authorize="isAuthenticated()">
+                <div class="comment-input-container">
                     <textarea class="comment-input" placeholder="댓글을 작성하세요"></textarea>
                     <button class="comment-submit">등록</button>
                 </div>
