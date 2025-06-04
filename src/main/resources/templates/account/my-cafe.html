@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="<http://www.thymeleaf.org>"
-      xmlns:layout="<http://www.ultraq.net.nz/thymeleaf/layout>"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/common}">
 <head>
   <meta charset="UTF-8">
@@ -16,27 +16,29 @@
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <h1 class="page-title">내 카페 총 1개</h1>
+          <h1 class="page-title" th:text="|내 카페 총 ${totalCount}개|"></h1>
           <!-- 카페 그리드 -->
-          <div class="cafe-grid">
-            <!-- 카페 카드 1 -->
-            <div class="cafe-card" >
-              <img th:src="@{/images/common/logo.png}" alt="아쿠아산타" class="cafe-image">
-              <div class="cafe-info">
-                <h3 class="cafe-name">아쿠아산타</h3>
-                <p class="cafe-address">서울 성동구 연무장길 81 1층 107호</p>
-                <div class="cafe-rating">
-                  <span class="rating-score">4.1</span>
-                  <div class="stars">
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star-fill"></i>
-                    <i class="bi bi-star"></i>
+          <!-- 카페 카드 그리드 -->
+          <div class="cafe-grid row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="cafe : ${cafes}">
+              <a th:href="@{'/cafe/' + ${cafe.cafeId}}" class="text-decoration-none text-dark">
+                <div class="cafe-card card h-100">
+                  <img th:src="${cafe.mainImage != null} ? ${cafe.mainImage} : '@{/images/common/logo.png}'"
+                       class="card-img-top cafe-image" alt="카페 이미지">
+                  <div class="card-body cafe-info">
+                    <h5 class="card-title cafe-name" th:text="${cafe.cafeName}"></h5>
+                    <p class="card-text cafe-address" th:text="${cafe.address}"></p>
+                    <div class="cafe-rating">
+                      <span class="rating-score" th:text="${cafe.avgStar}"></span>
+                      <div class="stars">
+                        <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(cafe.avgStar))}"></i>
+                        <i class="bi bi-star" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).round(cafe.avgStar))}"></i>
+                      </div>
+                      <span class="review-count" th:text="'(' + ${cafe.reviewCount} + ')'"></span>
+                    </div>
                   </div>
-                  <span class="review-count">(41)</span>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
           <!-- 페이지네이션 -->
@@ -64,9 +66,5 @@
     </div>
   </main>
 </div>
-
-<th:block layout:fragment="scripts">
-  <script th:src="@{/account/my-cafe.js}"></script>
-</th:block>
 </body>
 </html>

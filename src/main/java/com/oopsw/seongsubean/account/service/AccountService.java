@@ -5,6 +5,7 @@ import com.oopsw.seongsubean.account.repository.AccountRepository;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,16 +44,28 @@ public class AccountService {
     return accountRepository.setUserInfo(userDTO);
   }
 
-  public List<Map<String, Object>> getMyBoards(String email) {
-    return accountRepository.getMyBoards(email);
+  public List<Map<String, Object>> getMyBoards(String email, RowBounds rowBounds) {
+    return accountRepository.getMyBoards(email, rowBounds);
   }
 
-  public List<Map<String, Object>> getMyReviews(String email) {
-    return accountRepository.getMyReviews(email);
+  public int countMyBoards(String email) {
+    return accountRepository.countMyBoards(email);
   }
 
-  public List<Map<String, Object>> getMyCafes(String email) {
-    return accountRepository.getMyCafes(email);
+  public List<Map<String, Object>> getMyReviews(String email, RowBounds rowBounds) {
+    return accountRepository.getMyReviews(email, rowBounds);
+  }
+
+  public int countMyReviews(String email) {
+    return accountRepository.countMyReviews(email);
+  }
+
+  public List<Map<String, Object>> getMyCafes(String email, RowBounds rowBounds) {
+    return accountRepository.getMyCafes(email, rowBounds);
+  }
+
+  public int countMyCafes(String email) {
+    return accountRepository.countMyCafes(email);
   }
 
   public UserDTO findByEmail(String email) {

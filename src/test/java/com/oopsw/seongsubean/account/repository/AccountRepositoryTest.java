@@ -80,35 +80,35 @@ public class AccountRepositoryTest {
     //마찬가지
   }
 
-  @Test
-  public void successGetMyBoardsTest(){
-    System.out.println(userMapper.getMyBoards("jennie0116@gmail.com").toString());
-  }
-  @Test
-  public void failGetMyBoardsTest(){
-    System.out.println(userMapper.getMyBoards("jen23nie0116@gmail.com").toString());
-    //null 반환
-  }
+//  @Test
+//  public void successGetMyBoardsTest(){
+//    System.out.println(userMapper.getMyBoards("jennie0116@gmail.com").toString());
+//  }
+//  @Test
+//  public void failGetMyBoardsTest(){
+//    System.out.println(userMapper.getMyBoards("jen23nie0116@gmail.com").toString());
+//    //null 반환
+//  }
 
-  @Test
-  public void successGetMyReviewsTest(){
-    System.out.println(userMapper.getMyReviews("jennie0116@gmail.com").toString());
-  }
-  @Test
-  public void failGetMyReviewsTest(){
-    System.out.println(userMapper.getMyReviews("jennie0116@gmail.com").toString());
-    //null 반환
-  }
+//  @Test
+//  public void successGetMyReviewsTest(){
+//    System.out.println(userMapper.getMyReviews("jennie0116@gmail.com").toString());
+//  }
+//  @Test
+//  public void failGetMyReviewsTest(){
+//    System.out.println(userMapper.getMyReviews("jennie0116@gmail.com").toString());
+//    //null 반환
+//  }
 
-  @Test
-  public void successGetMyCafesTest(){
-    System.out.println(userMapper.getMyCafes("yuqi0923@gmail.com").toString());
-  }
-  @Test
-  public void failGetMyCafesTest(){
-    System.out.println(userMapper.getMyCafes("yuqi0923@gmail.com").toString());
-    //null 반환
-  }
+//  @Test
+//  public void successGetMyCafesTest(){
+//    System.out.println(userMapper.getMyCafes("yuqi0923@gmail.com").toString());
+//  }
+//  @Test
+//  public void failGetMyCafesTest(){
+//    System.out.println(userMapper.getMyCafes("yuqi0923@gmail.com").toString());
+//    //null 반환
+//  }
 
   @Test
   public void successExcistsEmailTest(){
