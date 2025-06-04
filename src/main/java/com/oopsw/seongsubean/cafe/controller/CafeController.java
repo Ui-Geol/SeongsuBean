@@ -49,10 +49,17 @@ public class CafeController {
     //카페 리뷰
     pageable = PageRequest.of(0, 2);
     List<TotalReviewDTO> totalReviewDTOList = reviewService.getReviews(id, pageable);
-    System.out.println(totalReviewDTOList);
+    System.out.println("총 리뷰 DTO 리스트: " + totalReviewDTOList);
     model.addAttribute("totalReviewDTOList", totalReviewDTOList);
 
     return "cafe/cafe-detail";
+  }
+
+  @GetMapping("/{cafeId}/menu")
+  public String viewCafeMenu(@PathVariable Long cafeId, Model model) {
+    // 카페 정보 조회
+    model.addAttribute("cafeId", cafeId);
+    return "cafe/add-menu";  // ✅ 직접 템플릿 반환
   }
 
 

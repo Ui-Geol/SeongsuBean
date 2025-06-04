@@ -158,4 +158,29 @@ public class CafeRestController {
       return ResponseEntity.badRequest().body(errorResponse);
     }
   }
+
+  @PostMapping("/menu")
+  public ResponseEntity<Map<String, Object>> registerMenu(
+      @RequestParam("menuCategory") String menuCategory,
+      @RequestParam("menuName") String menuName,
+      @RequestParam("menuDescription") String menuDescription,
+      @RequestParam("price") String price,
+      @RequestParam("cafeId") String cafeId) {
+
+    System.out.println(menuCategory);
+    System.out.println(menuName);
+    System.out.println(menuDescription);
+    System.out.println(price);
+    System.out.println(cafeId);
+
+    // 성공 응답
+    Map<String, Object> response = new HashMap<>();
+    response.put("success", true);
+    response.put("id", cafeId);
+    response.put("message", "메뉴가 성공적으로 등록되었습니다.");
+
+    return ResponseEntity.ok(response);
+
+
+  }
 }

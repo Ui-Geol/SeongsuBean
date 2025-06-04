@@ -4,7 +4,7 @@
       layout:decorate="~{common/common}">
 <head>
   <title layout:fragment="title">메뉴 추가</title>
-  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/add-menu.css" />
+  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/add-menu.css"/>
 </head>
 <body>
 <div layout:fragment="content">
@@ -31,6 +31,8 @@
             <option value="샌드위치">샌드위치</option>
           </select>
         </div>
+
+        <input type="hidden" id="cafeId" name="cafeId" th:value="${cafeId}">
 
         <div class="form-group">
           <label for="menuName">메뉴명</label>
