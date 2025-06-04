@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const imagePreview = document.getElementById('imagePreview');
   const cancelBtn = document.getElementById('cancelBtn');
   const priceInput = document.getElementById('price');
+  const cafeIdInput = document.getElementById('cafeId')
 
   // 글자 수 카운터
   menuDescriptionTextarea.addEventListener('input', function () {
@@ -124,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return isValid;
   }
 
-  // 폼 제출 이벤트 (현재는 화면 테스트용)
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -132,38 +132,40 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    // 폼 데이터 수집 (콘솔에 출력)
-    const formData = {
-      menuCategory: document.getElementById('menuCategory').value,
-      menuName: document.getElementById('menuName').value,
-      menuDescription: document.getElementById('menuDescription').value,
-      price: document.getElementById('price').value,
-      imageCount: imagePreview.children.length
-    };
+    // 방법 1: FormData를 수동으로 구성 (권장)
+    const serverFormData = new FormData();
 
-    console.log('메뉴 등록 데이터:', formData);
-    alert('메뉴가 성공적으로 등록되었습니다! (콘솔에서 데이터 확인 가능)');
+    // 각 필드 값을 수동으로 추가
+    serverFormData.append('menuCategory',
+        document.getElementById('menuCategory').value);
+    serverFormData.append('menuName',
+        document.getElementById('menuName').value);
+    serverFormData.append('menuDescription',
+        document.getElementById('menuDescription').value);
+    serverFormData.append('price', document.getElementById('price').value);
+    serverFormData.append('cafeId', document.getElementById('cafeId').value);
+    const selectedFile = document.getElementById('imageInput').files[0];
+    if (!selectedFile) {
+      alert('이미지를 선택해주세요.');
+      return;
+    }
 
-    // 실제 서버 연동 시 사용할 코드 (현재 주석처리)
-    /*
-    // FormData 생성
-    const serverFormData = new FormData(form);
+    serverFormData.append('image', selectedFile);
 
     // 서버로 전송
-    fetch('/menu/register', {
-        method: 'POST',
-        body: serverFormData
+    fetch('/api/cafe/menu', {
+      method: 'POST',
+      body: serverFormData
     })
     .then(response => response.json())
     .then(data => {
-        alert('메뉴가 성공적으로 등록되었습니다!');
-        window.location.href = '/menu/list';
+      alert('메뉴가 성공적으로 등록되었습니다!');
+      window.location.href = '/cafe/' + data.id;
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('오류가 발생했습니다.');
+      console.error('Error:', error);
+      alert('오류가 발생했습니다.');
     });
-    */
   });
 
   // 취소 버튼 이벤트
@@ -172,12 +174,13 @@ document.addEventListener('DOMContentLoaded', function () {
       form.reset();
       charCount.textContent = '0';
       imagePreview.innerHTML = '';
-
       // 에러 스타일 제거
       const errorElements = form.querySelectorAll('.error');
       errorElements.forEach(element => {
         element.classList.remove('error');
       });
+
+      window.location.href = '/cafe/' + cafeIdInput.value;
     }
   });
 
@@ -197,44 +200,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
-
-// 데이터베이스 연동 시 사용할 Spring Boot Controller 예시 (현재 주석처리)
-/*
-@Controller
-@RequestMapping("/menu")
-public class MenuController {
-
-    // @Autowired
-    // private MenuService menuService;
-
-    @GetMapping("/register")
-    public String showRegisterForm(Model model) {
-        // model.addAttribute("menuForm", new MenuForm());
-        return "menu-form";
-    }
-
-    @PostMapping("/register")
-    public String registerMenu(@ModelAttribute MenuForm menuForm,
-                              @RequestParam("images") MultipartFile[] images,
-                              RedirectAttributes redirectAttributes) {
-        try {
-            // menuService.saveMenu(menuForm, images);
-            // redirectAttributes.addFlashAttribute("successMessage", "메뉴가 성공적으로 등록되었습니다.");
-            return "redirect:/menu/list";
-        } catch (Exception e) {
-            // redirectAttributes.addFlashAttribute("errorMessage", "오류가 발생했습니다.");
-            return "redirect:/menu/register";
-        }
-    }
-}
-
-// DTO 클래스 예시
-public class MenuForm {
-    private String menuCategory;
-    private String menuName;
-    private String menuDescription;
-    private Integer price;
-
-    // getters and setters...
-}
-*/

@@ -42,17 +42,24 @@ public class CafeController {
     model.addAttribute("operationTimes", operationTimes);
 
     //카페 메뉴
-    Pageable pageable = PageRequest.of(0, 3);
+    Pageable pageable = PageRequest.of(0, 100);
     List<MenuDTO> menuInfoList = menuService.getMenuList(id, pageable);
     model.addAttribute("menuInfoList", menuInfoList);
+    System.out.println(menuInfoList);
 
     //카페 리뷰
-    pageable = PageRequest.of(0, 2);
+    pageable = PageRequest.of(0, 100);
     List<TotalReviewDTO> totalReviewDTOList = reviewService.getReviews(id, pageable);
-    System.out.println(totalReviewDTOList);
     model.addAttribute("totalReviewDTOList", totalReviewDTOList);
 
     return "cafe/cafe-detail";
+  }
+
+  @GetMapping("/{cafeId}/menu")
+  public String viewCafeMenu(@PathVariable Long cafeId, Model model) {
+    // 카페 정보 조회
+    model.addAttribute("cafeId", cafeId);
+    return "cafe/add-menu";  // ✅ 직접 템플릿 반환
   }
 
 
