@@ -1,4 +1,17 @@
 let freeBoardId = null;
+let loginUserEmail = '';
+
+async function fetchLoginEmail() {
+    try {
+        const res = await fetch('/api/free/auth/email');
+        const data = await res.json();
+        if (data.success) {
+            loginUserEmail = data.email;
+        }
+    } catch (err) {
+        console.warn("로그인 이메일 조회 실패:", err);
+    }
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     const pathParts = window.location.pathname.split('/');
@@ -26,6 +39,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!res.ok) throw new Error(`서버 오류: ${res.status}`);
 
         const data = await res.json();
+        await fetchLoginEmail();
+
+        const isMyPost = loginUserEmail && loginUserEmail === data.email;
+        if (isMyPost) {
+            const editBtn = document.getElementById('edit-btn');
+            const deleteBtn = document.getElementById('delete-btn');
+            if (editBtn) editBtn.style.display = 'inline-block';
+            if (deleteBtn) deleteBtn.style.display = 'inline-block';
+        }
 
         document.getElementById('post-title').textContent = data.title;
         document.getElementById('author-name').textContent = data.nickName;
