@@ -4,10 +4,10 @@
   <update id="setUserInfo" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
     UPDATE USER_INFO
     <set>
-      <if test="newPassword != null">
+      <if test="newPassword != null and !newPassword.isEmpty()">
         PASSWORD = #{newPassword},
       </if>
-      <if test="newNickName != null">
+      <if test="newNickName != null and !newNickName.isEmpty()">
         NICKNAME = #{newNickName}
       </if>
     </set>
@@ -19,8 +19,8 @@
     set IMAGE = #{image}
     where EMAIL = #{email}
   </update>
-  <delete id="removeUser" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
-    delete from user_info where EMAIL=#{email} and PASSWORD= #{password}
+  <delete id="removeUser" parameterType="String">
+    delete from user_info where EMAIL=#{email}
   </delete>
 
   <select id="getUserInfo" parameterType="com.oopsw.seongsubean.account.dto.UserDTO"

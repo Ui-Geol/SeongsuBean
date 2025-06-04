@@ -1,11 +1,15 @@
 package com.oopsw.seongsubean.cafe.dto;
 
 import java.util.List;
+import com.oopsw.seongsubean.cafe.domain.OperationTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,20 +30,9 @@ public class CafeDTO {
   private String pageCreatedDate;
   private String email;
   /**
-   * 클라이언트에서 JSON으로 전송한 영업시간 리스트를 직접 매핑 (LocalTime 역직렬화를 위해 OperationTimeDTO에 @JsonFormat 사용)
+   * 클라이언트에서 JSON으로 전송한 영업시간 리스트를 직접 매핑
+   * (LocalTime 역직렬화를 위해 OperationTimeDTO에 @JsonFormat 사용)
    */
   private List<OperationTimeDTO> operationTimes;
-
-  public String getFullAddress() {
-    return address + ", " + detailAddress;
-  }
-
-  public boolean isRestDay() {
-    if (status.equals("휴무일")) {
-      return true;
-    }
-
-    return false;
-  }
 
 }

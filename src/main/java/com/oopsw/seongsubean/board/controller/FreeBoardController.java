@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/free")
@@ -16,8 +19,16 @@ public class FreeBoardController {
     this.freeBoardService = freeBoardService;
   }
   @GetMapping("/list")
-  public String freeList(Model model) {
-    model.addAttribute("freeList", freeBoardService.getFreeBoardList());
+  public String freeList(@RequestParam(value = "page", defaultValue = "1") int page,
+                         @RequestParam(value = "size", defaultValue = "12") int size,
+                         Model model) {
+    int offset = (page - 1) * size;
+    List<FreeBoardDTO> list = freeBoardService.getFreeBoardList(offset, size);
+    int totalCount = freeBoardService.getTotalFreeBoardCount();
+    int totalPages = (int) Math.ceil((double) totalCount / size);
+    model.addAttribute("freeList", list);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", totalPages);
     return "board/free-list";
   }
   @GetMapping("/detail/{id}")

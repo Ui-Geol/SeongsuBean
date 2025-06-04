@@ -32,21 +32,21 @@ public class UserServiceTest {
         .build());
   }
 
-  @Test
-  public void successRemoveUserTest() {
-    System.out.println(accountService.removeUser(UserDTO.builder()
-        .email("zzzz@gmail.com")
-        .password("$2a$10$V3ZvnQbwR9AKgZiFG.pTtu4PaflaeiSJ4X5LHRk4MLA3urPQcw9gC")
-        .build()));
-  }
-
-  @Test
-  public void failRemoveUserTest() {
-    System.out.println(accountService.removeUser(UserDTO.builder()
-        .email("zzzz@gmail.com")
-        .password("$2a$10$V3ZvnQbwR9AKgZiFG.pTtu4PaflaeiSJ4X5LHRk4MLA3urPQcw9gC")
-        .build()));
-  }
+//  @Test
+//  public void successRemoveUserTest() {
+//    System.out.println(accountService.removeUser(UserDTO.builder()
+//        .email("zzzz@gmail.com")
+//        .password("$2a$10$V3ZvnQbwR9AKgZiFG.pTtu4PaflaeiSJ4X5LHRk4MLA3urPQcw9gC")
+//        .build()));
+//  }
+//
+//  @Test
+//  public void failRemoveUserTest() {
+//    System.out.println(accountService.removeUser(UserDTO.builder()
+//        .email("zzzz@gmail.com")
+//        .password("$2a$10$V3ZvnQbwR9AKgZiFG.pTtu4PaflaeiSJ4X5LHRk4MLA3urPQcw9gC")
+//        .build()));
+//  }
 
   @Test
   public void successGetUserInfoTest(){

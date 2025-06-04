@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 public class MainController {
   /*                             홈화면 테스트 */
-  @GetMapping("/map")
+  @GetMapping("/")
   public String map() {
     return "home/map";
   }

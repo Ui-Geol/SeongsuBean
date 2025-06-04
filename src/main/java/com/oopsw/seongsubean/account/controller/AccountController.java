@@ -5,30 +5,27 @@ import com.oopsw.seongsubean.account.service.AccountService;
 import com.oopsw.seongsubean.auth.AccountDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/account")
 @RequiredArgsConstructor
 public class AccountController {
   private final AccountService accountService;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @GetMapping("/login")
   public String login() {
     return "account/login-view";
   }
-
-//  @PostMapping("/login")
-//  public String getUser(@AuthenticationPrincipal AccountDetails user) {
-//    UserDTO userdto = user.getUser();
-//    session
-//    return "account/login-view";
-//  }
 
   @GetMapping("/join")
   public String join() {
@@ -44,8 +41,8 @@ public class AccountController {
 
   @GetMapping("/myPage")
   public String myPage(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
-    UserDTO user = accountDetails.getUser();
-
+    String email = accountDetails.getUsername();
+    UserDTO user = accountService.findByEmail(email);
     model.addAttribute("user", user);
 
     return "account/my-page";
@@ -59,6 +56,20 @@ public class AccountController {
     model.addAttribute("isOAuth2User", isOAuth2);
     model.addAttribute("user", user);
     return "account/edit-profile";
+  }
+
+  @PostMapping("/editProfile")
+  public String editProfileAction(@ModelAttribute UserDTO form, Model model) {
+    if (form.getNewPassword() != null && !form.getNewPassword().isEmpty()) {
+      // 비밀번호 암호화
+      String encoded = bCryptPasswordEncoder.encode(form.getNewPassword());
+      form.setNewPassword(encoded);
+    }
+    accountService.setUserInfo(form);
+    UserDTO updatedUser = accountService.findByEmail(form.getEmail());
+    model.addAttribute("user", updatedUser);
+    model.addAttribute("editSuccess", true);
+    return "account/my-page";
   }
 
   @GetMapping("/checkPw")
@@ -88,4 +99,5 @@ public class AccountController {
   public String myCafe() {
     return "account/my-cafe";
   }
+
 }
