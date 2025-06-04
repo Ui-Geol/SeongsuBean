@@ -13,7 +13,7 @@ public interface ReviewRepository {
 
   Integer getReviewIdByCafeIdAndEmail(ReviewDTO reviewDTO);
 
-  List<ReviewDTO> getTwoReviews(@Param("pageable") Pageable pageable);
+  List<ReviewDTO> getTwoReviews(Integer cafeId, @Param("pageable") Pageable pageable);
 
   Boolean removeReview(@Param("reviewId") Integer reviewId);
 

@@ -28,35 +28,6 @@ body {
   margin-bottom: 2rem;
 }
 
-.profile-icon {
-  width: 80px;
-  height: 80px;
-  background: #8B4513;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1rem;
-  position: relative;
-}
-
-.profile-icon i {
-  color: #D2691E;
-  font-size: 2.5rem;
-}
-
-.profile-icon::after {
-  content: '';
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
-  background: #8B4513;
-  border-radius: 3px;
-  border: 2px solid #D2691E;
-}
-
 .profile-img {
   border: 2px solid #ccc;
   transition: transform 0.2s ease;
@@ -168,31 +139,24 @@ body {
   box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
 }
 
-.error-message {
-  color: #dc3545;
-  font-size: 0.8rem;
-  margin-top: 0.3rem;
-  margin-left: 116px;
-  display: none;
+.cancel-btn {
+  background: #716666;
+  color: white;
+  border: none;
+  text-decoration: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.success-message {
-  color: #28a745;
-  font-size: 0.8rem;
-  margin-top: 0.3rem;
-  margin-left: 116px;
-  display: none;
+.cancel-btn:hover {
+  background: #756449;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(112, 99, 102, 0.3);
 }
-
-.password-strength {
-  margin-top: 0.3rem;
-  margin-left: 116px;
-  font-size: 0.8rem;
-}
-
-.strength-weak { color: #dc3545; }
-.strength-medium { color: #ffc107; }
-.strength-strong { color: #28a745; }
 
 @media (max-width: 576px) {
   .main-card {
@@ -209,12 +173,6 @@ body {
     width: 100%;
     margin-right: 0;
     margin-bottom: 0.5rem;
-  }
-
-  .error-message,
-  .success-message,
-  .password-strength {
-    margin-left: 0;
   }
 
   .btn-group {

@@ -3,13 +3,14 @@ package com.oopsw.seongsubean.cafe.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.oopsw.seongsubean.cafe.domain.MenuInfo;
+import com.oopsw.seongsubean.cafe.dto.MenuDTO;
 import com.oopsw.seongsubean.cafe.repository.jparepository.MenuInfoRepository;
+import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,9 +48,9 @@ public class MenuServiceTest {
   public void getMenuListTest() {
     Pageable pageable = PageRequest.of(0, 2); // 첫 번째 페이지, 사이즈 2
 
-    Page<MenuInfo> menuInfoList = menuService.getMenuList(35, pageable);
+    List<MenuDTO> menuInfoList = menuService.getMenuList(35, pageable);
 
-    assertThat(menuInfoList.getSize()).isEqualTo(2);
+    assertThat(menuInfoList.size()).isEqualTo(2);
   }
 
   //메뉴 수정

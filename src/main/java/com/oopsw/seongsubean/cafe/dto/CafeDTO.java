@@ -1,5 +1,8 @@
 package com.oopsw.seongsubean.cafe.dto;
 
+import java.util.List;
+import com.oopsw.seongsubean.cafe.domain.OperationTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

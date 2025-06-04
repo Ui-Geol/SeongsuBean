@@ -30,5 +30,12 @@ public class OperationTime {
   @Column(nullable = false)
   private Integer cafeId;
 
+  public boolean isOpenNow() {
+    if (LocalTime.now().isAfter(openTime) && LocalTime.now().isBefore(closeTime)) {
+      return true;
+    }
+
+    return false;
+  }
 
 }

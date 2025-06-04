@@ -24,8 +24,8 @@ public class AccountService {
     return accountRepository.addUser(userDTO);
   }
 
-  public boolean removeUser(UserDTO userDTO) {
-    return accountRepository.removeUser(userDTO);
+  public boolean removeUser(String email) {
+    return accountRepository.removeUser(email);
   }
   public UserDTO getUserInfo(UserDTO userDTO) {
     return accountRepository.getUserInfo(userDTO);
@@ -40,16 +40,6 @@ public class AccountService {
   }
 
   public boolean setUserInfo(UserDTO userDTO) {
-    if(userDTO.getNewPassword() != null){
-      if(!userDTO.getNewPassword().equals(userDTO.getNewPasswordCheck())){
-        throw new IllegalArgumentException("비밀번호 불일치.");
-      }
-      userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getNewPassword()));
-    }
-    if(userDTO.getNewNickName() != null){
-      existsNickName(userDTO.getNewNickName());
-      userDTO.setNickName(userDTO.getNewNickName());
-    }
     return accountRepository.setUserInfo(userDTO);
   }
 
@@ -65,6 +55,11 @@ public class AccountService {
     return accountRepository.getMyCafes(email);
   }
 
+  public UserDTO findByEmail(String email) {
+    return accountRepository.findByEmail(email);
+  }
+
+
   public boolean existsNickName(String nickName) {
     if(accountRepository.existsNickName(nickName)){
       return true;
@@ -77,4 +72,6 @@ public class AccountService {
     }
     return false;
   }
+
+
 }

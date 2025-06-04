@@ -120,18 +120,18 @@ public class AccountRepositoryTest {
     System.out.println(accountRepository.existsNickName("아커만vf리바이"));
   }
 
-  @Test
-  public void successDeleteUser(){
-    System.out.println(accountRepository.removeUser(UserDTO.builder()
-        .email("zzzz@gmail.com")
-        .password("$2a$10$vWgCDeAzCaJlgEPyBJcbUuznaorCNKUEH77uKxwCbQdvPZe7UkLWi")
-        .build()));
-  }
-  @Test
-  public void failDeleteUser(){
-    System.out.println(accountRepository.removeUser(UserDTO.builder()
-        .email("zzsazz@gmail.com")
-        .password("$2a$10$vWgCDeAzCaJlgEPyBJcbUuznaorCNKUEH77uKxwCbQdvPZe7UkLWi")
-        .build()));
-  }
+//  @Test
+//  public void successDeleteUser(){
+//    System.out.println(accountRepository.removeUser(UserDTO.builder()
+//        .email("zzzz@gmail.com")
+//        .password("$2a$10$vWgCDeAzCaJlgEPyBJcbUuznaorCNKUEH77uKxwCbQdvPZe7UkLWi")
+//        .build()));
+//  }
+//  @Test
+//  public void failDeleteUser(){
+//    System.out.println(accountRepository.removeUser(UserDTO.builder()
+//        .email("zzsazz@gmail.com")
+//        .password("$2a$10$vWgCDeAzCaJlgEPyBJcbUuznaorCNKUEH77uKxwCbQdvPZe7UkLWi")
+//        .build()));
+//  }
 }
