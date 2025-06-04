@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (imgName.startsWith('/')) {
                     imgTag.src = imgName;
                 } else {
-                    imgTag.src = `/images/board/${imgName}`;
+                    imgTag.src = `/images/upload/${data.email}/${imgName}`;
                 }
                 imgTag.alt = '게시글 이미지';
                 imgTag.classList.add('post-image');

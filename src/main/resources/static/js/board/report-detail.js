@@ -63,14 +63,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (data.images && Array.isArray(data.images) && data.images.length > 0) {
       data.images.forEach(imgName => {
         const imgTag = document.createElement('img');
-        imgTag.src = `/images/board/${imgName}`;
+        imgTag.src = imgName;  // ✅ 바로 사용
         imgTag.alt = '게시글 이미지';
         imgTag.classList.add('post-image');
-
         if (imgName === 'default.png') {
           imgTag.style.display = 'none';
         }
-
         imageContainer.appendChild(imgTag);
       });
     }
