@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AccountRepository {
   public boolean addUser(UserDTO userDTO);
-  public boolean removeUser(UserDTO userDTO);
+  public boolean removeUser(String email);
   public UserDTO getUserInfo(UserDTO userDTO);
   public UserDTO getUserByEmailAndPassword(UserDTO userDTO);
   public boolean setImage(UserDTO userDTO);
