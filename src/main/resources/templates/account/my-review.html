@@ -33,7 +33,7 @@
                   <td>
                     <a th:href="@{'/cafe/' + ${review.cafeId}}" th:text="${review.content}"></a>
                   </td>
-                  <td th:text="${#dates.format(review.createdDate, 'yyyy-MM-dd')}"></td>
+                  <td th:text="${#dates.format(review['createdDate'], 'yyyy-MM-dd')}"></td>
                 </tr>
                 </tbody>
               </table>
