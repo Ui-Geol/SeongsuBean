@@ -29,20 +29,20 @@ public class SecurityConfig {
         .loginPage("/account/login")
         .loginProcessingUrl("/account/login")
         .failureUrl("/account/login?error")
-        .defaultSuccessUrl("/map", true)
+        .defaultSuccessUrl("/", true)
         .usernameParameter("email")
         .permitAll()
     );
     http.logout(logout -> logout
         .logoutUrl("/account/logout")               // 로그아웃 요청 경로 (POST)
-        .logoutSuccessUrl("/map")         // 로그아웃 성공 시 리다이렉트, 홈 화면으로 바꾸기
+        .logoutSuccessUrl("/")         // 로그아웃 성공 시 리다이렉트, 홈 화면으로 바꾸기
         .invalidateHttpSession(true)                // 세션 무효화
         .clearAuthentication(true)                  // 인증 정보 제거
         .deleteCookies("JSESSIONID")                // 쿠키 제거
     );
     http.oauth2Login(oauth2 -> oauth2
         .loginPage("/account/login") // 사용자 정의 로그인 페이지
-        .defaultSuccessUrl("/map", true)
+        .defaultSuccessUrl("/", true)
         .userInfoEndpoint(userInfo -> userInfo
             .userService(accountOauth2UserService) // 여기에서 Kakao, Google 모두 처리
         )

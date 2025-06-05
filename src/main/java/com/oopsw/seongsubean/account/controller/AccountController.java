@@ -146,7 +146,7 @@ public class AccountController {
   @GetMapping("/myCafe")
   public String myCafe(
       @RequestParam(defaultValue = "1") int page,
-      @RequestParam(defaultValue = "6") int size,
+      @RequestParam(defaultValue = "4") int size,
       Principal principal,
       Model model) {
 
