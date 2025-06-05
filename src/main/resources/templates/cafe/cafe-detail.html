@@ -190,6 +190,9 @@
       </div>
     </div>
   </div>
+  <script th:inline="javascript">
+    var operationTimes = [[${operationTimes}]];
+  </script>
 </div>
 <th:block layout:fragment="scripts">
   <script th:src="@{/js/cafe/cafe-detail.js}"></script>
