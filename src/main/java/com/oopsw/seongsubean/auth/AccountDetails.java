@@ -32,7 +32,11 @@ public class AccountDetails implements UserDetails, OAuth2User {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(user.getRole()));
+    String role = user.getRole(); // 예: "CUSTOMER", "OWNER"
+    if (role == null || role.isBlank()) {
+      throw new IllegalStateException("Role is not set for account: " + user.getEmail());
+    }
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role)); // ✅ ROLE_ 접두사 붙이기
   }
 
   @Override

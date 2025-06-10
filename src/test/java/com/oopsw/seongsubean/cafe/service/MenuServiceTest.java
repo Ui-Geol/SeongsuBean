@@ -29,7 +29,7 @@ public class MenuServiceTest {
   //메뉴 생성
   @Test
   public void addMenuTest() {
-    MenuInfo newMenuInfo = MenuInfo.builder()
+    MenuDTO newMenuDTO = MenuDTO.builder()
         .menuCategory("커피")
         .menuName("씨쏠트커피")
         .image("/images/cafe/Cafe4.png")
@@ -38,7 +38,7 @@ public class MenuServiceTest {
         .cafeId(6)
         .build();
 
-    boolean result = menuService.addMenu(newMenuInfo);
+    boolean result = menuService.addMenu(newMenuDTO);
 
     assertThat(result).isTrue();
   }

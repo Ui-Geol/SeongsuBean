@@ -5,9 +5,15 @@ import com.oopsw.seongsubean.account.service.AccountService;
 import com.oopsw.seongsubean.auth.AccountDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +25,12 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -74,4 +82,53 @@ public class AccountRestController {
           .body("삭제 실패: " + e.getMessage());
     }
   }
+
+  @PutMapping("/uploadImage")
+  public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file,
+      Principal principal) throws IOException {
+    if (file.isEmpty()) {
+      return ResponseEntity.badRequest().body("파일이 비어 있습니다.");
+    }
+
+    String email = principal.getName();
+    UserDTO user = accountService.findByEmail(email);
+
+    // 1. 절대 경로로 수정
+    String uploadDir = new File("src/main/resources/static/images/account/").getAbsolutePath();
+
+    String originalFilename = Paths.get(file.getOriginalFilename()).getFileName().toString();
+    String safeFilename = originalFilename.replaceAll("\\s+", "_");
+
+    String newFilename = UUID.randomUUID() + "_" + safeFilename;
+    Path uploadPath = Paths.get(uploadDir);
+
+    // 2. 저장 경로가 없다면 생성
+    try {
+      if (!Files.exists(uploadPath)) {
+        Files.createDirectories(uploadPath);
+      }
+    } catch (IOException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("디렉토리 생성 실패: " + e.getMessage());
+    }
+
+    // 3. 기존 이미지 삭제
+    String oldImage = user.getImage();
+    if (oldImage != null && !oldImage.equals("default.png")) {
+      Path oldPath = uploadPath.resolve(oldImage);
+      Files.deleteIfExists(oldPath);
+    }
+
+    // 4. 새 이미지 저장
+    Path filePath = uploadPath.resolve(newFilename);
+    file.transferTo(filePath.toFile());
+
+    // 5. DB 업데이트
+    user.setImage(newFilename);
+    accountService.setImage(user);
+
+    return ResponseEntity.ok("업로드 성공");
+  }
+
+
 }

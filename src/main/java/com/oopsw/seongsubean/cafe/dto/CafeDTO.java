@@ -33,5 +33,4 @@ public class CafeDTO {
   public String getFullAddress() {
     return address + ", " + detailAddress;
   }
-
 }

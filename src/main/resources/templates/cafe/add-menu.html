@@ -4,7 +4,7 @@
       layout:decorate="~{common/common}">
 <head>
   <title layout:fragment="title">메뉴 추가</title>
-  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/add-menu.css" />
+  <link layout:fragment="styles" rel="stylesheet" href="/css/cafe/add-menu.css"/>
 </head>
 <body>
 <div layout:fragment="content">
@@ -32,6 +32,8 @@
           </select>
         </div>
 
+        <input type="hidden" id="cafeId" name="cafeId" th:value="${cafeId}">
+
         <div class="form-group">
           <label for="menuName">메뉴명</label>
           <input type="text" id="menuName" name="menuName" placeholder="메뉴를 입력해주세요" required>
@@ -58,7 +60,7 @@
               <div class="upload-icon">📷</div>
               <span class="upload-text">사진 추가</span>
             </div>
-            <input type="file" id="imageInput" name="images" accept="image/*" multiple
+            <input type="file" id="imageInput" name="imageInput" accept="image/*"
                    style="display: none;">
           </div>
           <div id="imagePreview" class="image-preview"></div>

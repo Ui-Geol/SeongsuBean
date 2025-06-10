@@ -15,14 +15,10 @@
         <span class="icon-button" id="deleteCafe" title="삭제">🗑️</span>
       </h1>
 
-
       <div class="rating-container">
         <span class="rating-score" th:text="${cafeHeaderDTO.getAvgRating()}"></span>
-
-        <!-- 각 별을 개별적으로 처리 -->
         <span th:each="i : ${#numbers.sequence(1, 5)}"
               th:class="${cafeHeaderDTO.isStarFilled(i)} ? 'star' : 'star empty'">★</span>
-
         <span class="review-count" th:text="'（' + ${cafeHeaderDTO.getTotalCount()} + '）'"></span>
       </div>
 
@@ -38,6 +34,7 @@
     </nav>
 
     <div class="cafe-content">
+      <!-- ✅ 개요 탭 - 메뉴 섹션 제거 -->
       <div id="overview" class="tab-content active">
         <div class="info-section">
           <div class="info-item">
@@ -70,7 +67,6 @@
                         onclick="toggleTodayClosed()">오늘 휴무
                 </button>
 
-
                 <div class="hours-detail" id="hoursDetail">
                   <div class="hours-day" th:each="operationTime : ${operationTimes}">
                     <span th:text="${operationTime.getWeekday()}">요일</span>
@@ -99,36 +95,60 @@
         </div>
       </div>
 
+      <!-- ✅ 메뉴 탭 - 메뉴 관련 내용만 포함 -->
       <div id="menu" class="tab-content">
-        <div class="menu-item" th:each="menu : ${menuInfoList}">
-          <div class="menu-info">
-            <div class="menu-header">
-              <div class="menu-name" th:text="${menu.getMenuName()}">메뉴명</div>
-              <div class="menu-actions">
-                <a class="edit-btn" th:href="@{/add-menu(menuId=${menu.getMenuId()})}"
-                   th:alt="메뉴수정">
-                  <button class="edit-btn">✏️</button>
-                </a>
-                <a class="delete-btn" th:href="@{/cafe-detail(deleteMenuId=${menu.getMenuId()})}"
-                   th:alt="메뉴삭제">
-                  <button class="delete-btn">🗑️</button>
-                </a>
+        <div class="menu-add-section">
+          <a class="add-menu-btn" th:href="@{/cafe/{cafeId}/menu(cafeId=${cafeDTO.getCafeId()})}">
+            <button class="btn-add-menu" type="button">
+              <span class="add-icon">➕</span>
+              <span class="add-text">메뉴 추가</span>
+            </button>
+          </a>
+        </div>
+
+        <!-- 기존 메뉴 리스트 -->
+        <div class="menu-list">
+          <div class="menu-item" th:each="menu : ${menuInfoList}">
+            <div class="menu-info">
+              <div class="menu-header">
+                <div class="menu-name" th:text="${menu.menuName}">메뉴명</div>
+                <div class="menu-actions">
+                  <a class="edit-btn" th:href="@{/add-menu(menuId=${menu.menuId})}" th:title="메뉴수정">
+                    <button class="edit-btn" type="button">✏️</button>
+                  </a>
+                  <a class="delete-btn" th:href="@{/cafe-detail(deleteMenuId=${menu.menuId})}"
+                     th:title="메뉴삭제">
+                    <button class="delete-btn" type="button">🗑️</button>
+                  </a>
+                </div>
+              </div>
+              <div class="menu-description"
+                   th:if="${menu.description != null && !#strings.isEmpty(menu.description)}"
+                   th:text="${menu.description}">
+                메뉴 설명
+              </div>
+              <div class="menu-price"
+                   th:text="|${#numbers.formatInteger(menu.price, 0, 'COMMA')}원|">
+                가격
               </div>
             </div>
-            <div class="menu-description"
-                 th:if="${menu.description != null and menu.description != ''}"
-                 th:text="${menu.description}">메뉴 설명
-            </div>
-            <div class="menu-price"
-                 th:text="${#numbers.formatInteger(menu.price, 0, 'COMMA')} + '원'">가격
-            </div>
+            <img class="menu-image"
+                 th:src="${menu.image != null ? menu.image : '/images/common/default.png'}"
+                 th:alt="${menu.menuName}"/>
           </div>
-          <img class="menu-image"
-               th:src="${menu.getImage() != null ? menu.getImage() : '/images/common/default.png'}"
-               th:alt="${menu.getMenuName()}">
+        </div>
+
+        <!-- 메뉴가 없을 때 표시할 내용 -->
+        <div class="no-menu-message" th:if="${#lists.isEmpty(menuInfoList)}">
+          <div class="empty-state">
+            <div class="empty-icon">☕</div>
+            <div class="empty-text">등록된 메뉴가 없습니다</div>
+            <div class="empty-subtext">첫 번째 메뉴를 추가해보세요!</div>
+          </div>
         </div>
       </div>
 
+      <!-- ✅ 리뷰 탭 - 리뷰 관련 내용만 포함 -->
       <div id="reviews" class="tab-content">
         <div class="review-write-wrapper">
           <a th:href="@{/review-form(cafeId=${cafeId})}" class="review-write-btn">리뷰 작성하기</a>

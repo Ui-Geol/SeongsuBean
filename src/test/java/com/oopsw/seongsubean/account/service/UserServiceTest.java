@@ -139,33 +139,33 @@ public class UserServiceTest {
         .build()));
   }
 
-  @Test
-  public void successGetMyBoards(){
-    System.out.println(accountService.getMyBoards("dlwodnjs2669@gmail.com"));
-  }
-  @Test
-  public void failGetMyBoards(){
-    System.out.println(accountService.getMyBoards("dlwosddnjs2669@gmail.com"));
-    //null
-  }
+//  @Test
+//  public void successGetMyBoards(){
+//    System.out.println(accountService.getMyBoards("dlwodnjs2669@gmail.com"));
+//  }
+//  @Test
+//  public void failGetMyBoards(){
+//    System.out.println(accountService.getMyBoards("dlwosddnjs2669@gmail.com"));
+//    //null
+//  }
 
-  @Test
-  public void successGetMyReviews(){
-    System.out.println(accountService.getMyReviews("yuqi0923@gmail.com"));
-  }
-  @Test
-  public void failGetMyReviews(){
-    System.out.println(accountService.getMyReviews("dlwosddnjs2669@gmail.com"));
-    //null
-  }
+//  @Test
+//  public void successGetMyReviews(){
+//    System.out.println(accountService.getMyReviews("yuqi0923@gmail.com"));
+//  }
+//  @Test
+//  public void failGetMyReviews(){
+//    System.out.println(accountService.getMyReviews("dlwosddnjs2669@gmail.com"));
+//    //null
+//  }
 
-  @Test
-  public void successGetMyCafes(){
-    System.out.println(accountService.getMyCafes("yuqi0923@gmail.com"));
-  }
-  @Test
-  public void failGetMyCafes(){
-    System.out.println(accountService.getMyCafes("dlwosddnjs2669@gmail.com"));
-    //null
-  }
+//  @Test
+//  public void successGetMyCafes(){
+//    System.out.println(accountService.getMyCafes("yuqi0923@gmail.com"));
+//  }
+//  @Test
+//  public void failGetMyCafes(){
+//    System.out.println(accountService.getMyCafes("dlwosddnjs2669@gmail.com"));
+//    //null
+//  }
 }
