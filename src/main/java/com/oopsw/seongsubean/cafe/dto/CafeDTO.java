@@ -1,11 +1,15 @@
 package com.oopsw.seongsubean.cafe.dto;
 
+import com.oopsw.seongsubean.cafe.domain.OperationTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Data
 @AllArgsConstructor
@@ -30,7 +34,29 @@ public class CafeDTO {
    */
   private List<OperationTimeDTO> operationTimes;
 
+  @JsonIgnore
   public String getFullAddress() {
     return address + ", " + detailAddress;
   }
+
+  @JsonIgnore
+  public List<OperationTime> convertToOperationTimeList(List<OperationTimeDTO> operationTimes,
+      Integer cafeId) {
+    if (operationTimes == null) {
+      return null;
+    }
+    List<OperationTime> operationTimesList = new ArrayList<>();
+
+    for (OperationTimeDTO operationTimeDTO : operationTimes) {
+      operationTimesList.add(OperationTime.builder()
+          .weekday(operationTimeDTO.getWeekday())
+          .openTime(LocalTime.parse(operationTimeDTO.getOpenTime()))
+          .closeTime(LocalTime.parse(operationTimeDTO.getCloseTime()))
+          .cafeId(cafeId)
+          .build());
+    }
+
+    return operationTimesList;
+  }
+
 }
