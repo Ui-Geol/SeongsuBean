@@ -33,13 +33,4 @@ public class CafeDTO {
   public String getFullAddress() {
     return address + ", " + detailAddress;
   }
-
-  public boolean isRestDay() {
-    if (status.equals("휴무일")) {
-      return true;
-    }
-
-    return false;
-  }
-
 }

@@ -61,7 +61,7 @@
   </select>
 
   <select id="getMyReviews" parameterType="String" resultType="java.util.Map">
-    select c.CAFE_ID AS cafeId, c.CAFE_NAME AS cafeName, r.REVIEW_CONTENTS AS content, r.REVIEW_DATE AS createDate
+    select c.CAFE_ID AS cafeId, c.CAFE_NAME AS cafeName, r.REVIEW_CONTENTS AS content, r.REVIEW_DATE AS createdDate
     from CAFE_INFO c
            join REVIEW r on c.CAFE_ID = r.CAFE_ID
     where r.EMAIL= #{email}

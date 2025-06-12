@@ -36,7 +36,7 @@
                     <a th:case="'제보'" th:href="@{'/report/detail/' + ${post.boardId}}" th:text="${post.title}"></a>
                     </span>
                   </td>
-                  <td th:text="${#dates.format(post.created_date, 'yyyy-MM-dd')}"></td>
+                  <td th:text="${#dates.format(post['created_date'], 'yyyy-MM-dd')}"></td>
                 </tr>
                 </tbody>
               </table>

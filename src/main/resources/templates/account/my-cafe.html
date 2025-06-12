@@ -31,8 +31,8 @@
                     <div class="cafe-rating">
                       <span class="rating-score" th:text="${cafe.avgStar}"></span>
                       <div class="stars">
-                        <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(cafe.avgStar))}"></i>
-                        <i class="bi bi-star" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).round(cafe.avgStar))}"></i>
+                        <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(cafe.avgStar.doubleValue()))}"></i>
+                        <i class="bi bi-star" th:each="i : ${#numbers.sequence(1, 5 - T(java.lang.Math).round(cafe.avgStar.doubleValue()))}"></i>
                       </div>
                       <span class="review-count" th:text="'(' + ${cafe.reviewCount} + ')'"></span>
                     </div>
