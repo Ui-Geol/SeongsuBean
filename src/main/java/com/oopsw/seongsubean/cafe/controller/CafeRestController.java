@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,7 @@ public class CafeRestController {
     }
 
     cafeDto.setEmail(userDTO.getEmail());
+    cafeDto.setMainImage("/images/cafe/" + cafeDto.getMainImage());
 
     try {
       int cafeId = cafeService.addCafe(cafeDto);
@@ -54,23 +56,33 @@ public class CafeRestController {
     //카페 헤더
     CafeHeaderDTO cafeHeaderDTO = cafeService.getCafeHeader(cafeId);
     //카페 개요
-    CafeDTO cafeDTO = cafeService.getCafeDTO(cafeId);
+    CafeDTO cafeDto = cafeService.getCafeDTO(cafeId);
 
     //카페 영업 시간
     List<OperationTime> operationTimes = cafeService.getOperationTimes(cafeId);
 
     return ResponseEntity.ok(
-        Map.of("cafeHeaderDTO", cafeHeaderDTO, "cafe", cafeDTO, "operationTimes", operationTimes));
+        Map.of("cafeHeaderDTO", cafeHeaderDTO, "cafe", cafeDto, "operationTimes", operationTimes));
   }
 
   @PutMapping("/{cafeId}")
-  public ResponseEntity<?> setCafe(@Valid @RequestBody CafeDTO cafeDto) {
+  public ResponseEntity<String> setCafe(@Valid @RequestBody CafeDTO cafeDto) {
 
     try {
       cafeService.setCafe(cafeDto);
-      return ResponseEntity.status(HttpStatus.NO_CONTENT).body("카페 업데이트에 성공하였습니다");
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     } catch (RuntimeException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카페 업데이트를 실패하였습니다");
+    }
+  }
+
+  @DeleteMapping("/{cafeId}")
+  public ResponseEntity<String> removeCafe(@PathVariable Integer cafeId) {
+    try {
+      cafeService.removeCafe(cafeId);
+      return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    } catch (RuntimeException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카페 삭제를 실패하였습니다");
     }
   }
 

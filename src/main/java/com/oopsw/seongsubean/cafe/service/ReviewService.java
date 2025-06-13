@@ -22,9 +22,13 @@ public class ReviewService {
   private final AccountRepository accountRepository;
 
   //리뷰 생성
-  public boolean addReview(ReviewDTO reviewDTO, List<ReviewImage> reviewImageList) {
-    boolean result = reviewRepository.addReview(reviewDTO);
-    for (ReviewImage reviewImage : reviewImageList) {
+  public boolean addReview(TotalReviewDTO totalReviewDto) {
+
+    boolean result = reviewRepository.addReview(totalReviewDto.getReviewDTO());
+    Integer reviewId = reviewRepository.getReviewIdByCafeIdAndEmail(totalReviewDto.getReviewDTO());
+    for (ReviewImage reviewImage : totalReviewDto.getReviewImage()) {
+      reviewImage.setReviewId(reviewId);
+      reviewImage.setImage("/images/cafe/" + reviewImage.getImage());
       reviewImageRepository.save(reviewImage);
     }
 
