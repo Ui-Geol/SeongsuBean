@@ -1,4 +1,4 @@
-package com.oopsw.seongsubean.account.repository;
+package com.oopsw.seongsubean.account.repository.mybatisrepository;
 
 import com.oopsw.seongsubean.account.dto.UserDTO;
 import java.util.List;

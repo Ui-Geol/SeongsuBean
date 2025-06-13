@@ -1,7 +1,7 @@
 package com.oopsw.seongsubean.account.service;
 
 import com.oopsw.seongsubean.account.dto.UserDTO;
-import com.oopsw.seongsubean.account.repository.AccountRepository;
+import com.oopsw.seongsubean.account.repository.mybatisrepository.AccountRepository;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
