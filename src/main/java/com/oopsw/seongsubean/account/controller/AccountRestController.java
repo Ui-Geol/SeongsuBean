@@ -30,36 +30,35 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/account")
+@RequestMapping("/api/account")
 public class AccountRestController {
   private final AccountService accountService;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @PostMapping("/join")
-  public String joinAction(@ModelAttribute UserDTO form, Model model) {
-    accountService.addUser(form);
-    model.addAttribute("joinSuccess", true); // 메시지 전달
-    return "account/login-view";
+  public ResponseEntity<Map<String, String>> joinAction(@RequestBody UserDTO user) {
+    accountService.addUser(user);
+    return ResponseEntity.ok().body(Map.of("message", "회원가입에 성공 하셨습니다."));
   }
 
-  @GetMapping("/myPage")
-  public String myPage(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
-    String email = accountDetails.getUsername();
-    UserDTO user = accountService.findByEmail(email);
-    model.addAttribute("user", user);
-
-    return "account/my-page";
-  }
-
-//  @GetMapping("/editProfile")
-//  public String editProfile(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
-//    UserDTO user = accountDetails.getUser();
-//    //OAuth2로 로그인 한 유저인지 확인
-//    boolean isOAuth2 = user.isOauth();
-//    model.addAttribute("isOAuth2User", isOAuth2);
+//  @GetMapping("/myPage")
+//  public Map<String,S> myPage(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
+//    String email = accountDetails.getUsername();
+//    UserDTO user = accountService.findByEmail(email);
 //    model.addAttribute("user", user);
-//    return "account/edit-profile";
+//
+//    return "account/my-page";
 //  }
+
+  @GetMapping("/editProfile")
+  public String editProfile(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
+    UserDTO user = accountDetails.getUser();
+    //OAuth2로 로그인 한 유저인지 확인
+    boolean isOAuth2 = user.isOauth();
+    model.addAttribute("isOAuth2User", isOAuth2);
+    model.addAttribute("user", user);
+    return "account/edit-profile";
+  }
 
   @PostMapping("/editProfile")
   public String editProfileAction(@ModelAttribute UserDTO form, Model model) {
@@ -75,18 +74,18 @@ public class AccountRestController {
     return "account/my-page";
   }
 
-//  @GetMapping("/checkPw")
-//  public String checkPw(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
-//    UserDTO user = accountDetails.getUser();
-//    //OAuth2로 로그인 한 유저인지 확인
-//    boolean isOAuth2 = user.isOauth();
-//    model.addAttribute("isOAuth2User", isOAuth2);
-//    model.addAttribute("user", user);
-//    if(isOAuth2) {
-//      return "redirect:/account/editProfile";
-//    }
-//    return "account/check-pw";
-//  }
+  @GetMapping("/checkPw")
+  public String checkPw(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
+    UserDTO user = accountDetails.getUser();
+    //OAuth2로 로그인 한 유저인지 확인
+    boolean isOAuth2 = user.isOauth();
+    model.addAttribute("isOAuth2User", isOAuth2);
+    model.addAttribute("user", user);
+    if(isOAuth2) {
+      return "redirect:/account/editProfile";
+    }
+    return "account/check-pw";
+  }
 
   @GetMapping("/myPost")
   public String getMyPosts(
@@ -170,28 +169,28 @@ public class AccountRestController {
   }
 
   // 이메일 중복 체크
-  @GetMapping("/api/checkEmail")
+  @GetMapping("/checkEmail")
   public Map<String, Boolean> checkEmail(@RequestParam String email) {
     boolean exists = accountService.existsEmail(email);
     return Collections.singletonMap("exists", exists);
   }
 
   // 닉네임 중복 체크
-  @GetMapping("/api/checkNickname")
+  @GetMapping("/checkNickname")
   public Map<String, Boolean> checkNickname(@RequestParam String nickname) {
     boolean exists = accountService.existsNickName(nickname);
     return Collections.singletonMap("exists", exists);
   }
 
   // 비밀번호 체크
-  @PostMapping("/api/checkPw")
+  @PostMapping("/checkPw")
   public ResponseEntity<?> checkPw(@RequestBody Map<String, String> body,@AuthenticationPrincipal AccountDetails accountDetails) {
     String inputPassword = body.get("password");
     String password = accountDetails.getUser().getPassword();
     return ResponseEntity.ok(Map.of("success", bCryptPasswordEncoder.matches(inputPassword, password)));
   }
 
-  @DeleteMapping("/api/deleteAccount")
+  @DeleteMapping("/deleteAccount")
   public ResponseEntity<?> deleteAccount(
       @AuthenticationPrincipal AccountDetails accountDetails,
       HttpServletRequest request,
@@ -213,7 +212,7 @@ public class AccountRestController {
     }
   }
 
-  @PutMapping("/api/uploadImage")
+  @PutMapping("/uploadImage")
   public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file,
       Principal principal) throws IOException {
     if (file.isEmpty()) {

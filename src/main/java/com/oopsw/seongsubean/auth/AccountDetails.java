@@ -1,7 +1,6 @@
 package com.oopsw.seongsubean.auth;
 
-//import com.oopsw.seongsubean.account.dto.UserDTO;
-import com.oopsw.seongsubean.account.domain.UserInfo;
+import com.oopsw.seongsubean.account.dto.UserDTO;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public class AccountDetails implements UserDetails, OAuth2User {
-  private final UserInfo user;
+  private final UserDTO user;
   private Map<String, Object> attributes;
 
-  public AccountDetails(UserInfo user) {this.user = user;}
+  public AccountDetails(UserDTO user) {this.user = user;}
 
-  public AccountDetails(UserInfo user, Map<String, Object> attributes) {
+  public AccountDetails(UserDTO user, Map<String, Object> attributes) {
     this.user = user;
     this.attributes = attributes;
   }
@@ -70,7 +69,7 @@ public class AccountDetails implements UserDetails, OAuth2User {
     return true;
   }
 
-  public UserInfo getUser() {
+  public UserDTO getUser() {
     return this.user;
   }
 }

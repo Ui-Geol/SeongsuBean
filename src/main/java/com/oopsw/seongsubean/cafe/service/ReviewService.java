@@ -1,7 +1,7 @@
 package com.oopsw.seongsubean.cafe.service;
 
 import com.oopsw.seongsubean.account.dto.UserDTO;
-import com.oopsw.seongsubean.account.repository.AccountRepository;
+import com.oopsw.seongsubean.account.repository.mybatisrepository.AccountRepository;
 import com.oopsw.seongsubean.cafe.domain.ReviewImage;
 import com.oopsw.seongsubean.cafe.dto.ReviewDTO;
 import com.oopsw.seongsubean.cafe.dto.TotalReviewDTO;
