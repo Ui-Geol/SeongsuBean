@@ -1,53 +1,61 @@
 package com.oopsw.seongsubean.config;
 
+import com.oopsw.seongsubean.account.repository.mybatisrepository.AccountRepository;
+import com.oopsw.seongsubean.auth.AccountDetailsService;
 import com.oopsw.seongsubean.auth.AccountOauth2UserService;
+import com.oopsw.seongsubean.jwt.JwtAuthorizationFilter;
+import com.oopsw.seongsubean.jwt.JwtBasicAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
+  @Autowired
+  private CorsFilter corsFilter;
+  private final AccountDetailsService accountDetailsService;
+  private final AccountOauth2UserService accountOauth2UserService;
 
+  // 1. AuthenticationManager 등록
   @Bean
-  public BCryptPasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    return config.getAuthenticationManager();
   }
 
+  // 2. SecurityFilterChain 설정
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http,
-      AccountOauth2UserService accountOauth2UserService) throws Exception {
+                                                 AuthenticationManager authenticationManager, AccountRepository accountRepository) throws Exception {
+
     http.csrf(csrf -> csrf.disable());
+    http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+    http.formLogin(form -> form.disable());
+    // 기본 HTTP 인증 제거
+    http.httpBasic(basic -> basic.disable());
+    http.addFilter(corsFilter);
+    http.addFilter(new JwtAuthorizationFilter(authenticationManager));
+    http.addFilter(new JwtBasicAuthenticationFilter(authenticationManager, accountRepository));
 
-    http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+    http.authorizeHttpRequests(auth ->
+            auth.requestMatchers("/api/v1/user/**").authenticated() //로그인 하면 모두
+                    .anyRequest().permitAll() );
 
-    http.formLogin(form -> form
-        .loginPage("/account/login")
-        .loginProcessingUrl("/account/login")
-        .failureUrl("/account/login?error")
-        .defaultSuccessUrl("/", true)
-        .usernameParameter("email")
-        .permitAll()
-    );
-    http.logout(logout -> logout
-        .logoutUrl("/account/logout")               // 로그아웃 요청 경로 (POST)
-        .logoutSuccessUrl("/")         // 로그아웃 성공 시 리다이렉트, 홈 화면으로 바꾸기
-        .invalidateHttpSession(true)                // 세션 무효화
-        .clearAuthentication(true)                  // 인증 정보 제거
-        .deleteCookies("JSESSIONID")                // 쿠키 제거
-    );
     http.oauth2Login(oauth2 -> oauth2
-        .loginPage("/account/login") // 사용자 정의 로그인 페이지
-        .defaultSuccessUrl("/", true)
-        .userInfoEndpoint(userInfo -> userInfo
-            .userService(accountOauth2UserService) // 여기에서 Kakao, Google 모두 처리
-        )
+            .loginPage("/account/login-view.html")
+            .defaultSuccessUrl("/", true)
+            .userInfoEndpoint(userInfo -> userInfo
+                    .userService(accountOauth2UserService)
+            )
     );
+
     return http.build();
   }
 }

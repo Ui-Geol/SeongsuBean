@@ -1,7 +1,7 @@
 package com.oopsw.seongsubean.auth;
 
 import com.oopsw.seongsubean.account.dto.UserDTO;
-import com.oopsw.seongsubean.account.repository.AccountRepository;
+import com.oopsw.seongsubean.account.repository.mybatisrepository.AccountRepository;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;

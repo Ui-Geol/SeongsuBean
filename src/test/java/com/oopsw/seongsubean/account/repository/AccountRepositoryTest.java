@@ -2,6 +2,7 @@ package com.oopsw.seongsubean.account.repository;
 
 
 import com.oopsw.seongsubean.account.dto.UserDTO;
+import com.oopsw.seongsubean.account.repository.mybatisrepository.AccountRepository;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,7 +18,7 @@ public class AccountRepositoryTest {
 
   @Test
   public void successGetUserInfoTest() {
-    UserDTO user = userMapper.getUserInfo(UserDTO.builder().password("2345").email("zzzz@gmail.com").build());
+    UserDTO user = userMapper.getUserInfo(UserDTO.builder().password("1234").email("zzzz@gmail.com").build());
     System.out.println(user);
   }
   @Test

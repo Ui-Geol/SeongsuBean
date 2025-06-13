@@ -1,7 +1,7 @@
 package com.oopsw.seongsubean.auth;
 
 import com.oopsw.seongsubean.account.dto.UserDTO;
-import com.oopsw.seongsubean.account.repository.AccountRepository;
+import com.oopsw.seongsubean.account.repository.mybatisrepository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
