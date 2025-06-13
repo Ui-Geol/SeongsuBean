@@ -94,13 +94,17 @@ public class CafeService {
 
   //카페 수정
   @Transactional
-  public boolean setCafe(CafeDTO updatedCafeDTO, List<OperationTime> operationTimes) {
+  public boolean setCafe(CafeDTO updatedCafeDTO) {
     boolean result = cafeRepository.setCafe(updatedCafeDTO);
     if (!result) {
       return false;
     }
 
+    List<OperationTime> operationTimes = updatedCafeDTO.convertToOperationTimeList(
+        updatedCafeDTO.getOperationTimes(), updatedCafeDTO.getCafeId());
+
     operationTimeRepository.deleteAllByCafeId(updatedCafeDTO.getCafeId());
+    operationTimeRepository.flush();
 
     if (operationTimes != null && !operationTimes.isEmpty()) {
       operationTimes.forEach(operationTime -> {
@@ -108,6 +112,7 @@ public class CafeService {
           operationTime.setCafeId(updatedCafeDTO.getCafeId());
         }
       });
+      System.out.println(operationTimes);
       operationTimeRepository.saveAll(operationTimes);
     }
 

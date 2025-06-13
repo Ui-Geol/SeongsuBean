@@ -26,13 +26,20 @@ public class MenuService {
     return newMenuInfo.getMenuId() != null;
   }
 
-  //메뉴 조회
+  //전체 메뉴 조회
   public List<MenuDTO> getMenuList(Integer cafeId, Pageable pageable) {
     List<MenuInfo> menuInfoList = menuInfoRepository.findByCafeId(cafeId, pageable).getContent();
     return menuInfoList.stream()
         .map(this::convertToDTO)
         .collect(Collectors.toList());
   }
+
+  //메뉴 조회
+  public MenuDTO getMenu(Integer menuId) {
+    MenuInfo menuInfo = menuInfoRepository.findById(menuId).get();
+    return convertToDTO(menuInfo);
+  }
+
 
   // MenuInfo를 MenuDTO로 변환하는 메서드
   private MenuDTO convertToDTO(MenuInfo menuInfo) {
@@ -60,14 +67,14 @@ public class MenuService {
 
   //메뉴 수정
   @Transactional
-  public boolean setMenu(Integer menuId, MenuInfo newMenuInfo) {
+  public boolean setMenu(MenuDTO menuDto) {
     // 입력값 검증
-    if (menuId == null || newMenuInfo == null) {
+    if (menuDto == null) {
       throw new IllegalArgumentException("메뉴 ID와 메뉴 정보는 필수입니다.");
     }
 
     // 메뉴 존재 여부 확인 및 수정
-    Optional<MenuInfo> optionalMenu = menuInfoRepository.findById(menuId);
+    Optional<MenuInfo> optionalMenu = menuInfoRepository.findById(menuDto.getMenuId());
 
     if (optionalMenu.isEmpty()) {
       return false; // 또는 throw new EntityNotFoundException
@@ -76,13 +83,28 @@ public class MenuService {
     MenuInfo existingMenu = optionalMenu.get();
 
     // 필드 업데이트
-    existingMenu.setMenuName(newMenuInfo.getMenuName());
-    existingMenu.setMenuCategory(newMenuInfo.getMenuCategory());
-    existingMenu.setPrice(newMenuInfo.getPrice());
-    existingMenu.setImage(newMenuInfo.getImage());
-    existingMenu.setDescription(newMenuInfo.getDescription());
+    existingMenu.setMenuName(menuDto.getMenuName());
+    existingMenu.setMenuCategory(menuDto.getMenuCategory());
+    existingMenu.setPrice(menuDto.getPrice());
+    existingMenu.setImage(formatImagePath(menuDto.getImage()));
+    existingMenu.setDescription(menuDto.getDescription());
 
     return true;
+  }
+
+  private String formatImagePath(String imagePath) {
+    if (imagePath == null || imagePath.trim().isEmpty()) {
+      return null;
+    }
+
+    String cleanPath = imagePath.trim();
+
+    // 이미 경로가 있으면 그대로, 없으면 추가
+    if (cleanPath.startsWith("/images/menu/")) {
+      return cleanPath;
+    } else {
+      return "/images/menu/" + cleanPath;
+    }
   }
 
   //메뉴 삭제
