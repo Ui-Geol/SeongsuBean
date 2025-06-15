@@ -22,18 +22,14 @@
 <div id="footer-container"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- axios CDN -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  // HTML 조각(header.html, footer.html)을 axios로 비동기 로드
+  // HTML 조각(header.html, footer.html)을 비동기로 로드
   function includeHTML(id, url) {
-    axios.get(url)
-            .then(res => {
-              document.getElementById(id).innerHTML = res.data;
-            })
+    fetch(url)
+            .then(res => res.text())
+            .then(html => document.getElementById(id).innerHTML = html)
             .catch(err => console.error('Error loading ' + url, err));
   }
-
   includeHTML('header-container', '/common/header.html');
   includeHTML('footer-container', '/common/footer.html');
 
