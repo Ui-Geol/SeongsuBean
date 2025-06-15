@@ -89,7 +89,7 @@ public class CafeServiceTest {
 
   @Test
   public void successGetOperationTimesTest() {
-    var operationTimes = cafeService.getOperationTimes(3);
+    List<OperationTimeDTO> operationTimes = cafeService.getOperationTimes(3);
     assertThat(operationTimes.size()).isEqualTo(6);
   }
 

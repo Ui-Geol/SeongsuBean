@@ -84,6 +84,7 @@ public class CafeService {
           .openTime(String.valueOf(operationTime.getOpenTime()))
           .closeTime(String.valueOf(operationTime.getCloseTime()))
           .weekday(operationTime.getWeekday()).build();
+      operationTimeDTOList.add(operationTimeDTO);
     }
 
     // 요일 순서 정의

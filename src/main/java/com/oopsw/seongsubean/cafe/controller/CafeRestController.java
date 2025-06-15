@@ -78,6 +78,7 @@ public class CafeRestController {
     CafeDTO cafeDTO = cafeService.getCafeDTO(cafeId);
     List<OperationTimeDTO> operationTimes = cafeService.getOperationTimes(cafeId);
     cafeDTO.setOperationTimes(operationTimes);
+    System.out.println(operationTimes);
 
     return ResponseEntity.status(HttpStatus.OK).body(Map.of("cafeDTO", cafeDTO));
   }
