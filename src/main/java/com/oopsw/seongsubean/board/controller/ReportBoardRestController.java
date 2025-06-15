@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping("/api/reportboards")
 public class ReportBoardRestController {
   private final ReportBoardService reportBoardService;
   public ReportBoardRestController(ReportBoardService reportBoardService) {
@@ -57,7 +57,7 @@ public class ReportBoardRestController {
             .content(content)
             .email(email)
             .build();
-    List<String> fileNames = new ArrayList<>();
+    List<String> imagePaths = new ArrayList<>();
     if (images != null) {
       String uploadDir = new File("src/main/resources/static/images/upload/report/" + email).getAbsolutePath();
       Path uploadPath = Paths.get(uploadDir);
@@ -71,14 +71,14 @@ public class ReportBoardRestController {
           Path filePath = uploadPath.resolve(newFilename);
           try {
             file.transferTo(filePath.toFile());
-            fileNames.add("/images/upload/report/" + email + "/" + newFilename);
+            imagePaths.add("/images/upload/report/" + email + "/" + newFilename);
           } catch (IOException e) {
             e.printStackTrace();
           }
         }
       }
     }
-    boolean success = reportBoardService.addReportBoard(dto, fileNames);
+    boolean success = reportBoardService.addReportBoard(dto, imagePaths);
     return ResponseEntity.ok(Map.of("success", success, "id", dto.getReportBoardId()));
   }
   @GetMapping("/list")
@@ -91,11 +91,11 @@ public class ReportBoardRestController {
     int totalPages = (int)Math.ceil((double)totalCount/size);
     Map<String, Object> result = Map.of(
             "content", list,
-            "currentPages", page,
+            "currentPage", page,
             "totalPages", totalPages);
     return ResponseEntity.ok(result);
   }
-  @GetMapping("/{id}")
+  @GetMapping("/detail/{id}")
   public ResponseEntity<?> getReportBoardDetail(@PathVariable("id") Integer id) {
     ReportBoardDTO dto = reportBoardService.getReportBoardDetail(id);
     if (dto == null) {
@@ -134,7 +134,7 @@ public class ReportBoardRestController {
     }
     dto.setReportBoardId(id);
     boolean result = reportBoardService.setReportBoard(dto, List.of());
-    return ResponseEntity.ok(Map.of("success", result,"id", dto.getReportBoardId()));
+    return ResponseEntity.ok(Map.of("updated", result,"id", result));
   }
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteReportBoard(@AuthenticationPrincipal AccountDetails accountDetails,

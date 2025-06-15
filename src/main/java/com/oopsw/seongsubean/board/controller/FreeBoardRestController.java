@@ -23,18 +23,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/free")
 public class FreeBoardRestController {
   private final FreeBoardService freeBoardService;
   public FreeBoardRestController(FreeBoardService freeBoardService) {
     this.freeBoardService = freeBoardService;
   }
 
-  @PostMapping
+  @PostMapping("/api/freeboards")
   public ResponseEntity<?> addFreeBoard(
           @AuthenticationPrincipal AccountDetails accountDetails,
           @RequestParam String title,
@@ -47,11 +47,11 @@ public class FreeBoardRestController {
     }
     String email = user.getEmail();
     FreeBoardDTO dto = FreeBoardDTO.builder()
-        .title(title)
-        .content(content)
-        .email(email)
-        .headWord(headWord)
-        .build();
+            .title(title)
+            .content(content)
+            .email(email)
+            .headWord(headWord)
+            .build();
     List<String> imagePaths = new ArrayList<>();
     if (images != null) {
       String uploadDir = new File("src/main/resources/static/images/upload/free/" + email).getAbsolutePath();
@@ -77,7 +77,8 @@ public class FreeBoardRestController {
     return ResponseEntity.ok(Map.of("success", success, "id", dto.getFreeBoardId()));
   }
 
-  @GetMapping("/list")
+
+  @GetMapping("/api/freeboards/list")
   public ResponseEntity<Map<String, Object>> getFreeBoardList(
           @RequestParam(defaultValue = "1") int page,
           @RequestParam(defaultValue = "12") int size) {
@@ -93,7 +94,7 @@ public class FreeBoardRestController {
     return ResponseEntity.ok(result);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/api/freeboards/detail/{id}")
   public ResponseEntity<?> getFreeBoardDetail(
           @PathVariable("id") Integer id) {
     FreeBoardDTO dto = freeBoardService.getFreeBoardDetail(id);
@@ -104,7 +105,7 @@ public class FreeBoardRestController {
     return ResponseEntity.ok(dto);
   }
 
-  @PutMapping("/post/{id}")
+  @PutMapping("/api/freeboards/post/{id}")
   public ResponseEntity<Map<String, Object>> setFreeBoard(
           @AuthenticationPrincipal AccountDetails accountDetails,
           @PathVariable("id") Integer id,
@@ -124,7 +125,7 @@ public class FreeBoardRestController {
     return ResponseEntity.ok(Map.of("updated", result));
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/api/{id}")
   public ResponseEntity<?> deleteFreeBoard(
           @AuthenticationPrincipal AccountDetails accountDetails,
           @PathVariable("id") Integer id) {
@@ -143,32 +144,34 @@ public class FreeBoardRestController {
   }
 
   /* comment */
-  @PostMapping("/comment")
+  @PostMapping("/api/freeboards/comment")
   public ResponseEntity<?> addComment(
           @AuthenticationPrincipal AccountDetails accountDetails,
-          @RequestParam String comment,
-          @RequestParam Integer freeBoardId) {
+          @RequestBody Map<String, Object> requestBody) {
     if (accountDetails == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
+    String comment = (String) requestBody.get("comment");
+    Integer freeBoardId = (Integer) requestBody.get("freeBoardId");
+
     String email = accountDetails.getUser().getEmail();
     FreeBoardCommentDTO dto = FreeBoardCommentDTO.builder()
-        .content(comment)
-        .freeBoardId(freeBoardId)
-        .email(email)
-        .build();
+            .content(comment)
+            .freeBoardId(freeBoardId)
+            .email(email)
+            .build();
     boolean result = freeBoardService.addFreeBoardComment(dto);
     return ResponseEntity.ok(Map.of("success", result));
   }
 
-  @GetMapping("/comment/{id}")
+  @GetMapping("/api/freeboards/comment/{id}")
   public ResponseEntity<List<FreeBoardCommentDTO>> getComments(
           @PathVariable("id") Integer boardId) {
     List<FreeBoardCommentDTO> comments = freeBoardService.getFreeBoardComments(boardId);
     return ResponseEntity.ok(comments);
   }
 
-  @GetMapping("/auth/email")
+  @GetMapping("/api/freeboards/auth/email")
   public ResponseEntity<?> getCurrentUserEmail(
           @AuthenticationPrincipal AccountDetails accountDetails) {
     if (accountDetails == null) {
@@ -185,7 +188,7 @@ public class FreeBoardRestController {
     ));
   }
 
-  @DeleteMapping("/comment/{commentId}")
+  @DeleteMapping("/api/freeboards/comment/{commentId}")
   public ResponseEntity<?> removeComment(
           @PathVariable("commentId") Integer freeBoardCommentId,
           @AuthenticationPrincipal AccountDetails accountDetails) {
@@ -202,7 +205,7 @@ public class FreeBoardRestController {
   }
 
   /* search */
-  @GetMapping("/search")
+  @GetMapping("/api/freeboards/search")
   public ResponseEntity<Map<String, Object>> getFreeBoardListSearch(
           @RequestParam("type") String type,
           @RequestParam("keyword") String keyword,
