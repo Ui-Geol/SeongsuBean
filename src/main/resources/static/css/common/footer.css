@@ -10,12 +10,30 @@
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
 }
 
+
 .footer-logo-img {
-  max-width: 100%;
+  width: 120px;
   height: auto;
+  display: block;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-row {
+  margin-bottom: 6px;
 }
 
 .footer-brand {

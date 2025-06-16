@@ -2,93 +2,89 @@
   background-color: #ffffff;
   border-bottom: 1px solid #8a6534;
   font-family: 'Noto Sans KR', sans-serif;
-  height: 64px; /* ✅ 로고 높이에 맞게 고정 */
+  height: 64px;
   display: flex;
-  align-items: center; /* 세로 중앙 정렬 */
+  align-items: center;
   padding: 0;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  box-sizing: border-box;
 }
 
-.navbar-custom .container-fluid {
+/* 로고 영역 */
+.header-left {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding-left: 0;
-  padding-right: 0;
-}
-.navbar-brand {
-  display: flex;             /* ✅ 수평 정렬 */
+  align-items: center;
   gap: 0.8rem;
-  height: 100%;
 }
 
 .logo-icon {
-  height: 65px;
-  display: block;
-  align-items: flex-end;
-  margin-top: 8px;
+  height: 60px;
 }
-
 
 .logo-text {
-  height: 35px;
-  display: block;
-  align-items: center;
-  margin-top: 25px;
-}
-.navbar-custom .nav-link {
-  color: #6b4f1d;
-  font-size: 1.1rem;
-  margin: 0 1rem;
-}
-
-.navbar-custom .nav-link:hover {
-  color: #8a6534;
-}
-
-.btn-login {
-  position: relative;
-  z-index: 10;
-  background-color: #93653B;
-  color: #fff;
-  border: none;
-  border-radius: 1.5rem;
-  padding: 0.4rem 1.2rem;
-  font-size: 1rem;
-  font-weight: 500;
-  text-decoration: none;
-  display: inline-block;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease;
-  margin-top: 7px;
-}
-
-.btn-login:hover {
-  background-color: #ff0000;
-  color: #1df800;
-}
-
-/* 중앙 정렬을 위해 flex-grow 활용 */
-.navbar-nav {
-  flex-grow: 1;
-  justify-content: center;
-}
-.navbar-nav .nav-link {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #523820;
+  height: 36px;
   margin-top: 10px;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 0 16px;
-  }
+/* 메뉴 중앙 정렬 */
+.header-center {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.nav-link {
+  color: #6b4f1d;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: #8a6534;
+}
+
+/* 로그인 버튼 */
+.header-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.authenticated form {
+  display: inline-block;
+  margin: 0;
+}
+
+.btn-login {
+  background-color: #93653B;
+  color: white;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-login:hover {
+  background-color: #7a4e2c;
+  color: #fff;
+}
+
+.unauthenticated {
+  display: inline-block;
 }

@@ -1,13 +1,10 @@
-<!-- Footer Fragment -->
-<footer th:fragment="footerFragment" class="footer">
+<footer class="footer">
   <div class="footer-container">
     <div class="row align-items-start">
       <!-- Logo Section -->
       <div class="col-md-4 col-lg-3">
         <div class="footer-logo">
-          <!-- Logo image using Thymeleaf -->
-          <img th:src="@{/images/common/seongsubean-logo.png}" alt="SeongsuBean Logo"
-               class="footer-logo-img">
+          <img src="/images/common/seongsubean-logo.png" alt="SeongsuBean Logo" class="footer-logo-img">
         </div>
       </div>
 
@@ -18,7 +15,7 @@
             <div class="col-md-6">
               <div class="company-name">이용약관</div>
               <div class="detail-row">㈜ SeongsuBean</div>
-              <div class="detail-row">주소 : 서울시특별시 금천구 가산디지털 1로 70 912호</div>
+              <div class="detail-row">주소 : 서울특별시 금천구 가산디지털 1로 70 912호</div>
               <div class="detail-row">전화번호 : 031-606-9304</div>
             </div>
             <div class="col-md-6">
@@ -30,11 +27,15 @@
             </div>
           </div>
           <div class="copyright">
-            Copyright © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span>
-            SeongsuBean All Rights Reserved.
+            Copyright © <span id="currentYear"></span> SeongsuBean All Rights Reserved.
           </div>
         </div>
       </div>
     </div>
   </div>
 </footer>
+
+<script>
+  // 현재 연도 자동 적용
+  document.getElementById('currentYear').textContent = new Date().getFullYear();
+</script>
