@@ -72,8 +72,20 @@ public class CafeService {
   }
 
   //상세 페이지 개요 카페 운영시간 조회
-  public List<OperationTime> getOperationTimes(Integer cafeId) {
+  public List<OperationTimeDTO> getOperationTimes(Integer cafeId) {
     List<OperationTime> operationTimes = operationTimeRepository.findAllByCafeId(cafeId);
+
+    List<OperationTimeDTO> operationTimeDTOList = new ArrayList<>();
+
+    for (OperationTime operationTime : operationTimes) {
+      OperationTimeDTO operationTimeDTO = OperationTimeDTO.builder()
+          .operationTimeId(operationTime.getOperationTimeId())
+          .cafeId(operationTime.getCafeId())
+          .openTime(String.valueOf(operationTime.getOpenTime()))
+          .closeTime(String.valueOf(operationTime.getCloseTime()))
+          .weekday(operationTime.getWeekday()).build();
+      operationTimeDTOList.add(operationTimeDTO);
+    }
 
     // 요일 순서 정의
     Map<String, Integer> dayOrder = Map.of(
@@ -82,13 +94,13 @@ public class CafeService {
     );
 
     // 요일 순서로 정렬
-    operationTimes.sort((a, b) -> {
+    operationTimeDTOList.sort((a, b) -> {
       int orderA = dayOrder.getOrDefault(a.getWeekday(), 8);
       int orderB = dayOrder.getOrDefault(b.getWeekday(), 8);
       return Integer.compare(orderA, orderB);
     });
 
-    return operationTimes;
+    return operationTimeDTOList;
   }
 
 

@@ -2,6 +2,7 @@ package com.oopsw.seongsubean.cafe.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,10 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class OperationTimeDTO {
 
+  private Integer operationTimeId;
   // 요일 (예: "월", "화", ...)
   private String weekday;
 
@@ -30,4 +33,5 @@ public class OperationTimeDTO {
    */
   @JsonFormat(pattern = "HH:mm")
   private String closeTime;
+  private Integer cafeId;
 }
