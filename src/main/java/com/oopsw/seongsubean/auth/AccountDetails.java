@@ -27,7 +27,7 @@ public class AccountDetails implements UserDetails, OAuth2User {
 
   @Override
   public String getName() {
-    return user.getEmail();
+    return user.getNickName();
   }
 
   @Override
@@ -71,5 +71,9 @@ public class AccountDetails implements UserDetails, OAuth2User {
 
   public UserDTO getUser() {
     return this.user;
+  }
+
+  public String getImage(){
+    return user.getImage();
   }
 }
