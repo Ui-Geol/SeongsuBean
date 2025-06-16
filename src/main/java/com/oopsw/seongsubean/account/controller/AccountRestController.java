@@ -3,15 +3,12 @@ package com.oopsw.seongsubean.account.controller;
 import com.oopsw.seongsubean.account.dto.UserDTO;
 import com.oopsw.seongsubean.account.service.AccountService;
 import com.oopsw.seongsubean.auth.AccountDetails;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -20,11 +17,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,60 +35,48 @@ public class AccountRestController {
     return ResponseEntity.ok().body(Map.of("message", "회원가입에 성공 하셨습니다."));
   }
 
-//  @GetMapping("/myPage")
-//  public Map<String,S> myPage(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
-//    String email = accountDetails.getUsername();
-//    UserDTO user = accountService.findByEmail(email);
-//    model.addAttribute("user", user);
-//
-//    return "account/my-page";
-//  }
+  @PostMapping("/checkPw")
+  public ResponseEntity<Map<String, Boolean>> checkPwAction(Authentication auth ,@RequestBody UserDTO userDTO) {
+    AccountDetails accountDetails = (AccountDetails) auth.getPrincipal();
+    return ResponseEntity.ok(Map.of(
+        "result", bCryptPasswordEncoder.matches(
+            userDTO.getPassword(), accountDetails.getUser().getPassword())));
+  }
+
+  @GetMapping("/myPage")
+  public UserDTO myPage(Authentication auth) {
+    AccountDetails user = (AccountDetails) auth.getPrincipal();
+    return user.getUser();
+  }
 
   @GetMapping("/editProfile")
-  public String editProfile(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
-    UserDTO user = accountDetails.getUser();
-    //OAuth2로 로그인 한 유저인지 확인
-    boolean isOAuth2 = user.isOauth();
-    model.addAttribute("isOAuth2User", isOAuth2);
-    model.addAttribute("user", user);
-    return "account/edit-profile";
+  public UserDTO editProfile(Authentication auth) {
+    AccountDetails user = (AccountDetails) auth.getPrincipal(); //위 코드와 중복돼서 함수화 필요
+    return user.getUser();
   }
 
   @PostMapping("/editProfile")
-  public String editProfileAction(@ModelAttribute UserDTO form, Model model) {
-    if (form.getNewPassword() != null && !form.getNewPassword().isEmpty()) {
-      // 비밀번호 암호화
-      String encoded = bCryptPasswordEncoder.encode(form.getNewPassword());
-      form.setNewPassword(encoded);
+  public ResponseEntity<Map<String, String>> editProfileAction(@RequestBody UserDTO user,Authentication auth) {
+    AccountDetails userDetails = (AccountDetails) auth.getPrincipal();
+    user.setEmail(userDetails.getUsername());
+    if (user.getNewPassword() != null && !user.getNewPassword().isBlank()) {
+      user.setNewPassword(bCryptPasswordEncoder.encode(user.getNewPassword()));
     }
-    accountService.setUserInfo(form);
-    UserDTO updatedUser = accountService.findByEmail(form.getEmail());
-    model.addAttribute("user", updatedUser);
-    model.addAttribute("editSuccess", true);
-    return "account/my-page";
-  }
-
-  @GetMapping("/checkPw")
-  public String checkPw(@AuthenticationPrincipal AccountDetails accountDetails, Model model) {
-    UserDTO user = accountDetails.getUser();
-    //OAuth2로 로그인 한 유저인지 확인
-    boolean isOAuth2 = user.isOauth();
-    model.addAttribute("isOAuth2User", isOAuth2);
-    model.addAttribute("user", user);
-    if(isOAuth2) {
-      return "redirect:/account/editProfile";
+    if (user.getNewNickName() != null && !user.getNewNickName().isBlank()) {
+      user.setNickName(user.getNewNickName());
     }
-    return "account/check-pw";
+    accountService.setUserInfo(user);
+    return ResponseEntity.ok(Map.of("message","정보를 수정하였습니다."));
   }
 
   @GetMapping("/myPost")
-  public String getMyPosts(
+  public Map<String, Object> getMyPosts(
           @RequestParam(defaultValue = "1") int page,
           @RequestParam(defaultValue = "10") int size,
-          Principal principal,
-          Model model) {
+          Authentication auth) {
 
-    String email = principal.getName();
+    UserDetails user = (UserDetails) auth.getPrincipal();
+    String email = user.getUsername();
     int offset = (page - 1) * size;
 
     // 페이징용 RowBounds 객체 사용
@@ -105,21 +87,18 @@ public class AccountRestController {
     int totalCount = accountService.countMyBoards(email);
     int totalPages = (int) Math.ceil((double) totalCount / size);
 
-    model.addAttribute("posts", posts);
-    model.addAttribute("currentPage", page);
-    model.addAttribute("totalPages", totalPages);
-    model.addAttribute("totalCount", totalCount);
-    return "account/my-post";
+    return Map.of("posts", posts, "currentPage", page,
+        "totalPages", totalPages, "totalCount", totalCount);
   }
 
   @GetMapping("/myReview")
-  public String myReview(
+  public Map<String, Object> getMyReviews(
           @RequestParam(defaultValue = "1") int page,
           @RequestParam(defaultValue = "10") int size,
-          Principal principal,
-          Model model) {
+      Authentication auth) {
 
-    String email = principal.getName();
+    UserDetails user = (UserDetails) auth.getPrincipal();
+    String email = user.getUsername();
     int offset = (page - 1) * size;
 
     // 페이징용 RowBounds 객체 사용
@@ -133,21 +112,18 @@ public class AccountRestController {
       totalPages = 1;
     }
 
-    model.addAttribute("reviews", reviews);
-    model.addAttribute("currentPage", page);
-    model.addAttribute("totalPages", totalPages);
-    model.addAttribute("totalCount", totalCount);
-    return "account/my-review";
+    return Map.of("posts", reviews, "currentPage", page,
+        "totalPages", totalPages, "totalCount", totalCount);
   }
 
   @GetMapping("/myCafe")
-  public String myCafe(
+  public Map<String, Object> getMyCafes(
           @RequestParam(defaultValue = "1") int page,
           @RequestParam(defaultValue = "4") int size,
-          Principal principal,
-          Model model) {
+      Authentication auth) {
 
-    String email = principal.getName();
+    UserDetails user = (UserDetails) auth.getPrincipal();
+    String email = user.getUsername();
     int offset = (page - 1) * size;
 
     // 페이징용 RowBounds 객체 사용
@@ -161,55 +137,26 @@ public class AccountRestController {
       totalPages = 1;
     }
 
-    model.addAttribute("cafes", cafes);
-    model.addAttribute("currentPage", page);
-    model.addAttribute("totalPages", totalPages);
-    model.addAttribute("totalCount", totalCount);
-    return "account/my-cafe";
+    return Map.of("posts", cafes, "currentPage", page,
+        "totalPages", totalPages, "totalCount", totalCount);
   }
 
   // 이메일 중복 체크
-  @GetMapping("/checkEmail")
-  public Map<String, Boolean> checkEmail(@RequestParam String email) {
-    boolean exists = accountService.existsEmail(email);
-    return Collections.singletonMap("exists", exists);
+  @PostMapping("/checkEmail")
+  public Map<String, Boolean> checkEmail(@RequestBody UserDTO user) {
+    return Map.of("result", accountService.existsEmail(user.getEmail()));
   }
 
   // 닉네임 중복 체크
-  @GetMapping("/checkNickname")
-  public Map<String, Boolean> checkNickname(@RequestParam String nickname) {
-    boolean exists = accountService.existsNickName(nickname);
-    return Collections.singletonMap("exists", exists);
-  }
-
-  // 비밀번호 체크
-  @PostMapping("/checkPw")
-  public ResponseEntity<?> checkPw(@RequestBody Map<String, String> body,@AuthenticationPrincipal AccountDetails accountDetails) {
-    String inputPassword = body.get("password");
-    String password = accountDetails.getUser().getPassword();
-    return ResponseEntity.ok(Map.of("success", bCryptPasswordEncoder.matches(inputPassword, password)));
+  @PostMapping("/checkNickname")
+  public Map<String, Boolean> checkNickname(@RequestBody UserDTO user) {
+    return Map.of("result", accountService.existsNickName(user.getNickName()));
   }
 
   @DeleteMapping("/deleteAccount")
-  public ResponseEntity<?> deleteAccount(
-      @AuthenticationPrincipal AccountDetails accountDetails,
-      HttpServletRequest request,
-      HttpServletResponse response) {
-    try {
-      String email = accountDetails.getUser().getEmail();
-      accountService.removeUser(email);
-
-      // 인증 로그아웃 처리
-      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-      if (auth != null) {
-        new SecurityContextLogoutHandler().logout(request, response, auth);
-      }
-
-      return ResponseEntity.ok().build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("삭제 실패: " + e.getMessage());
-    }
+  public Map<String, Boolean> deleteAccount(Authentication auth) {
+    AccountDetails user = (AccountDetails) auth.getPrincipal();
+    return Map.of("result",accountService.removeUser(user.getUsername()));
   }
 
   @PutMapping("/uploadImage")

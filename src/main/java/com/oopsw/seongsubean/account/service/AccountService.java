@@ -72,19 +72,10 @@ public class AccountService {
     return accountRepository.findByEmail(email);
   }
 
-
   public boolean existsNickName(String nickName) {
-    if(accountRepository.existsNickName(nickName)){
-      return true;
-    }
-    return false;
+    return accountRepository.existsNickName(nickName);
   }
   public boolean existsEmail(String email) {
-    if(accountRepository.existsEmail(email)){
-      return true;
-    }
-    return false;
+    return accountRepository.existsEmail(email);
   }
-
-
 }
