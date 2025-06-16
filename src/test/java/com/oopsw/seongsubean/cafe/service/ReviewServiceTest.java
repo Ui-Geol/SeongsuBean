@@ -38,7 +38,11 @@ public class ReviewServiceTest {
     reviewImageList.add(ReviewImage.builder().image("/images/cafe/Cafe5.png").reviewId(3).build());
     reviewImageList.add(ReviewImage.builder().image("/images/cafe/Cafe6.png").reviewId(3).build());
 
-    assertThat(reviewService.addReview(reviewDTO, reviewImageList)).isTrue();
+    TotalReviewDTO totalReviewDto = TotalReviewDTO.builder()
+        .reviewDTO(reviewDTO)
+        .reviewImage(reviewImageList)
+        .build();
+    assertThat(reviewService.addReview(totalReviewDto)).isTrue();
 
   }
 

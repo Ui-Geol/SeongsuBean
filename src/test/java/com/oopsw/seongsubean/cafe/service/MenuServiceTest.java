@@ -43,7 +43,7 @@ public class MenuServiceTest {
     assertThat(result).isTrue();
   }
 
-  //메뉴 조회
+  //전체 메뉴 조회
   @Test
   public void getMenuListTest() {
     Pageable pageable = PageRequest.of(0, 2); // 첫 번째 페이지, 사이즈 2
@@ -53,19 +53,28 @@ public class MenuServiceTest {
     assertThat(menuInfoList.size()).isEqualTo(2);
   }
 
+  //메뉴 조회
+  @Test
+  public void getMenuTest() {
+    MenuDTO menuDto = menuService.getMenu(3);
+
+    assertThat(menuDto).isNotNull();
+  }
+
   //메뉴 수정
   @Test
   public void setMenuTest() {
-    MenuInfo newMenuInfo = MenuInfo.builder()
+    MenuDTO newMenuDto = MenuDTO.builder()
         .menuCategory("커피")
         .menuName("씨쏠트커피")
         .image("/images/cafe/Cafe4.png")
         .price(4000)
         .description("씨솔트 커피는 짜요")
-        .cafeId(6)
+        .cafeId(368)
+        .menuId(174)
         .build();
 
-    assertThat(menuService.setMenu(3, newMenuInfo)).isTrue();
+    assertThat(menuService.setMenu(newMenuDto)).isTrue();
   }
 
   //메뉴 삭제
@@ -76,6 +85,5 @@ public class MenuServiceTest {
     Optional<MenuInfo> menuInfo = menuInfoRepository.findById(3);
     assertThat(menuInfo.isPresent()).isFalse();
   }
-
 
 }
