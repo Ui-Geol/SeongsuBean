@@ -29,6 +29,12 @@ public class AccountRestController {
   private final AccountService accountService;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+  @GetMapping("/getEmail")
+  public String getEmail(Authentication auth) {
+    AccountDetails details = (AccountDetails) auth.getPrincipal();
+    return details.getUsername();
+  }
+
   @PostMapping("/join")
   public ResponseEntity<Map<String, String>> joinAction(@RequestBody UserDTO user) {
     accountService.addUser(user);
