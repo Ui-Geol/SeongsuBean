@@ -1,9 +1,9 @@
 package com.oopsw.seongsubean.cafe.controller;
 
-import com.oopsw.seongsubean.cafe.domain.OperationTime;
 import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.cafe.dto.CafeHeaderDTO;
 import com.oopsw.seongsubean.cafe.dto.MenuDTO;
+import com.oopsw.seongsubean.cafe.dto.OperationTimeDTO;
 import com.oopsw.seongsubean.cafe.dto.TotalReviewDTO;
 import com.oopsw.seongsubean.cafe.service.CafeService;
 import com.oopsw.seongsubean.cafe.service.MenuService;
@@ -38,8 +38,8 @@ public class CafeController {
     model.addAttribute("cafeDTO", cafeDTO);
 
     //카페 영업 시간
-    List<OperationTime> operationTimes = cafeService.getOperationTimes(id);
-    model.addAttribute("operationTimes", operationTimes);
+    List<OperationTimeDTO> operationTimeDTOList = cafeService.getOperationTimes(id);
+    model.addAttribute("operationTimes", operationTimeDTOList);
 
     //카페 메뉴
     Pageable pageable = PageRequest.of(0, 100);

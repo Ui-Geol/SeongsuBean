@@ -2,9 +2,9 @@ package com.oopsw.seongsubean.cafe.controller;
 
 import com.oopsw.seongsubean.account.dto.UserDTO;
 import com.oopsw.seongsubean.auth.AccountDetails;
-import com.oopsw.seongsubean.cafe.domain.OperationTime;
 import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.cafe.dto.CafeHeaderDTO;
+import com.oopsw.seongsubean.cafe.dto.OperationTimeDTO;
 import com.oopsw.seongsubean.cafe.service.CafeService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -59,11 +59,30 @@ public class CafeRestController {
     CafeDTO cafeDto = cafeService.getCafeDTO(cafeId);
 
     //카페 영업 시간
-    List<OperationTime> operationTimes = cafeService.getOperationTimes(cafeId);
+    List<OperationTimeDTO> operationTimeDTOList = cafeService.getOperationTimes(cafeId);
 
     return ResponseEntity.ok(
-        Map.of("cafeHeaderDTO", cafeHeaderDTO, "cafe", cafeDto, "operationTimes", operationTimes));
+        Map.of("cafeHeaderDTO", cafeHeaderDTO, "cafe", cafeDto, "operationTimes",
+            operationTimeDTOList));
   }
+
+  @GetMapping("/{cafeId}/cafeHeader")
+  public ResponseEntity<Map<String, Object>> getCafeHeader(@PathVariable("cafeId") Integer cafeId) {
+    CafeHeaderDTO cafeHeaderDTO = cafeService.getCafeHeader(cafeId);
+
+    return ResponseEntity.status(HttpStatus.OK).body(Map.of("cafeHeaderDTO", cafeHeaderDTO));
+  }
+
+  @GetMapping("/{cafeId}/cafeDTO")
+  public ResponseEntity<Map<String, Object>> getCafeDTO(@PathVariable("cafeId") Integer cafeId) {
+    CafeDTO cafeDTO = cafeService.getCafeDTO(cafeId);
+    List<OperationTimeDTO> operationTimes = cafeService.getOperationTimes(cafeId);
+    cafeDTO.setOperationTimes(operationTimes);
+    System.out.println(operationTimes);
+
+    return ResponseEntity.status(HttpStatus.OK).body(Map.of("cafeDTO", cafeDTO));
+  }
+
 
   @PutMapping("/{cafeId}")
   public ResponseEntity<String> setCafe(@Valid @RequestBody CafeDTO cafeDto) {

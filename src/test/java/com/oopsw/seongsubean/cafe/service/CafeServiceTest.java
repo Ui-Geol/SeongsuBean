@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.oopsw.seongsubean.cafe.domain.OperationTime;
 import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.cafe.dto.CafeHeaderDTO;
+import com.oopsw.seongsubean.cafe.dto.OperationTimeDTO;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class CafeServiceTest {
 
   @Test
   public void successGetOperationTimesTest() {
-    List<OperationTime> operationTimes = cafeService.getOperationTimes(3);
+    List<OperationTimeDTO> operationTimes = cafeService.getOperationTimes(3);
     assertThat(operationTimes.size()).isEqualTo(6);
   }
 
@@ -101,7 +102,7 @@ public class CafeServiceTest {
     cafeService.setCafe(cafeDTO);
 
     CafeDTO updatedCafeDTO = cafeService.getCafeDTO(3);
-    List<OperationTime> updatedOperationtimes = cafeService.getOperationTimes(3);
+    List<OperationTimeDTO> updatedOperationtimes = cafeService.getOperationTimes(3);
 
     assertThat(updatedCafeDTO.getCafeName()).isEqualTo("할로카페");
     assertThat(updatedOperationtimes.size()).isEqualTo(0);
