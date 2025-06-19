@@ -28,17 +28,19 @@
 
   <insert id="addCafe" parameterType="com.oopsw.seongsubean.cafe.dto.CafeDTO">
     INSERT INTO CAFE_INFO (CAFE_NAME, ADDRESS, DETAIL_ADDRESS, ZIP_CODE, CALL_NUMBER, INTRODUCTION,
-                           MAIN_IMAGE, PAGE_CREATED_DATE, EMAIL)
+                           MAIN_IMAGE, PAGE_CREATED_DATE, EMAIL, STATUS)
     VALUES (#{cafeName}, #{address}, #{detailAddress}, #{zipCode}, #{callNumber}, #{introduction},
-            #{mainImage}, NOW(), #{email})
+            #{mainImage}, NOW(), #{email}, "운영중")
   </insert>
 
-  <select id="getCafeIdByCafeNameAndAddress" parameterType="com.oopsw.seongsubean.cafe.dto.CafeDTO"
+  <select id="getCafeIdByCafeNameAndAddressAndDetailAddress"
+    parameterType="com.oopsw.seongsubean.cafe.dto.CafeDTO"
     resultType="Integer">
     SELECT CAFE_ID
     from CAFE_INFO
     WHERE CAFE_NAME = #{cafeName}
       AND ADDRESS = #{address}
+      And DETAIL_ADDRESS = #{detailAddress}
   </select>
 
   <select id="getCafeHeaderByCafeId" parameterType="int"
