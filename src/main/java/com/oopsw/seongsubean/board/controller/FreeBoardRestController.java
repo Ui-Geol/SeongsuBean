@@ -78,10 +78,10 @@ public class FreeBoardRestController {
   }
 
 
-  @GetMapping("/api/freeboards/list")
+  @GetMapping("/api/freeboards/list/{page}/{size}")
   public ResponseEntity<Map<String, Object>> getFreeBoardList(
-      @RequestParam(defaultValue = "1") int page,
-      @RequestParam(defaultValue = "12") int size) {
+      @PathVariable int page,
+      @PathVariable int size) {
     int offset = (page - 1) * size;
     List<FreeBoardDTO> list = freeBoardService.getFreeBoardList(offset, size);
     int totalCount = freeBoardService.getTotalFreeBoardCount();
@@ -93,6 +93,7 @@ public class FreeBoardRestController {
     );
     return ResponseEntity.ok(result);
   }
+
 
   @GetMapping("/api/freeboards/detail/{id}")
   public ResponseEntity<?> getFreeBoardDetail(
@@ -205,18 +206,18 @@ public class FreeBoardRestController {
   }
 
   /* search */
-  @GetMapping("/api/freeboards/search")
+  @GetMapping("/api/freeboards/search/{type}/{keyword}/{page}/{size}")
   public ResponseEntity<Map<String, Object>> getFreeBoardListSearch(
-      @RequestParam("type") String type,
-      @RequestParam("keyword") String keyword,
-      @RequestParam("page") int page,
-      @RequestParam("size") int size) {
+      @PathVariable String type,
+      @PathVariable String keyword,
+      @PathVariable int page,
+      @PathVariable int size) {
     if (keyword == null || keyword.trim().isEmpty()) {
-      throw new IllegalArgumentException("검색어는 null이거나 공백일 수 없습니다."); //서비스는 간단하게 유지
+      throw new IllegalArgumentException("검색어는 null이거나 공백일 수 없습니다.");
     }
     List<FreeBoardDTO> all = freeBoardService.searchFreeBoard(type, keyword);
     int total = all.size();
-    int from = Math.min((page-1) * size, total);
+    int from = Math.min((page - 1) * size, total);
     int to = Math.min(from + size, total);
     List<FreeBoardDTO> paged = all.subList(from, to);
     return ResponseEntity.ok(Map.of(
@@ -225,4 +226,5 @@ public class FreeBoardRestController {
         "currentPage", page
     ));
   }
+
 }
