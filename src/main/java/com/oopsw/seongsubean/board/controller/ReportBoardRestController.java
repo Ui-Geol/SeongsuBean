@@ -37,30 +37,26 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/reportboards")
 public class ReportBoardRestController {
-
   private final ReportBoardService reportBoardService;
-
   public ReportBoardRestController(ReportBoardService reportBoardService) {
     this.reportBoardService = reportBoardService;
   }
-
   @PostMapping
   public ResponseEntity<?> addReportBoard(
-          @AuthenticationPrincipal AccountDetails accountDetails,
-          @RequestParam String title,
-          @RequestParam String content,
-          @RequestParam(required = false) List<MultipartFile> images) throws IOException {
+      @AuthenticationPrincipal AccountDetails accountDetails,
+      @RequestParam String title,
+      @RequestParam String content,
+      @RequestParam(required = false) List<MultipartFile> images) throws IOException {
     UserDTO user = accountDetails.getUser();
-    if (user == null) {
+    if(user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
     }
     String email = user.getEmail();
     ReportBoardDTO dto = ReportBoardDTO.builder()
-            .title(title)
-            .content(content)
-            .email(email)
-            .build();
-
+        .title(title)
+        .content(content)
+        .email(email)
+        .build();
     List<String> imagePaths = new ArrayList<>();
     if (images != null) {
       String uploadDir = new File("src/main/resources/static/images/upload/report/" + email).getAbsolutePath();
@@ -73,96 +69,86 @@ public class ReportBoardRestController {
           String originalFilename = file.getOriginalFilename();
           String newFilename = UUID.randomUUID() + "_" + originalFilename;
           Path filePath = uploadPath.resolve(newFilename);
-          file.transferTo(filePath.toFile());
-          imagePaths.add("images/upload/report/" + email + "/" + newFilename);
+          try {
+            file.transferTo(filePath.toFile());
+            imagePaths.add("/images/upload/report/" + email + "/" + newFilename);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
         }
       }
     }
     boolean success = reportBoardService.addReportBoard(dto, imagePaths);
     return ResponseEntity.ok(Map.of("success", success, "id", dto.getReportBoardId()));
   }
-
   @GetMapping("/list")
   public ResponseEntity<Map<String, Object>> getReportBoardList(
-          @RequestParam(defaultValue = "1") int page,
-          @RequestParam(defaultValue = "7") int size) {
-    int offset = (page - 1) * size;
+      @RequestParam(defaultValue = "1", required = false) int page,
+      @RequestParam(defaultValue = "7", required = false) int size) {
+    int offset=(page-1)*size;
     List<ReportBoardDTO> list = reportBoardService.getReportBoardList(offset, size);
     int totalCount = reportBoardService.getTotalReportBoardCount();
-    int totalPages = (int) Math.ceil((double) totalCount / size);
-    return ResponseEntity.ok(Map.of(
-            "content", list,
-            "currentPage", page,
-            "totalPages", totalPages
-    ));
+    int totalPages = (int)Math.ceil((double)totalCount/size);
+    Map<String, Object> result = Map.of(
+        "content", list,
+        "currentPage", page,
+        "totalPages", totalPages);
+    return ResponseEntity.ok(result);
   }
-
-  @GetMapping("/detail")
-  public ResponseEntity<?> getReportBoardDetail(@RequestParam("id") Integer id) {
+  @GetMapping("/detail/{id}")
+  public ResponseEntity<?> getReportBoardDetail(@PathVariable("id") Integer id) {
     ReportBoardDTO dto = reportBoardService.getReportBoardDetail(id);
     if (dto == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
-              .body(Map.of("error", "해당 게시글이 존재하지 않습니다."));
+          .body(Map.of("error", "해당 게시글이 존재하지 않습니다."));
     }
     return ResponseEntity.ok(dto);
   }
-
-  @PutMapping("/post")
-  public ResponseEntity<Map<String, Object>> setReportBoard(
-          @AuthenticationPrincipal AccountDetails accountDetails,
-          @RequestParam("id") Integer id,
-          @RequestBody ReportBoardDTO dto) {
-    if (accountDetails == null || accountDetails.getUser() == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(Map.of("updated", false, "message", "로그인이 필요합니다."));
-    }
-
-    String loginEmail = accountDetails.getUser().getEmail();
-    String postOwnerEmail = reportBoardService.getReportBoardOwnerEmail(id);
-    if (!loginEmail.equals(postOwnerEmail)) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(Map.of("updated", false, "message", "본인의 게시글만 수정할 수 있습니다."));
-    }
-
-    dto.setReportBoardId(id);
-    boolean result = reportBoardService.setReportBoard(dto, List.of());
-    return ResponseEntity.ok(Map.of("updated", result));
-  }
-
-  @DeleteMapping
-  public ResponseEntity<?> deleteReportBoard(
-          @AuthenticationPrincipal AccountDetails accountDetails,
-          @RequestParam("id") Integer id) {
-    if (accountDetails == null || accountDetails.getUser() == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(Map.of("deleted", false, "message", "로그인이 필요합니다."));
-    }
-
-    String loginEmail = accountDetails.getUser().getEmail();
-    String ownerEmail = reportBoardService.getReportBoardOwnerEmail(id);
-    if (!loginEmail.equals(ownerEmail)) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(Map.of("deleted", false, "message", "본인의 게시글만 삭제할 수 있습니다."));
-    }
-
-    boolean result = reportBoardService.removeReportBoard(id);
-    return ResponseEntity.ok(Map.of("deleted", result));
-  }
-
   @GetMapping("/auth/email")
   public ResponseEntity<?> getCurrentUserEmail(@AuthenticationPrincipal AccountDetails accountDetails) {
     if (accountDetails == null) {
       return ResponseEntity.ok(Map.of(
-              "success", false,
-              "email", "",
-              "message", "비회원입니다."
+          "success", false,
+          "email", "",
+          "message", "비회원입니다."
       ));
     }
     String email = accountDetails.getUser().getEmail();
     return ResponseEntity.ok(Map.of(
-            "success", true,
-            "email", email
+        "success", true,
+        "email", email
     ));
   }
+  @PutMapping("/post/{id}")
+  public ResponseEntity<Map<String, Object>> setReportBoard(@AuthenticationPrincipal AccountDetails accountDetails,
+      @PathVariable("id") Integer id,
+      @RequestBody ReportBoardDTO dto) {
+    if(accountDetails.getUser() == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false,"message","로그인이 필요합니다"));
+    }
+    String loginEmail = accountDetails.getUser().getEmail();
+    String reportBoardOwnerEmail = reportBoardService.getReportBoardOwnerEmail(id);
+    if(!loginEmail.equals(reportBoardOwnerEmail)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+          .body(Map.of("updated",false,"message","본인의 게시글만 수정할 수 있습니다"));
+    }
+    dto.setReportBoardId(id);
+    boolean result = reportBoardService.setReportBoard(dto, List.of());
+    return ResponseEntity.ok(Map.of("updated", result,"id", result));
+  }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteReportBoard(@AuthenticationPrincipal AccountDetails accountDetails,
+      @PathVariable("id") Integer id) {
+    if(accountDetails.getUser() == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false,"message","로그인이 필요합니다"));
+    }
+    String loginEmail = accountDetails.getUser().getEmail();
+    String reportBoardOwnerEmail = reportBoardService.getReportBoardOwnerEmail(id);
+    if (!loginEmail.equals(reportBoardOwnerEmail)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+          .body(Map.of("deleted", false, "message", "본인의 게시글만 삭제할 수 있습니다."));
+    }
+    boolean result = reportBoardService.removeReportBoard(id);
+    return ResponseEntity.ok(Map.of("deleted", result));
+  }
 }
-

@@ -28,37 +28,30 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/freeboards")
 public class FreeBoardRestController {
-
   private final FreeBoardService freeBoardService;
-
   public FreeBoardRestController(FreeBoardService freeBoardService) {
     this.freeBoardService = freeBoardService;
   }
 
-  // 1. 게시글 등록
-  @PostMapping
+  @PostMapping("/api/freeboards")
   public ResponseEntity<?> addFreeBoard(
-          @AuthenticationPrincipal AccountDetails accountDetails,
-          @RequestParam String title,
-          @RequestParam String content,
-          @RequestParam String headWord,
-          @RequestParam(required = false) List<MultipartFile> images) throws IOException {
-
+      @AuthenticationPrincipal AccountDetails accountDetails,
+      @RequestParam String title,
+      @RequestParam String content,
+      @RequestParam String headWord,
+      @RequestParam(required = false) List<MultipartFile> images) throws IOException {
     UserDTO user = accountDetails.getUser();
     if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
     }
-
     String email = user.getEmail();
     FreeBoardDTO dto = FreeBoardDTO.builder()
-            .title(title)
-            .content(content)
-            .email(email)
-            .headWord(headWord)
-            .build();
-
+        .title(title)
+        .content(content)
+        .email(email)
+        .headWord(headWord)
+        .build();
     List<String> imagePaths = new ArrayList<>();
     if (images != null) {
       String uploadDir = new File("src/main/resources/static/images/upload/free/" + email).getAbsolutePath();
@@ -66,183 +59,170 @@ public class FreeBoardRestController {
       if (!Files.exists(uploadPath)) {
         Files.createDirectories(uploadPath);
       }
-
       for (MultipartFile file : images) {
         if (!file.isEmpty()) {
           String originalFilename = file.getOriginalFilename();
           String newFilename = UUID.randomUUID() + "_" + originalFilename;
           Path filePath = uploadPath.resolve(newFilename);
-          file.transferTo(filePath.toFile());
-          imagePaths.add("images/upload/free/" + email + "/" + newFilename);
+          try {
+            file.transferTo(filePath.toFile());
+            imagePaths.add("/images/upload/free/" + email + "/" + newFilename);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
         }
       }
     }
-
     boolean success = freeBoardService.addFreeBoard(dto, imagePaths);
     return ResponseEntity.ok(Map.of("success", success, "id", dto.getFreeBoardId()));
   }
 
-  // 2. 게시글 목록
-  @GetMapping("/list")
-  public ResponseEntity<Map<String, Object>> getFreeBoardList(
-          @RequestParam(defaultValue = "1") int page,
-          @RequestParam(defaultValue = "12") int size) {
 
+  @GetMapping("/api/freeboards/list")
+  public ResponseEntity<Map<String, Object>> getFreeBoardList(
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "12") int size) {
     int offset = (page - 1) * size;
     List<FreeBoardDTO> list = freeBoardService.getFreeBoardList(offset, size);
     int totalCount = freeBoardService.getTotalFreeBoardCount();
     int totalPages = (int) Math.ceil((double) totalCount / size);
-
-    return ResponseEntity.ok(Map.of(
-            "content", list,
-            "currentPage", page,
-            "totalPages", totalPages
-    ));
+    Map<String, Object> result = Map.of(
+        "content", list,
+        "currentPage", page,
+        "totalPages", totalPages
+    );
+    return ResponseEntity.ok(result);
   }
 
-  // 3. 게시글 상세조회 (PathVariable → QueryString)
-  @GetMapping("/detail")
-  public ResponseEntity<?> getFreeBoardDetail(@RequestParam("id") Integer id) {
+  @GetMapping("/api/freeboards/detail/{id}")
+  public ResponseEntity<?> getFreeBoardDetail(
+      @PathVariable("id") Integer id) {
     FreeBoardDTO dto = freeBoardService.getFreeBoardDetail(id);
     if (dto == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
-              .body(Map.of("error", "해당 게시글이 존재하지 않습니다."));
+          .body(Map.of("error", "해당 게시글이 존재하지 않습니다."));
     }
     return ResponseEntity.ok(dto);
   }
 
-  // 4. 게시글 수정 (PathVariable → QueryString)
-  @PutMapping("/post")
+  @PutMapping("/api/freeboards/post/{id}")
   public ResponseEntity<Map<String, Object>> setFreeBoard(
-          @AuthenticationPrincipal AccountDetails accountDetails,
-          @RequestParam("id") Integer id,
-          @RequestBody FreeBoardDTO dto) {
-
+      @AuthenticationPrincipal AccountDetails accountDetails,
+      @PathVariable("id") Integer id,
+      @RequestBody FreeBoardDTO dto) {
     if (accountDetails == null || accountDetails.getUser() == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(Map.of("updated", false, "message", "로그인이 필요합니다."));
+          .body(Map.of("updated", false, "message", "로그인이 필요합니다."));
     }
-
     String loginEmail = accountDetails.getUser().getEmail();
     String postOwnerEmail = freeBoardService.getFreeBoardOwnerEmail(id);
     if (!loginEmail.equals(postOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(Map.of("updated", false, "message", "본인의 게시글만 수정할 수 있습니다."));
+          .body(Map.of("updated", false, "message", "본인의 게시글만 수정할 수 있습니다."));
     }
-
     dto.setFreeBoardId(id);
     boolean result = freeBoardService.setFreeBoard(dto, List.of());
     return ResponseEntity.ok(Map.of("updated", result));
   }
 
-  // 5. 게시글 삭제 (PathVariable → QueryString)
-  @DeleteMapping
+  @DeleteMapping("/api/{id}")
   public ResponseEntity<?> deleteFreeBoard(
-          @AuthenticationPrincipal AccountDetails accountDetails,
-          @RequestParam("id") Integer id) {
-
+      @AuthenticationPrincipal AccountDetails accountDetails,
+      @PathVariable("id") Integer id) {
     if (accountDetails == null || accountDetails.getUser() == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(Map.of("deleted", false, "message", "로그인이 필요합니다."));
+          .body(Map.of("deleted", false, "message", "로그인이 필요합니다."));
     }
-
     String loginEmail = accountDetails.getUser().getEmail();
     String postOwnerEmail = freeBoardService.getFreeBoardOwnerEmail(id);
     if (!loginEmail.equals(postOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(Map.of("deleted", false, "message", "본인의 게시글만 삭제할 수 있습니다."));
+          .body(Map.of("deleted", false, "message", "본인의 게시글만 삭제할 수 있습니다."));
     }
-
     boolean result = freeBoardService.removeFreeBoard(id);
     return ResponseEntity.ok(Map.of("deleted", result));
   }
 
-  // 6. 댓글 등록
-  @PostMapping("/comment")
+  /* comment */
+  @PostMapping("/api/freeboards/comment")
   public ResponseEntity<?> addComment(
-          @AuthenticationPrincipal AccountDetails accountDetails,
-          @RequestBody Map<String, Object> requestBody) {
-
+      @AuthenticationPrincipal AccountDetails accountDetails,
+      @RequestBody Map<String, Object> requestBody) {
     if (accountDetails == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-              .body(Map.of("success", false, "message", "로그인이 필요합니다."));
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
-
     String comment = (String) requestBody.get("comment");
     Integer freeBoardId = (Integer) requestBody.get("freeBoardId");
+
     String email = accountDetails.getUser().getEmail();
-
     FreeBoardCommentDTO dto = FreeBoardCommentDTO.builder()
-            .content(comment)
-            .freeBoardId(freeBoardId)
-            .email(email)
-            .build();
-
+        .content(comment)
+        .freeBoardId(freeBoardId)
+        .email(email)
+        .build();
     boolean result = freeBoardService.addFreeBoardComment(dto);
     return ResponseEntity.ok(Map.of("success", result));
   }
 
-  // 7. 댓글 목록 (PathVariable은 유지해도 무방함)
-  @GetMapping("/comment")
-  public ResponseEntity<List<FreeBoardCommentDTO>> getComments(@RequestParam("id") Integer boardId) {
-    return ResponseEntity.ok(freeBoardService.getFreeBoardComments(boardId));
+  @GetMapping("/api/freeboards/comment/{id}")
+  public ResponseEntity<List<FreeBoardCommentDTO>> getComments(
+      @PathVariable("id") Integer boardId) {
+    List<FreeBoardCommentDTO> comments = freeBoardService.getFreeBoardComments(boardId);
+    return ResponseEntity.ok(comments);
   }
 
-  // 8. 댓글 삭제 (PathVariable → QueryString)
-  @DeleteMapping("/comment")
-  public ResponseEntity<?> removeComment(
-          @RequestParam("id") Integer commentId,
-          @AuthenticationPrincipal AccountDetails accountDetails) {
+  @GetMapping("/api/freeboards/auth/email")
+  public ResponseEntity<?> getCurrentUserEmail(
+      @AuthenticationPrincipal AccountDetails accountDetails) {
+    if (accountDetails == null) {
+      return ResponseEntity.ok(Map.of(
+          "success", false,
+          "email", "",
+          "message", "비회원입니다."
+      ));
+    }
+    String email = accountDetails.getUser().getEmail();
+    return ResponseEntity.ok(Map.of(
+        "success", true,
+        "email", email
+    ));
+  }
 
+  @DeleteMapping("/api/freeboards/comment/{commentId}")
+  public ResponseEntity<?> removeComment(
+      @PathVariable("commentId") Integer freeBoardCommentId,
+      @AuthenticationPrincipal AccountDetails accountDetails) {
     if (accountDetails == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
-
     String loginEmail = accountDetails.getUser().getEmail();
-    String commentOwnerEmail = freeBoardService.getCommentOwnerEmail(commentId);
+    String commentOwnerEmail = freeBoardService.getCommentOwnerEmail(freeBoardCommentId);
     if (!loginEmail.equals(commentOwnerEmail)) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN)
-              .body(Map.of("success", false, "message", "본인의 댓글만 삭제할 수 있습니다."));
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("success", false, "message", "본인의 댓글만 삭제할 수 있습니다."));
     }
-
-    boolean result = freeBoardService.removeFreeBoardComment(commentId);
+    boolean result = freeBoardService.removeFreeBoardComment(freeBoardCommentId);
     return ResponseEntity.ok(Map.of("success", result));
   }
 
-  // 9. 현재 사용자 이메일 조회
-  @GetMapping("/auth/email")
-  public ResponseEntity<?> getCurrentUserEmail(@AuthenticationPrincipal AccountDetails accountDetails) {
-    if (accountDetails == null) {
-      return ResponseEntity.ok(Map.of("success", false, "email", "", "message", "비회원입니다."));
-    }
-
-    return ResponseEntity.ok(Map.of("success", true, "email", accountDetails.getUser().getEmail()));
-  }
-
-  // 10. 검색 기능
-  @GetMapping("/search")
+  /* search */
+  @GetMapping("/api/freeboards/search")
   public ResponseEntity<Map<String, Object>> getFreeBoardListSearch(
-          @RequestParam("type") String type,
-          @RequestParam("keyword") String keyword,
-          @RequestParam("page") int page,
-          @RequestParam("size") int size) {
-
+      @RequestParam("type") String type,
+      @RequestParam("keyword") String keyword,
+      @RequestParam("page") int page,
+      @RequestParam("size") int size) {
     if (keyword == null || keyword.trim().isEmpty()) {
-      throw new IllegalArgumentException("검색어는 null이거나 공백일 수 없습니다.");
+      throw new IllegalArgumentException("검색어는 null이거나 공백일 수 없습니다."); //서비스는 간단하게 유지
     }
-
     List<FreeBoardDTO> all = freeBoardService.searchFreeBoard(type, keyword);
-
     int total = all.size();
-    int from = Math.min((page - 1) * size, total);
+    int from = Math.min((page-1) * size, total);
     int to = Math.min(from + size, total);
     List<FreeBoardDTO> paged = all.subList(from, to);
-
     return ResponseEntity.ok(Map.of(
-            "content", paged,
-            "totalPages", (int) Math.ceil((double) total / size),
-            "currentPage", page
+        "content", paged,
+        "totalPages", (int) Math.ceil((double) total / size),
+        "currentPage", page
     ));
   }
 }
-
