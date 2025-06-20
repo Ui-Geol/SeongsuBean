@@ -44,9 +44,10 @@ public class CafeRespositoryTest {
 
   @Test
   public void getCafeIdByCafeNameAndAddressTest() {
-    CafeDTO cafe = CafeDTO.builder().cafeName("대림창고").address("서울특별시 성동구 성수이로 78").build();
+    CafeDTO cafe = CafeDTO.builder().cafeName("대림창고").address("서울특별시 성동구 성수이로 78")
+        .detailAddress("1층").build();
 
-    assertThat(cafeRepository.getCafeIdByCafeNameAndAddress(cafe)).isEqualTo(1);
+    assertThat(cafeRepository.getCafeIdByCafeNameAndAddressAndDetailAddress(cafe)).isEqualTo(1);
   }
 
   @Test

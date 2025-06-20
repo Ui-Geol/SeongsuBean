@@ -21,41 +21,53 @@ public class CafeService {
   private final CafeRepository cafeRepository;
   private final OperationTimeRepository operationTimeRepository;
 
-  //카페 생성
   @Transactional
   public Integer addCafe(CafeDTO cafeDTO) {
     try {
       boolean cafeResult = cafeRepository.addCafe(cafeDTO);
       if (!cafeResult) {
-        return null;
+        throw new RuntimeException("카페 정보 저장 실패");
       }
 
-      Integer cafeId = cafeRepository.getCafeIdByCafeNameAndAddress(cafeDTO);
+      Integer cafeId = cafeRepository.getCafeIdByCafeNameAndAddressAndDetailAddress(cafeDTO);
+      if (cafeId == null) {
+        throw new RuntimeException("카페 ID 조회 실패");
+      }
+
+      List<OperationTimeDTO> operationTimeDTOs = cafeDTO.getOperationTimes();
+      if (operationTimeDTOs == null || operationTimeDTOs.isEmpty()) {
+        throw new RuntimeException("영업시간 정보가 없습니다");
+      }
 
       List<OperationTime> operationTimes = new ArrayList<>();
-
-      for (OperationTimeDTO operationTimeDTO : cafeDTO.getOperationTimes()) {
-        OperationTime operationTime = OperationTime.builder()
-            .weekday(operationTimeDTO.getWeekday())
-            .openTime(LocalTime.parse(operationTimeDTO.getOpenTime()))
-            .closeTime(LocalTime.parse(operationTimeDTO.getCloseTime())).build();
-
-        operationTimes.add(operationTime);
-
+      for (OperationTimeDTO operationTimeDTO : operationTimeDTOs) {
+        try {
+          if (operationTimeDTO == null) {
+            continue;
+          }
+          OperationTime operationTime = OperationTime.builder()
+              .weekday(operationTimeDTO.getWeekday())
+              .openTime(LocalTime.parse(operationTimeDTO.getOpenTime()))
+              .closeTime(LocalTime.parse(operationTimeDTO.getCloseTime()))
+              .build();
+          operationTime.setCafeId(cafeId);
+          operationTimes.add(operationTime);
+        } catch (Exception e) {
+          throw new RuntimeException("영업시간 파싱 오류: " + e.getMessage(), e);
+        }
       }
 
-      if (operationTimes != null && !operationTimes.isEmpty()) {
-        operationTimes.forEach(operationTime -> {
-          if (operationTime != null) {
-            operationTime.setCafeId(cafeId);
-          }
-        });
+      if (!operationTimes.isEmpty()) {
         operationTimeRepository.saveAll(operationTimes);
       }
+
+      System.out.println(cafeId);
 
       return cafeId;
 
     } catch (Exception e) {
+      // 로그 남기기
+      System.err.println("카페 저장 중 오류: " + e.getMessage());
       throw new RuntimeException("카페 저장 중 오류가 발생했습니다: " + e.getMessage(), e);
     }
   }

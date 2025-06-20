@@ -12,7 +12,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,10 +31,11 @@ public class CafeRestController {
 
   @PostMapping
   public ResponseEntity<?> addCafe(
-      @AuthenticationPrincipal AccountDetails accountDetails,
+      Authentication auth,
       @Valid @RequestBody CafeDTO cafeDto) {
 
-    UserDTO userDTO = accountDetails.getUser();
+    UserDTO userDTO = ((AccountDetails) auth.getPrincipal()).getUser();
+
     if (userDTO == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다");
     }
@@ -42,8 +43,12 @@ public class CafeRestController {
     cafeDto.setEmail(userDTO.getEmail());
     cafeDto.setMainImage("/images/cafe/" + cafeDto.getMainImage());
 
+    System.out.println(cafeDto);
     try {
-      int cafeId = cafeService.addCafe(cafeDto);
+      Integer cafeId = cafeService.addCafe(cafeDto);
+      if (cafeId == null) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카페 생성이 실패하였습니다");
+      }
       return ResponseEntity.status(HttpStatus.CREATED).body(cafeId);
     } catch (RuntimeException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카페 생성이 실패하였습니다");

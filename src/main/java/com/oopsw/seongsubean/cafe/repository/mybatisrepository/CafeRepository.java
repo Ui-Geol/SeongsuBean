@@ -14,7 +14,7 @@ public interface CafeRepository {
 
   Boolean addCafe(CafeDTO cafe);
 
-  Integer getCafeIdByCafeNameAndAddress(CafeDTO cafe);
+  Integer getCafeIdByCafeNameAndAddressAndDetailAddress(CafeDTO cafe);
 
   CafeHeaderDTO getCafeHeaderByCafeId(int cafeId);
 
