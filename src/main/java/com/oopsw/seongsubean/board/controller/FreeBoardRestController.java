@@ -22,6 +22,7 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +37,12 @@ public class FreeBoardRestController {
 
   @PostMapping("/api/freeboards")
   public ResponseEntity<?> addFreeBoard(
-      @AuthenticationPrincipal AccountDetails accountDetails,
+      Authentication auth,
       @RequestParam String title,
       @RequestParam String content,
       @RequestParam String headWord,
       @RequestParam(required = false) List<MultipartFile> images) throws IOException {
-    UserDTO user = accountDetails.getUser();
+    UserDTO user = ((AccountDetails) auth.getPrincipal()).getUser();
     if (user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
     }
@@ -108,14 +109,14 @@ public class FreeBoardRestController {
 
   @PutMapping("/api/freeboards/post/{id}")
   public ResponseEntity<Map<String, Object>> setFreeBoard(
-      @AuthenticationPrincipal AccountDetails accountDetails,
+      Authentication auth,
       @PathVariable("id") Integer id,
       @RequestBody FreeBoardDTO dto) {
-    if (accountDetails == null || accountDetails.getUser() == null) {
+    if (auth == null || !(auth.getPrincipal() instanceof AccountDetails)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
           .body(Map.of("updated", false, "message", "로그인이 필요합니다."));
     }
-    String loginEmail = accountDetails.getUser().getEmail();
+    String loginEmail = ((AccountDetails) auth.getPrincipal()).getUser().getEmail();
     String postOwnerEmail = freeBoardService.getFreeBoardOwnerEmail(id);
     if (!loginEmail.equals(postOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -128,13 +129,13 @@ public class FreeBoardRestController {
 
   @DeleteMapping("/api/{id}")
   public ResponseEntity<?> deleteFreeBoard(
-      @AuthenticationPrincipal AccountDetails accountDetails,
+      Authentication auth,
       @PathVariable("id") Integer id) {
-    if (accountDetails == null || accountDetails.getUser() == null) {
+    if (auth == null || !(auth.getPrincipal() instanceof AccountDetails)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
           .body(Map.of("deleted", false, "message", "로그인이 필요합니다."));
     }
-    String loginEmail = accountDetails.getUser().getEmail();
+    String loginEmail =  ((AccountDetails) auth.getPrincipal()).getUser().getEmail();
     String postOwnerEmail = freeBoardService.getFreeBoardOwnerEmail(id);
     if (!loginEmail.equals(postOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -147,15 +148,15 @@ public class FreeBoardRestController {
   /* comment */
   @PostMapping("/api/freeboards/comment")
   public ResponseEntity<?> addComment(
-      @AuthenticationPrincipal AccountDetails accountDetails,
+      Authentication auth,
       @RequestBody Map<String, Object> requestBody) {
-    if (accountDetails == null) {
+    if (auth == null || !(auth.getPrincipal() instanceof AccountDetails)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
     String comment = (String) requestBody.get("comment");
     Integer freeBoardId = (Integer) requestBody.get("freeBoardId");
 
-    String email = accountDetails.getUser().getEmail();
+    String email = ((AccountDetails) auth.getPrincipal()).getUser().getEmail();
     FreeBoardCommentDTO dto = FreeBoardCommentDTO.builder()
         .content(comment)
         .freeBoardId(freeBoardId)

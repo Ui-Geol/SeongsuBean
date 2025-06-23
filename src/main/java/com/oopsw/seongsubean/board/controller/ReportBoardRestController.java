@@ -21,6 +21,7 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,11 +44,11 @@ public class ReportBoardRestController {
   }
   @PostMapping
   public ResponseEntity<?> addReportBoard(
-      @AuthenticationPrincipal AccountDetails accountDetails,
+      Authentication auth,
       @RequestParam String title,
       @RequestParam String content,
       @RequestParam(required = false) List<MultipartFile> images) throws IOException {
-    UserDTO user = accountDetails.getUser();
+    UserDTO user = ((AccountDetails) auth.getPrincipal()).getUser();
     if(user == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
     }
@@ -105,7 +106,8 @@ public class ReportBoardRestController {
     return ResponseEntity.ok(dto);
   }
   @GetMapping("/auth/email")
-  public ResponseEntity<?> getCurrentUserEmail(@AuthenticationPrincipal AccountDetails accountDetails) {
+  public ResponseEntity<?> getCurrentUserEmail(
+          @AuthenticationPrincipal AccountDetails accountDetails) {
     if (accountDetails == null) {
       return ResponseEntity.ok(Map.of(
           "success", false,
@@ -120,13 +122,14 @@ public class ReportBoardRestController {
     ));
   }
   @PutMapping("/post/{id}")
-  public ResponseEntity<Map<String, Object>> setReportBoard(@AuthenticationPrincipal AccountDetails accountDetails,
-      @PathVariable("id") Integer id,
-      @RequestBody ReportBoardDTO dto) {
-    if(accountDetails.getUser() == null) {
+  public ResponseEntity<Map<String, Object>> setReportBoard(
+          Authentication auth,
+          @PathVariable("id") Integer id,
+          @RequestBody ReportBoardDTO dto) {
+    if(auth == null || !(auth.getPrincipal() instanceof AccountDetails)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false,"message","로그인이 필요합니다"));
     }
-    String loginEmail = accountDetails.getUser().getEmail();
+    String loginEmail = ((AccountDetails) auth.getPrincipal()).getUser().getEmail();
     String reportBoardOwnerEmail = reportBoardService.getReportBoardOwnerEmail(id);
     if(!loginEmail.equals(reportBoardOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -137,12 +140,13 @@ public class ReportBoardRestController {
     return ResponseEntity.ok(Map.of("updated", result,"id", result));
   }
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteReportBoard(@AuthenticationPrincipal AccountDetails accountDetails,
-      @PathVariable("id") Integer id) {
-    if(accountDetails.getUser() == null) {
+  public ResponseEntity<?> deleteReportBoard(
+          Authentication auth,
+          @PathVariable("id") Integer id) {
+    if(auth == null || !(auth.getPrincipal() instanceof AccountDetails)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false,"message","로그인이 필요합니다"));
     }
-    String loginEmail = accountDetails.getUser().getEmail();
+    String loginEmail = ((AccountDetails) auth.getPrincipal()).getUser().getEmail();
     String reportBoardOwnerEmail = reportBoardService.getReportBoardOwnerEmail(id);
     if (!loginEmail.equals(reportBoardOwnerEmail)) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
