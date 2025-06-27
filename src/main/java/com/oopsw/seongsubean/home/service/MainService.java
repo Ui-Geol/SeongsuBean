@@ -17,8 +17,9 @@ public class MainService {
   /**
    * 메인 페이지 카드 뷰에 필요한 카페 리스트 조회
    */
-  public List<CafeDTO> getMainCardView() {
-    return mainRepository.getMainCardView();
+  public List<CafeDTO> getMainCardView(int page) {
+    int offset = Math.max((page - 1) * 4, 0);
+    return mainRepository.getMainCardView(offset);
   }
   /**
 
