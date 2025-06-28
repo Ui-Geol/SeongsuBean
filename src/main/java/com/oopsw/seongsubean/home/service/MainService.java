@@ -2,6 +2,7 @@ package com.oopsw.seongsubean.home.service;
 
 import com.oopsw.seongsubean.cafe.dto.CafeDTO;
 import com.oopsw.seongsubean.cafe.dto.RankingDTO;
+import com.oopsw.seongsubean.home.dto.CafeAddressDTO;
 import com.oopsw.seongsubean.home.dto.CafeInfoDTO;
 import com.oopsw.seongsubean.home.repository.MainRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class MainService {
     int offset = Math.max((page - 1) * 4, 0);
     return mainRepository.getMainCardView(offset);
   }
-  /**
 
+  /**
    * 카페 별점 랭킹 리스트 조회
    */
   public List<RankingDTO> getRanking() {
@@ -30,30 +31,26 @@ public class MainService {
   }
 
   /**
-   * 카페명으로 정확히 일치하는 카페 이름 조회
+   * 카페명으로 정확히 일치하는 카페 정보 조회 (수정)
    */
-  public List<String> getSearchCafeName(String cafeName) {
+  public List<CafeAddressDTO> getSearchCafeName(String cafeName) {
     return mainRepository.getSearchCafeName(cafeName);
   }
 
   /**
-   * 메뉴 카테고리에 해당하는 카페들의 주소 목록 조회
+   * 메뉴 카테고리에 해당하는 카페들의 정보 조회 (수정)
    *
    * @param menuCategory 메뉴 카테고리 (예: "빵")
-   * @return [CAFE_ID, ADDRESS, DETAIL_ADDRESS] 를 합친 문자열 리스트
+   * @return cafeId와 address를 포함한 CafeAddressDTO 리스트
    */
-  public List<String> getSearchCafeMenu(String menuCategory) {
+  public List<CafeAddressDTO> getSearchCafeMenu(String menuCategory) {
     return mainRepository.getSearchCafeMenu(menuCategory);
   }
 
   /**
-   * 메뉴명을 카테고리처럼 받아, 그 메뉴를 판매하는 카페 주소들 조회
+   * 메뉴명을 카테고리처럼 받아, 그 메뉴를 판매하는 카페 정보들 조회 (수정)
    */
-  public List<String> getEachMenu(String menuName) {
+  public List<CafeAddressDTO> getEachMenu(String menuName) {
     return mainRepository.getEachMenu(menuName);
   }
-
-
-
-
 }

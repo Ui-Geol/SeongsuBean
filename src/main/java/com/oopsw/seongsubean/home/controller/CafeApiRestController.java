@@ -1,5 +1,6 @@
 package com.oopsw.seongsubean.home.controller;
 
+import com.oopsw.seongsubean.home.dto.CafeAddressDTO;
 import com.oopsw.seongsubean.home.service.MainService;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -20,22 +21,23 @@ public class CafeApiRestController {
   }
 
   @GetMapping("/search-by-menu")
-  public List<String> getEachMenu(@RequestParam String menuName) {
+  public List<CafeAddressDTO> getEachMenu(@RequestParam String menuName) {
     return mainService.getSearchCafeMenu(menuName);
   }
-  /** 평균별점 상위 5개 카페 주소 반환 */
+
+  /** 평균별점 상위 5개 카페 주소와 ID 반환 */
   @GetMapping("/search/top5")
-  public List<String> top5CafesByRating() {
+  public List<CafeAddressDTO> top5CafesByRating() {
     return mainService.getRanking().stream()
-        .limit(5)
-        .flatMap(r -> {
-          List<String> names = mainService.getSearchCafeName(r.getCafeName());
-          return names != null
-              ? names.stream()
-              : Stream.empty();
-        })
-        .filter(Objects::nonNull)
-        .distinct()
-        .collect(Collectors.toList());
+            .limit(5)
+            .flatMap(r -> {
+              List<CafeAddressDTO> cafeAddresses = mainService.getSearchCafeName(r.getCafeName());
+              return cafeAddresses != null
+                      ? cafeAddresses.stream()
+                      : Stream.empty();
+            })
+            .filter(Objects::nonNull)
+            .distinct()
+            .collect(Collectors.toList());
   }
 }
