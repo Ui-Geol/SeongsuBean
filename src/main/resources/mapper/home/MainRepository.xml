@@ -70,16 +70,15 @@
           ) mi ON ci.CAFE_ID = mi.CAFE_ID;
   </select>
 
-  <!--랜덤으로 4개 카페(사진+이름) 조회-->
-  <select id="getMainCardView"
-    resultMap="CafeDTOResultMap">
-    SELECT CAFE_ID,
-           CAFE_NAME,
-           INTRODUCTION,
-           MAIN_IMAGE
-    FROM CAFE_INFO
-    ORDER BY RAND()
-  </select>
+  <!--4개 카페(사진+이름) 조회-->
+    <select id="getMainCardView" resultMap="CafeDTOResultMap">
+        SELECT CAFE_ID,
+               CAFE_NAME,
+               INTRODUCTION,
+               MAIN_IMAGE
+        FROM CAFE_INFO
+            LIMIT #{offset}, 4
+    </select>
 
   <select id="getEachMenu"
     parameterType="string"
