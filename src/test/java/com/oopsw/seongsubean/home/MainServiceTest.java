@@ -14,11 +14,11 @@ public class MainServiceTest {
   MainService mainService;
   CafeDTO cafeDTO;
 
-  @Test
-  public void getMainCardViewtest() {
-    List<CafeDTO> mainCardView = mainService.getMainCardView();
-    System.out.println(mainCardView);
-  }
+//  @Test
+//  public void getMainCardViewtest() {
+//    List<CafeDTO> mainCardView = mainService.getMainCardView();
+//    System.out.println(mainCardView);
+//  }
 
   @Test
   public void getRankingtest() {

@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface MainRepository {
 
-  List<CafeDTO> getMainCardView();
+  List<CafeDTO> getMainCardView(@Param("offset") int offset);
 
   List<RankingDTO> getRanking();
 
