@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oopsw.seongsubean.home.repository.MainRepository">
 
-  <resultMap id="RankingResultMap" type="com.oopsw.seongsubean.cafe.dto.RankingDTO">
-    <result property="cafeId" column="CAFE_ID"/>
-    <result property="cafeName" column="CAFE_NAME"/>
-    <result property="avgStarScore" column="AVG_STAR_SCORE"/>
-    <result property="reviewCount" column="REVIEW_COUNT"/>
-  </resultMap>
+    <resultMap id="RankingResultMap" type="com.oopsw.seongsubean.cafe.dto.RankingDTO">
+        <result property="cafeId" column="CAFE_ID"/>
+        <result property="cafeName" column="CAFE_NAME"/>
+        <result property="avgStarScore" column="AVG_STAR_SCORE"/>
+        <result property="reviewCount" column="REVIEW_COUNT"/>
+    </resultMap>
+
+    <!-- CafeAddressDTO용 ResultMap 추가 -->
+    <resultMap id="CafeAddressResultMap" type="com.oopsw.seongsubean.home.dto.CafeAddressDTO">
+        <result property="cafeId" column="CAFE_ID"/>
+        <result property="address" column="ADDRESS"/>
+    </resultMap>
 
     <resultMap id="CafeDTOResultMap" type="com.oopsw.seongsubean.cafe.dto.CafeDTO">
         <!-- 기본 키 -->
@@ -27,68 +33,71 @@
         <result property="email"          column="EMAIL"           />
     </resultMap>
 
-  <!--카페랭킹조회(평균별점높은순으로 정렬)-->
-  <select id="getRanking"
-    resultMap="RankingResultMap">
-    SELECT ci.CAFE_ID,
-           ci.CAFE_NAME,
-      ROUND(AVG(r.STAR_SCORE), 2) AS AVG_STAR_SCORE,
-           COUNT(r.REVIEW_ID)          AS REVIEW_COUNT
-    FROM CAFE_INFO AS ci
-           LEFT JOIN REVIEW AS r
-                     ON ci.CAFE_ID = r.CAFE_ID
-    GROUP BY ci.CAFE_ID,
-             ci.CAFE_NAME
-    ORDER BY AVG_STAR_SCORE DESC
-    LIMIT 5
-  </select>
+    <!--카페랭킹조회(평균별점높은순으로 정렬)-->
+    <select id="getRanking" resultMap="RankingResultMap">
+        SELECT ci.CAFE_ID,
+               ci.CAFE_NAME,
+               ROUND(AVG(r.STAR_SCORE), 2) AS AVG_STAR_SCORE,
+               COUNT(r.REVIEW_ID)          AS REVIEW_COUNT
+        FROM CAFE_INFO AS ci
+                 LEFT JOIN REVIEW AS r
+                           ON ci.CAFE_ID = r.CAFE_ID
+        GROUP BY ci.CAFE_ID,
+                 ci.CAFE_NAME
+        ORDER BY AVG_STAR_SCORE DESC
+            LIMIT 5
+    </select>
 
-  <!--카페명으로주소조회-->
-  <select id="getSearchCafeName"
-    parameterType="string"
-    resultType="string">
-    SELECT ADDRESS
-    FROM CAFE_INFO
-    WHERE CAFE_NAME LIKE CONCAT('%', #{cafeName}, '%')
-  </select>
+    <!--카페명으로 카페ID와 주소 조회 (수정)-->
+    <select id="getSearchCafeName"
+            parameterType="string"
+            resultMap="CafeAddressResultMap">
+        SELECT CAFE_ID,
+               CONCAT(ADDRESS, ' ', DETAIL_ADDRESS) AS ADDRESS
+        FROM CAFE_INFO
+        WHERE CAFE_NAME LIKE CONCAT('%', #{cafeName}, '%')
+    </select>
 
-  <!--메뉴명으로주소조회-->
-  <select id="getSearchCafeMenu"
-    parameterType="string"
-    resultType="string">
-      SELECT
-          concat(ci.ADDRESS,' ',ci.DETAIL_ADDRESS) as TOTAL_ADRESS
-      FROM
-          CAFE_INFO ci
-              JOIN (
-              SELECT DISTINCT
-                  CAFE_ID
-              FROM
-                  MENU_INFO
-              WHERE
-                  menu_category = #{menuCategory}
-          ) mi ON ci.CAFE_ID = mi.CAFE_ID;
-  </select>
+    <!--메뉴 카테고리로 카페ID와 주소 조회 (수정)-->
+    <select id="getSearchCafeMenu"
+            parameterType="string"
+            resultMap="CafeAddressResultMap">
+        SELECT DISTINCT
+            ci.CAFE_ID,
+            CONCAT(ci.ADDRESS, ' ', ci.DETAIL_ADDRESS) as ADDRESS
+        FROM
+            CAFE_INFO ci
+                JOIN (
+                SELECT DISTINCT
+                    CAFE_ID
+                FROM
+                    MENU_INFO
+                WHERE
+                    menu_category = #{menuCategory}
+            ) mi ON ci.CAFE_ID = mi.CAFE_ID
+    </select>
 
-  <!--4개 카페(사진+이름) 조회-->
+    <!--4개 카페(사진+이름) 조회-->
     <select id="getMainCardView" resultMap="CafeDTOResultMap">
         SELECT CAFE_ID,
                CAFE_NAME,
                INTRODUCTION,
                MAIN_IMAGE
         FROM CAFE_INFO
-            LIMIT #{offset}, 4
+                 LIMIT #{offset}, 4
     </select>
 
-  <select id="getEachMenu"
-    parameterType="string"
-    resultType="string">
-    SELECT DISTINCT ci.ADDRESS
-    FROM CAFE_INFO ci
-           JOIN MENU_INFO mi
-                ON ci.CAFE_ID = mi.CAFE_ID
-    WHERE mi.MENU_NAME LIKE CONCAT('%', #{menuName}, '%')
-  </select>
-
+    <!--메뉴명으로 카페ID와 주소 조회 (수정)-->
+    <select id="getEachMenu"
+            parameterType="string"
+            resultMap="CafeAddressResultMap">
+        SELECT DISTINCT
+            ci.CAFE_ID,
+            ci.ADDRESS
+        FROM CAFE_INFO ci
+                 JOIN MENU_INFO mi
+                      ON ci.CAFE_ID = mi.CAFE_ID
+        WHERE mi.MENU_NAME LIKE CONCAT('%', #{menuName}, '%')
+    </select>
 
 </mapper>
