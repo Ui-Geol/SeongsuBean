@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RequestMapping("/api/account")
 public class AccountRestController {
+
   private final AccountService accountService;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -42,7 +43,8 @@ public class AccountRestController {
   }
 
   @PostMapping("/checkPw")
-  public ResponseEntity<Map<String, Boolean>> checkPwAction(Authentication auth ,@RequestBody UserDTO userDTO) {
+  public ResponseEntity<Map<String, Boolean>> checkPwAction(Authentication auth,
+      @RequestBody UserDTO userDTO) {
     AccountDetails accountDetails = (AccountDetails) auth.getPrincipal();
     return ResponseEntity.ok(Map.of(
         "result", bCryptPasswordEncoder.matches(
@@ -62,7 +64,8 @@ public class AccountRestController {
   }
 
   @PostMapping("/editProfile")
-  public ResponseEntity<Map<String, String>> editProfileAction(@RequestBody UserDTO user,Authentication auth) {
+  public ResponseEntity<Map<String, String>> editProfileAction(@RequestBody UserDTO user,
+      Authentication auth) {
     AccountDetails userDetails = (AccountDetails) auth.getPrincipal();
     user.setEmail(userDetails.getUsername());
     if (user.getNewPassword() != null && !user.getNewPassword().isBlank()) {
@@ -72,14 +75,14 @@ public class AccountRestController {
       user.setNickName(user.getNewNickName());
     }
     accountService.setUserInfo(user);
-    return ResponseEntity.ok(Map.of("message","정보를 수정하였습니다."));
+    return ResponseEntity.ok(Map.of("message", "정보를 수정하였습니다."));
   }
 
   @GetMapping("/myPost")
   public Map<String, Object> getMyPosts(
-          @RequestParam(defaultValue = "1") int page,
-          @RequestParam(defaultValue = "10") int size,
-          Authentication auth) {
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size,
+      Authentication auth) {
 
     UserDetails user = (UserDetails) auth.getPrincipal();
     String email = user.getUsername();
@@ -99,10 +102,9 @@ public class AccountRestController {
 
   @GetMapping("/myReview")
   public Map<String, Object> getMyReviews(
-          @RequestParam(defaultValue = "1") int page,
-          @RequestParam(defaultValue = "10") int size,
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size,
       Authentication auth) {
-
     UserDetails user = (UserDetails) auth.getPrincipal();
     String email = user.getUsername();
     int offset = (page - 1) * size;
@@ -124,8 +126,8 @@ public class AccountRestController {
 
   @GetMapping("/myCafe")
   public Map<String, Object> getMyCafes(
-          @RequestParam(defaultValue = "1") int page,
-          @RequestParam(defaultValue = "4") int size,
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "4") int size,
       Authentication auth) {
 
     UserDetails user = (UserDetails) auth.getPrincipal();
@@ -143,7 +145,7 @@ public class AccountRestController {
       totalPages = 1;
     }
 
-    return Map.of("posts", cafes, "currentPage", page,
+    return Map.of("cafes", cafes, "currentPage", page,
         "totalPages", totalPages, "totalCount", totalCount);
   }
 
@@ -162,7 +164,7 @@ public class AccountRestController {
   @DeleteMapping("/deleteAccount")
   public Map<String, Boolean> deleteAccount(Authentication auth) {
     AccountDetails user = (AccountDetails) auth.getPrincipal();
-    return Map.of("result",accountService.removeUser(user.getUsername()));
+    return Map.of("result", accountService.removeUser(user.getUsername()));
   }
 
   @PutMapping("/uploadImage")
@@ -211,6 +213,4 @@ public class AccountRestController {
 
     return ResponseEntity.ok("업로드 성공");
   }
-
-
 }
