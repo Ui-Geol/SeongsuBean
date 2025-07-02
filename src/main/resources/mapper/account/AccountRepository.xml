@@ -107,4 +107,9 @@
     FROM user_info
     WHERE email = #{email}
   </select>
+
+  <update id="updatePw" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
+    update USER_INFO
+    set password = #{password}
+  </update>
 </mapper>
