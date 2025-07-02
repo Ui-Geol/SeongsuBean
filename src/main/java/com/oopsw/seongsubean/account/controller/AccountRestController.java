@@ -30,40 +30,41 @@ public class AccountRestController {
   private final AccountService accountService;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  @GetMapping("/getEmail")
+  @GetMapping("/email")
   public String getEmail(Authentication auth) {
     AccountDetails details = (AccountDetails) auth.getPrincipal();
     return details.getUsername();
   }
 
-  @PostMapping("/join")
+  @PostMapping
   public ResponseEntity<Map<String, String>> joinAction(@RequestBody UserDTO user) {
     accountService.addUser(user);
     return ResponseEntity.ok().body(Map.of("message", "회원가입에 성공 하셨습니다."));
   }
 
-  @PostMapping("/checkPw")
-  public ResponseEntity<Map<String, Boolean>> checkPwAction(Authentication auth,
-      @RequestBody UserDTO userDTO) {
-    AccountDetails accountDetails = (AccountDetails) auth.getPrincipal();
-    return ResponseEntity.ok(Map.of(
-        "result", bCryptPasswordEncoder.matches(
-            userDTO.getPassword(), accountDetails.getUser().getPassword())));
+  @DeleteMapping
+  public Map<String, Boolean> deleteAccount(Authentication auth) {
+    AccountDetails user = (AccountDetails) auth.getPrincipal();
+    return Map.of("result", accountService.removeUser(user.getUsername()));
   }
 
-  @GetMapping("/myPage")
+  @GetMapping("/exist/email")
+  public Map<String, Boolean> checkEmail(@RequestBody UserDTO user) {
+    return Map.of("result", accountService.existsEmail(user.getEmail()));
+  }
+
+  @GetMapping("/exist/nickname")
+  public Map<String, Boolean> checkNickname(@RequestBody UserDTO user) {
+    return Map.of("result", accountService.existsNickName(user.getNickName()));
+  }
+
+  @GetMapping("/profile")
   public UserDTO myPage(Authentication auth) {
     AccountDetails user = (AccountDetails) auth.getPrincipal();
     return user.getUser();
   }
 
-  @GetMapping("/editProfile")
-  public UserDTO editProfile(Authentication auth) {
-    AccountDetails user = (AccountDetails) auth.getPrincipal(); //위 코드와 중복돼서 함수화 필요
-    return user.getUser();
-  }
-
-  @PostMapping("/editProfile")
+  @PutMapping("/profile")
   public ResponseEntity<Map<String, String>> editProfileAction(@RequestBody UserDTO user,
       Authentication auth) {
     AccountDetails userDetails = (AccountDetails) auth.getPrincipal();
@@ -78,96 +79,16 @@ public class AccountRestController {
     return ResponseEntity.ok(Map.of("message", "정보를 수정하였습니다."));
   }
 
-  @GetMapping("/myPost")
-  public Map<String, Object> getMyPosts(
-      @RequestParam(defaultValue = "1") int page,
-      @RequestParam(defaultValue = "10") int size,
-      Authentication auth) {
-
-    UserDetails user = (UserDetails) auth.getPrincipal();
-    String email = user.getUsername();
-    int offset = (page - 1) * size;
-
-    // 페이징용 RowBounds 객체 사용
-    RowBounds rowBounds = new RowBounds(offset, size);
-    List<Map<String, Object>> posts = accountService.getMyBoards(email, rowBounds);
-
-    // 총 게시글 수
-    int totalCount = accountService.countMyBoards(email);
-    int totalPages = (int) Math.ceil((double) totalCount / size);
-
-    return Map.of("posts", posts, "currentPage", page,
-        "totalPages", totalPages, "totalCount", totalCount);
+  @PostMapping("/profile/check-password")
+  public ResponseEntity<Map<String, Boolean>> checkPwAction(Authentication auth,
+      @RequestBody UserDTO userDTO) {
+    AccountDetails accountDetails = (AccountDetails) auth.getPrincipal();
+    return ResponseEntity.ok(Map.of(
+        "result", bCryptPasswordEncoder.matches(
+            userDTO.getPassword(), accountDetails.getUser().getPassword())));
   }
 
-  @GetMapping("/myReview")
-  public Map<String, Object> getMyReviews(
-      @RequestParam(defaultValue = "1") int page,
-      @RequestParam(defaultValue = "10") int size,
-      Authentication auth) {
-    UserDetails user = (UserDetails) auth.getPrincipal();
-    String email = user.getUsername();
-    int offset = (page - 1) * size;
-
-    // 페이징용 RowBounds 객체 사용
-    RowBounds rowBounds = new RowBounds(offset, size);
-    List<Map<String, Object>> reviews = accountService.getMyReviews(email, rowBounds);
-
-    // 총 리뷰 수
-    int totalCount = accountService.countMyReviews(email);
-    int totalPages = (int) Math.ceil((double) totalCount / size);
-    if (totalPages < 1) {
-      totalPages = 1;
-    }
-
-    return Map.of("posts", reviews, "currentPage", page,
-        "totalPages", totalPages, "totalCount", totalCount);
-  }
-
-  @GetMapping("/myCafe")
-  public Map<String, Object> getMyCafes(
-      @RequestParam(defaultValue = "1") int page,
-      @RequestParam(defaultValue = "4") int size,
-      Authentication auth) {
-
-    UserDetails user = (UserDetails) auth.getPrincipal();
-    String email = user.getUsername();
-    int offset = (page - 1) * size;
-
-    // 페이징용 RowBounds 객체 사용
-    RowBounds rowBounds = new RowBounds(offset, size);
-    List<Map<String, Object>> cafes = accountService.getMyCafes(email, rowBounds);
-
-    // 총 리뷰 수
-    int totalCount = accountService.countMyCafes(email);
-    int totalPages = (int) Math.ceil((double) totalCount / size);
-    if (totalPages < 1) {
-      totalPages = 1;
-    }
-
-    return Map.of("cafes", cafes, "currentPage", page,
-        "totalPages", totalPages, "totalCount", totalCount);
-  }
-
-  // 이메일 중복 체크
-  @PostMapping("/checkEmail")
-  public Map<String, Boolean> checkEmail(@RequestBody UserDTO user) {
-    return Map.of("result", accountService.existsEmail(user.getEmail()));
-  }
-
-  // 닉네임 중복 체크
-  @PostMapping("/checkNickname")
-  public Map<String, Boolean> checkNickname(@RequestBody UserDTO user) {
-    return Map.of("result", accountService.existsNickName(user.getNickName()));
-  }
-
-  @DeleteMapping("/deleteAccount")
-  public Map<String, Boolean> deleteAccount(Authentication auth) {
-    AccountDetails user = (AccountDetails) auth.getPrincipal();
-    return Map.of("result", accountService.removeUser(user.getUsername()));
-  }
-
-  @PutMapping("/uploadImage")
+  @PutMapping("/profile/image")
   public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file,
       Principal principal) throws IOException {
     if (file.isEmpty()) {
@@ -212,5 +133,76 @@ public class AccountRestController {
     accountService.setImage(user);
 
     return ResponseEntity.ok("업로드 성공");
+  }
+
+  @GetMapping("/profile/posts")
+  public Map<String, Object> getMyPosts(
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size,
+      Authentication auth) {
+
+    UserDetails user = (UserDetails) auth.getPrincipal();
+    String email = user.getUsername();
+    int offset = (page - 1) * size;
+
+    // 페이징용 RowBounds 객체 사용
+    RowBounds rowBounds = new RowBounds(offset, size);
+    List<Map<String, Object>> posts = accountService.getMyBoards(email, rowBounds);
+
+    // 총 게시글 수
+    int totalCount = accountService.countMyBoards(email);
+    int totalPages = (int) Math.ceil((double) totalCount / size);
+
+    return Map.of("posts", posts, "currentPage", page,
+        "totalPages", totalPages, "totalCount", totalCount);
+  }
+
+  @GetMapping("/profile/reviews")
+  public Map<String, Object> getMyReviews(
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size,
+      Authentication auth) {
+    UserDetails user = (UserDetails) auth.getPrincipal();
+    String email = user.getUsername();
+    int offset = (page - 1) * size;
+
+    // 페이징용 RowBounds 객체 사용
+    RowBounds rowBounds = new RowBounds(offset, size);
+    List<Map<String, Object>> reviews = accountService.getMyReviews(email, rowBounds);
+
+    // 총 리뷰 수
+    int totalCount = accountService.countMyReviews(email);
+    int totalPages = (int) Math.ceil((double) totalCount / size);
+    if (totalPages < 1) {
+      totalPages = 1;
+    }
+
+    return Map.of("posts", reviews, "currentPage", page,
+        "totalPages", totalPages, "totalCount", totalCount);
+  }
+
+  @GetMapping("/profile/cafes")
+  public Map<String, Object> getMyCafes(
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "4") int size,
+      Authentication auth) {
+
+    UserDetails user = (UserDetails) auth.getPrincipal();
+    String email = user.getUsername();
+    int offset = (page - 1) * size;
+
+    // 페이징용 RowBounds 객체 사용
+    RowBounds rowBounds = new RowBounds(offset, size);
+    List<Map<String, Object>> cafes = accountService.getMyCafes(email, rowBounds);
+
+    // 총 리뷰 수
+    int totalCount = accountService.countMyCafes(email);
+    int totalPages = (int) Math.ceil((double) totalCount / size);
+    if (totalPages < 1) {
+      totalPages = 1;
+    }
+
+    return Map.of("cafes", cafes, "currentPage", page,
+        "totalPages", totalPages, "totalCount", totalCount);
   }
 }
