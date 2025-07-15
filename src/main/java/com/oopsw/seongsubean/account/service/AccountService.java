@@ -21,7 +21,7 @@ public class AccountService {
       throw new IllegalArgumentException("정보 중복");
     }
     userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-
+    userDTO.setRole("CUSTOMER");
     return accountRepository.addUser(userDTO);
   }
 
