@@ -67,10 +67,11 @@ public class CafeMenuRestController {
     }
   }
 
-  @DeleteMapping
-  public ResponseEntity<String> removeCafe(@Valid @RequestBody MenuDTO menuDto) {
+  @DeleteMapping("/{menuId}")
+  public ResponseEntity<String> removeCafe(
+      @PathVariable Integer menuId) {
     try {
-      menuService.removeMenu(menuDto.getMenuId());
+      menuService.removeMenu(menuId);
       return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     } catch (RuntimeException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("메뉴 삭제를 실패하였습니다");

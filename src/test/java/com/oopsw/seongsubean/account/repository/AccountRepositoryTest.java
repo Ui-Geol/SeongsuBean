@@ -8,15 +8,19 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootTest
 public class AccountRepositoryTest {
   @Autowired
   private AccountRepository accountRepository;
 
+  @Autowired
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
+
   @Test
   public void successGetUserInfoTest() {
-    UserDTO user = accountRepository.getUserInfo(UserDTO.builder().password("1234").email("zzzz@gmail.com").build());
+    UserDTO user = accountRepository.getUserInfo(UserDTO.builder().password("0524").email("hayoon@gmail.com").build());
     System.out.println(user);
   }
   @Test
@@ -111,7 +115,7 @@ public class AccountRepositoryTest {
 
   @Test
   public void successExcistsEmailTest(){
-    System.out.println(accountRepository.existsEmail("zzzxzccxzz@gmail.com"));
+    System.out.println(accountRepository.existsEmail("hayoondsadas@gmail.com"));
   }
 
   @Test
@@ -130,4 +134,9 @@ public class AccountRepositoryTest {
 //        .password("$2a$10$vWgCDeAzCaJlgEPyBJcbUuznaorCNKUEH77uKxwCbQdvPZe7UkLWi")
 //        .build()));
 //  }
+
+  @Test
+  public void successUpdatePw(){
+    System.out.println(accountRepository.updatePw(UserDTO.builder().password(bCryptPasswordEncoder.encode("1234")).build()));
+  }
 }
