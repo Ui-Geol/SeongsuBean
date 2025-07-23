@@ -1,10 +1,10 @@
 package com.oopsw.seongsubean.config;
 
 import com.oopsw.seongsubean.account.repository.mybatisrepository.AccountRepository;
-import com.oopsw.seongsubean.auth.AccountDetailsService;
 import com.oopsw.seongsubean.auth.AccountOauth2UserService;
 import com.oopsw.seongsubean.jwt.JwtAuthorizationFilter;
 import com.oopsw.seongsubean.jwt.JwtBasicAuthenticationFilter;
+import com.oopsw.seongsubean.jwt.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +21,8 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
   @Autowired
   private CorsFilter corsFilter;
-  private final AccountDetailsService accountDetailsService;
   private final AccountOauth2UserService accountOauth2UserService;
+  private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
   // 1. AuthenticationManager 등록
   @Bean
@@ -53,7 +53,7 @@ public class SecurityConfig {
             .defaultSuccessUrl("/", true)
             .userInfoEndpoint(userInfo -> userInfo
                     .userService(accountOauth2UserService)
-            )
+            ).successHandler(oAuth2SuccessHandler)
     );
 
     return http.build();

@@ -42,7 +42,7 @@ public class AccountOauth2UserService extends DefaultOAuth2UserService {
     if (accountRepository.existsNickName(nickname)) {
       nickname = nickname + UUID.randomUUID().toString().substring(0, 5); // 임시 닉네임
     }
-
+    System.out.println("OAUTH 회원가입 시도");
     UserDTO user = accountRepository.findByEmail(email);
 
     if(user == null) {
@@ -53,6 +53,7 @@ public class AccountOauth2UserService extends DefaultOAuth2UserService {
           .birthDate(LocalDate.of(1999,2,20))
           .phoneNumber("010-2323-2323")
           .oauth(true)
+          .role("CUSTOMER")
           .build();
       accountRepository.addUser(user);
     }else {
