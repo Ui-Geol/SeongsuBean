@@ -80,17 +80,22 @@ public class AccountRestController {
   }
 
   @PutMapping("/profile/image")
-  public ResponseEntity<Map<String, String>> setImage(@RequestBody Map<String, String> image,
-      Authentication auth){
+  public ResponseEntity<Map<String, String>> setImage(@RequestBody Map<String, String> image, Authentication auth) {
     AccountDetails accountDetails = (AccountDetails) auth.getPrincipal();
     UserDTO userDTO = accountDetails.getUser();
-    String safeFilename = image.get("image").replaceAll("\\s+", "_");
 
-    userDTO.setImage(safeFilename);
+    String fileName = image.get("image");
+    if (fileName == null || fileName.trim().isEmpty()) {
+      return ResponseEntity.badRequest().body(Map.of("message", "파일명이 없습니다."));
+    }
+
+    // 파일명 저장
+    userDTO.setImage(fileName);
     accountService.setImage(userDTO);
 
     return ResponseEntity.ok(Map.of("message", "업로드 성공"));
   }
+
 
   @GetMapping("/profile/posts")
   public Map<String, Object> getMyPosts(
