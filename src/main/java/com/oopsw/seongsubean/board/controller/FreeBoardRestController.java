@@ -153,12 +153,12 @@ public class FreeBoardRestController {
     if (auth == null || !(auth.getPrincipal() instanceof AccountDetails)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("success", false, "message", "로그인이 필요합니다."));
     }
-    String comment = (String) requestBody.get("comment");
-    Integer freeBoardId = (Integer) requestBody.get("freeBoardId");
+    String content = (String) requestBody.get("content");
+    Integer freeBoardId = Integer.parseInt(requestBody.get("freeBoardId").toString());
 
     String email = ((AccountDetails) auth.getPrincipal()).getUser().getEmail();
     FreeBoardCommentDTO dto = FreeBoardCommentDTO.builder()
-        .content(comment)
+        .content(content)
         .freeBoardId(freeBoardId)
         .email(email)
         .build();

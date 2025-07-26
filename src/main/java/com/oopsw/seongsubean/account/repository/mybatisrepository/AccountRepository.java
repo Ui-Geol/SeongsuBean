@@ -23,4 +23,5 @@ public interface AccountRepository {
   boolean existsEmail(String email);
   boolean existsNickName(String nickName);
   UserDTO findByEmail(String email);
+  boolean updatePw(UserDTO userDTO);
 }

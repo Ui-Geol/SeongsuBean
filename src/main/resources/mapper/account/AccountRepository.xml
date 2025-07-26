@@ -30,8 +30,8 @@
   </select> <!--안쓸듯?-->
 
   <insert id="addUser" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
-    INSERT INTO USER_INFO (email, nickname, password, birthdate, phone_number, join_date)
-    VALUES (#{email}, #{nickName}, #{password}, #{birthDate}, #{phoneNumber}, NOW())
+    INSERT INTO USER_INFO (email, nickname, password, birthdate, phone_number, join_date, role)
+    VALUES (#{email}, #{nickName}, #{password}, #{birthDate}, #{phoneNumber}, NOW(), #{role})
   </insert>
 
   <select id="getUserByEmailAndPassword" parameterType="com.oopsw.seongsubean.account.dto.UserDTO"
@@ -107,4 +107,9 @@
     FROM user_info
     WHERE email = #{email}
   </select>
+
+  <update id="updatePw" parameterType="com.oopsw.seongsubean.account.dto.UserDTO">
+    update USER_INFO
+    set password = #{password}
+  </update>
 </mapper>
